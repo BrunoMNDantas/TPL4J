@@ -1,165 +1,341 @@
 package com.dantas.tpl4j.pool;
 
 import com.dantas.tpl4j.task.Task;
+import com.dantas.tpl4j.task.core.TaskOption;
+import com.dantas.tpl4j.task.core.action.IAction;
+import com.dantas.tpl4j.task.core.action.IEmptyAction;
+import com.dantas.tpl4j.task.core.action.IEmptyVoidAction;
+import com.dantas.tpl4j.task.core.action.IVoidAction;
+import com.dantas.tpl4j.task.unwrap.UnwrapTask;
+import com.dantas.tpl4j.task.when.whenAll.WhenAllTask;
+import com.dantas.tpl4j.task.when.whenAny.WhenAnyTask;
+import org.junit.AfterClass;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TaskPoolTest {
 
-    private static void sleep(long milliseconds) {
-        try{
-            Thread.sleep(milliseconds);
-        } catch (Exception e) { }
+    private static final IAction<String> ACTION = (token) -> null;
+    private static final IEmptyAction<String> EMPTY_ACTION = () -> null;
+    private static final IVoidAction VOID_ACTION = (token) -> {};
+    private static final IEmptyVoidAction EMPTY_VOID_ACTION = () -> {};
+    private static final TaskOption[] OPTIONS = {};
+
+
+
+    @AfterClass
+    public static void close() {
+        TaskPool.dispose();
     }
 
 
 
     @Test
-    public void fixedPoolSizeTest() {
-        boolean[] running = new boolean[Runtime.getRuntime().availableProcessors()*2];
-
-        TaskPool pool = new TaskPool(running.length);
-
-        try{
-            for(int i=0; i<running.length; ++i){
-                int idx = i;
-
-                pool.createAndRun(() -> {
-                    running[idx] = true;
-                    sleep(4000);
-                    running[idx] = false;
-                });
-            }
-        }finally {
-            pool.close();
-        }
-
-        sleep(1000);
-
-        for(boolean b : running)
-            assertTrue(b);
-
-        sleep(6000);
-
-        for(boolean b : running)
-            assertFalse(b);
+    public void staticGetSchedulerTest() {
+        assertNotNull(TaskPool.getTaskScheduler());
     }
 
     @Test
-    public void defaultPoolSizeTest() {
-        boolean[] running = new boolean[Runtime.getRuntime().availableProcessors()];
+    public void staticCreateTest() {
+        Task<?> task;
 
-        TaskPool pool = new TaskPool(running.length);
+        task = TaskPool.createTask(ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
-        try{
-            for(int i=0; i<running.length; ++i){
-                int idx = i;
+        task = TaskPool.createTask(ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
-                pool.createAndRun(() -> {
-                    running[idx] = true;
-                    sleep(4000);
-                    running[idx] = false;
-                });
-            }
-        }finally {
-            pool.close();
-        }
+        task = TaskPool.createTask(EMPTY_ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
-        sleep(1000);
+        task = TaskPool.createTask(EMPTY_ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
-        for(boolean b : running)
-            assertTrue(b);
+        task = TaskPool.createTask(VOID_ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
-        sleep(6000);
+        task = TaskPool.createTask(VOID_ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
-        for(boolean b : running)
-            assertFalse(b);
+        task = TaskPool.createTask(EMPTY_VOID_ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskPool.createTask(EMPTY_VOID_ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
     }
 
     @Test
-    public void thenOnActionReceivedFromFixedPoolSizeTest() {
-        boolean[] runningFirstLevel = new boolean[Runtime.getRuntime().availableProcessors()];
-        boolean[] runningSecondLevel = new boolean[Runtime.getRuntime().availableProcessors()];
-        boolean[] runningThirdLevel = new boolean[Runtime.getRuntime().availableProcessors()];
+    public void staticCreateAndStartTest() {
+        Task<?> task;
 
-        TaskPool pool = new TaskPool(runningFirstLevel.length);
+        task = TaskPool.createAndStartTask(ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        try{
-            for(int i=0; i<runningFirstLevel.length; ++i){
-                int idx = i;
+        task = TaskPool.createAndStartTask(ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-                pool.createAndRun(() -> {
-                    runningFirstLevel[idx] = true;
-                    sleep(4000);
-                    runningFirstLevel[idx] = false;
-                })
-                .then((previous) -> {
-                    runningSecondLevel[idx] = true;
-                    sleep(4000);
-                    runningSecondLevel[idx] = false;
-                })
-                .then((previous) -> {
-                    runningThirdLevel[idx] = true;
-                    sleep(4000);
-                    runningThirdLevel[idx] = false;
-                });
-            }
-        }finally {
-            pool.close();
-        }
+        task = TaskPool.createAndStartTask(EMPTY_ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        sleep(1000);
+        task = TaskPool.createAndStartTask(EMPTY_ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        for(boolean b : runningFirstLevel)
-            assertTrue(b);
+        task = TaskPool.createAndStartTask(VOID_ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        sleep(4000);
+        task = TaskPool.createAndStartTask(VOID_ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        for(boolean b : runningSecondLevel)
-            assertFalse(b);
+        task = TaskPool.createAndStartTask(EMPTY_VOID_ACTION);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        sleep(4000);
-
-        for(boolean b : runningThirdLevel)
-            assertFalse(b);
+        task = TaskPool.createAndStartTask(EMPTY_VOID_ACTION, OPTIONS);
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
     }
 
     @Test
-    public void whenAllWithFixedPoolSizeTest() throws Exception {
-        boolean[] running = new boolean[16];
+    public void staticWhenAllTest() {
+        Task<String> taskA = new Task<>(() -> "");
+        Task<String> taskB = new Task<>(() -> "");
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
-        TaskPool pool = new TaskPool(4);
+        WhenAllTask<String> task = TaskPool.whenAllTask(tasks);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
 
-        Collection<Task<Void>> tasks = new LinkedList<>();
+        task = TaskPool.whenAllTask(tasks, OPTIONS);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+    }
 
-        try{
-            for(int i=0; i<running.length; ++i){
-                int idx = i;
+    @Test
+    public void staticWhenAnyTest() {
+        Task<String> taskA = new Task<>(() -> "");
+        Task<String> taskB = new Task<>(() -> "");
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
-                tasks.add(
-                    pool.createAndRun(() -> {
-                        running[idx] = true;
-                        sleep(2000);
-                        running[idx] = false;
-                    })
-                );
-            }
+        WhenAnyTask<String> task = TaskPool.whenAnyTask(tasks);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
 
-            long finishedTime = System.currentTimeMillis() + 2000*(running.length/4);
+        task = TaskPool.whenAnyTask(tasks, OPTIONS);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+    }
 
-            Task<?> task = pool.whenAll(tasks);
-            task.getResult();
+    @Test
+    public void staticUnwrapTest() {
+        Task<Task<String>> unwrapTask = new Task<>(() -> new Task<>(() -> null));
 
-            assertTrue(finishedTime <= System.currentTimeMillis());
-        }finally {
-            pool.close();
-        }
+        UnwrapTask<String> task = TaskPool.unwrapTask(unwrapTask);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(unwrapTask, task.getTask());
+
+        task = TaskPool.unwrapTask(unwrapTask, OPTIONS);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(TaskPool.getTaskScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(unwrapTask, task.getTask());
+    }
+
+
+    @Test
+    public void getSchedulerTest() {
+        TaskPool pool = new TaskPool();
+
+        assertNotNull(pool.getTaskScheduler());
+
+        pool.close();
+    }
+
+    @Test
+    public void createTest() {
+        TaskPool pool = new TaskPool();
+        Task<?> task;
+
+        task = pool.create(ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = pool.create(ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = pool.create(EMPTY_ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = pool.create(EMPTY_ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = pool.create(VOID_ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = pool.create(VOID_ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = pool.create(EMPTY_VOID_ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = pool.create(EMPTY_VOID_ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        pool.close();
+    }
+
+    @Test
+    public void createAndStartTest() {
+        TaskPool pool = new TaskPool();
+        Task<?> task;
+
+        task = pool.createAndStart(ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(EMPTY_ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(EMPTY_ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(VOID_ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(VOID_ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(EMPTY_VOID_ACTION);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = pool.createAndStart(EMPTY_VOID_ACTION, OPTIONS);
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        pool.close();
+    }
+
+    @Test
+    public void whenAllTest() {
+        TaskPool pool = new TaskPool();
+        Task<String> taskA = new Task<>(() -> "");
+        Task<String> taskB = new Task<>(() -> "");
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
+
+        WhenAllTask<String> task = pool.whenAll(tasks);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = pool.whenAll(tasks, OPTIONS);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        pool.close();
+    }
+
+    @Test
+    public void whenAnyTest() {
+        TaskPool pool = new TaskPool();
+        Task<String> taskA = new Task<>(() -> "");
+        Task<String> taskB = new Task<>(() -> "");
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
+
+        WhenAnyTask<String> task = pool.whenAny(tasks);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = pool.whenAny(tasks, OPTIONS);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        pool.close();
+    }
+
+    @Test
+    public void unwrapTest() {
+        TaskPool pool = new TaskPool();
+        Task<Task<String>> unwrapTask = new Task<>(() -> new Task<>(() -> null));
+
+        UnwrapTask<String> task = pool.unwrap(unwrapTask);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(unwrapTask, task.getTask());
+
+        task = pool.unwrap(unwrapTask, OPTIONS);
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(pool.getScheduler(), task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(unwrapTask, task.getTask());
+
+        pool.close();
     }
 
 }
-
