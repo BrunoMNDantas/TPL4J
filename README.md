@@ -134,19 +134,8 @@ That's it for now. You already have you basic skills up  and running. You can go
 ### TaskStatus
 
 Task life cycle:
-```mermaid
-graph LR
-Cr[CREATED] -- "start()" --> Sc[SCHEDULED]
-Sc --> R[RUNNING]
-Sc --> Ca[CANCELED]
-R --> Ca[CANCELED]
-R --> F[FAILED]
-R --> Su[SUCCEEDED]
-R --> W[WAITING_CHILDREN]
-W --> Su
-W --> Ca
-W --> F
-```
+
+![TaskLifeCycle](https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/TaskLifeCycle.png)
 
 `TaskStatus` class offers all life cycle events of a Task. You can get it through method `getStatus()`.  On the flowing code we are registering an action on each event to log different status of Task.
 
