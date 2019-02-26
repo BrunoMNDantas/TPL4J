@@ -52,17 +52,17 @@ Hello Paul!
 If for some reason our task produced an **Exception**, this Exception would be thrown on `getResult()` call. That’s what happen on this example:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<String> task = new Task<>(() -> { throw new Exception("Try again later!"); });
+public static void main(String[] args) throws Exception {
+    Task<String> task = new Task<>(() -> { throw new Exception("Try again later!"); });
 
-		task.start();
+    task.start();
 
-		try {
-			task.getResult();
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
+    try {
+        task.getResult();
+    } catch(Exception e) {
+        System.out.println(e.getMessage());
+    }
+}
 ```
 Output:
 ```java
@@ -72,16 +72,16 @@ Try again later!
 Next step is to chain tasks. For this example we will have tow Tasks, one producer and one consumer. To chain Tasks you can use method `<T> Task<T> then(Task<T> task)`, this method register the given task to run after the current task finishes.
 Go ahead, create a producer Task and a consumer Task. Now register consumer Task to run after producer Task. Your code should look like:
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<String> producerTask = new Task<>(() -> "Paul");
-		Task<?> consumerTask = new Task<>(() -> System.out.println("Hello " + producerTask.getResult() + " !"));
+public static void main(String[] args) throws Exception {
+    Task<String> producerTask = new Task<>(() -> "Paul");
+    Task<?> consumerTask = new Task<>(() -> System.out.println("Hello " + producerTask.getResult() + " !"));
 
-		producerTask.then(consumerTask);
+    producerTask.then(consumerTask);
 
-		producerTask.start();
+    producerTask.start();
 
-		consumerTask.getResult();
-	}
+    consumerTask.getResult();
+}
 ```
 
 Run this example and observe the following output:
@@ -91,15 +91,15 @@ Hello Paul!
 If you look carefully you will realize that `then` method returns a Task<T>. The returned task is the same task received as parameter. This mechanism will permit to have a fluent syntax to chain Tasks:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<String> task = new Task<>(() -> System.out.println(1));
-		task.start();
+public static void main(String[] args) throws Exception {
+    Task<String> task = new Task<>(() -> System.out.println(1));
+    task.start();
 
-		task.then(new Task<>(() -> System.out.println(2)))
-			.then(new Task<>(() -> System.out.println(3)))
-			.then(new Task<>(() -> System.out.println(4)))
-			.getResult();
-	}
+    task.then(new Task<>(() -> System.out.println(2)))
+        .then(new Task<>(() -> System.out.println(3)))
+        .then(new Task<>(() -> System.out.println(4)))
+        .getResult();
+}
 ```
 Output:
 ```java
@@ -112,15 +112,15 @@ Output:
 I know, I know. You are probably thinking that it would be easier to to pass a lambda to `then` method. Guess what?... I totally agree ;) that's why you have multiple overloads of method `then`. These variants of method `then` create a Task with the given action, chains it with the current task and return the created Task. With this overloads the previous example could be written like this:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<String> task = new Task<>(() -> System.out.println(1));
-		task.start();
+public static void main(String[] args) throws Exception {
+    Task<String> task = new Task<>(() -> System.out.println(1));
+    task.start();
 
-		task.then(() -> System.out.println(2))
-			.then(() -> System.out.println(3))
-			.then(() -> System.out.println(4))
-			.getResult();
-	}
+    task.then(() -> System.out.println(2))
+        .then(() -> System.out.println(3))
+        .then(() -> System.out.println(4))
+        .getResult();
+}
 ```
 
 Latter on [ILinkAction](#ilinkaction) section you can find all overloads of method `then`.
@@ -151,22 +151,22 @@ W --> F
 `TaskStatus` class offers all life cycle events of a Task. You can get it through method `getStatus()`.  On the flowing code we are registering an action on each event to log different status of Task.
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<?> task = new Task<>(() -> System.out.println("Task Action!"));
+public static void main(String[] args) throws Exception {
+    Task<?> task = new Task<>(() -> System.out.println("Task Action!"));
 
-		task.getStatus().scheduledEvent.addListener(() -> System.out.println("SCHEDULED"));
-		task.getStatus().runningEvent.addListener(() -> System.out.println("RUNNING"));
-		task.getStatus().waitingForChildrenEvent.addListener(() -> System.out.println("WAITING"));
-		task.getStatus().succeededEvent.addListener(() -> System.out.println("SUCCEEDED"));
-		task.getStatus().cancelledEvent.addListener(() -> System.out.println("CANCELED"));
-		task.getStatus().failedEvent.addListener(() -> System.out.println("FAILED"));
-		task.getStatus().finishedEvent.addListener(() -> System.out.println("FINISHED"));
+    task.getStatus().scheduledEvent.addListener(() -> System.out.println("SCHEDULED"));
+    task.getStatus().runningEvent.addListener(() -> System.out.println("RUNNING"));
+    task.getStatus().waitingForChildrenEvent.addListener(() -> System.out.println("WAITING"));
+    task.getStatus().succeededEvent.addListener(() -> System.out.println("SUCCEEDED"));
+    task.getStatus().cancelledEvent.addListener(() -> System.out.println("CANCELED"));
+    task.getStatus().failedEvent.addListener(() -> System.out.println("FAILED"));
+    task.getStatus().finishedEvent.addListener(() -> System.out.println("FINISHED"));
 
-		task.start();
+    task.start();
 
-		task.getResult();
-		System.out.println("Final:"task.getStatus().getValue());
-	}
+    task.getResult();
+    System.out.println("Final:"task.getStatus().getValue());
+}
 ```
 Output:
 ```java
@@ -219,22 +219,22 @@ Sometimes it is useful to create other Tasks inside a certain Task. TPL4J allows
 This feature needs to be declared explicitly. Child must be created with `ATTACH_TO_PARENT` option and parent must be created with `ACCEPT_CHILDREN ` option.
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<String> task = new Task<>(() -> {
-			System.out.println(1);
+public static void main(String[] args) throws Exception {
+    Task<String> task = new Task<>(() -> {
+        System.out.println(1);
 
-			new Task<>(() -> {
-				System.out.println(2);
-			}, TaskOption.ATTACH_TO_PARENT).start();
+        new Task<>(() -> {
+            System.out.println(2);
+        }, TaskOption.ATTACH_TO_PARENT).start();
 
-		}, TaskOption.ACCEPT_CHILDREN);
+    }, TaskOption.ACCEPT_CHILDREN);
 
-		task.start();
+    task.start();
 
-		task.getResult();
+    task.getResult();
 
-		System.out.println("Finished");
-	}
+    System.out.println("Finished");
+}
 ```
 
 Output:
@@ -251,25 +251,25 @@ If you create a task with the option `REJECT_CHILDREN`, all children tasks will 
 In certain scenarios it is useful to cancel the execution of a task. To finish a Task with cancel status, the action supplied to the Task must throw a `CancelledException`. To implement this mechanism, the action passed to Task can receive an instance of `CancellationToken `. With this token the action can check if there is a cancel request through method `hasCancelRequest` and abort the action by trowing a `CancelledException`. Here you have an example:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<?> task = new Task<>((IVoidAction)(cancelToken) -> {
-			while(true) {
-				System.out.println("Sleep");
-				Thread.sleep(1000);
+public static void main(String[] args) throws Exception {
+    Task<?> task = new Task<>((IVoidAction)(cancelToken) -> {
+        while(true) {
+            System.out.println("Sleep");
+            Thread.sleep(1000);
 
-				if(cancelToken.hasCancelRequest())
-					throw cancelToken.abort();
-			}
-		});
+            if(cancelToken.hasCancelRequest())
+                throw cancelToken.abort();
+        }
+    });
 
-		task.start();
+    task.start();
 
-		Thread.sleep(3000);
-		task.cancel();
+    Thread.sleep(3000);
+    task.cancel();
 
-		task.getResult();
-		System.out.println(task.getStatus().getValue());  //Prints CANCELED
-	}
+    task.getResult();
+    System.out.println(task.getStatus().getValue());  //Prints CANCELED
+}
 ```
 
 
@@ -284,28 +284,28 @@ In certain scenarios it is useful to cancel the execution of a task. To finish a
 As you already realized we have a common pattern of creating and starting a Task. Imagine the following example:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<String> task = new Task<>(() -> System.out.println(1));
-		task.start();
+public static void main(String[] args) throws Exception {
+    Task<String> task = new Task<>(() -> System.out.println(1));
+    task.start();
 
-		task.then(new Task<>(() -> System.out.println(2)))
-			.then(new Task<>(() -> System.out.println(3)))
-			.then(new Task<>(() -> System.out.println(4)))
-			.getResult();
-	}
+    task.then(new Task<>(() -> System.out.println(2)))
+        .then(new Task<>(() -> System.out.println(3)))
+        .then(new Task<>(() -> System.out.println(4)))
+        .getResult();
+}
 ```
 
 We can take advantage of this method and rewrite this code like so:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		TaskFactory
-			.createAndStart(() -> System.out.println(1))
-	        .then(new Task<>(() -> System.out.println(2)))
-	        .then(new Task<>(() -> System.out.println(3)))
-	        .then(new Task<>(() -> System.out.println(4)))
-	        .getResult();
-	}
+public static void main(String[] args) throws Exception {
+    TaskFactory
+        .createAndStart(() -> System.out.println(1))
+        .then(new Task<>(() -> System.out.println(2)))
+        .then(new Task<>(() -> System.out.println(3)))
+        .then(new Task<>(() -> System.out.println(4)))
+        .getResult();
+}
 ```
 
 
@@ -314,34 +314,34 @@ We can take advantage of this method and rewrite this code like so:
 `whenAll` method returns a Task that will only be completed when all the given tasks complete. The result of the returned task is a `Collection` containing the result of all given tasks. If any of the supplied tasks fails the result of the returned task is also failure.
 Here you have an example:
 ```java
-	public static void main(String[] args) throws Exception {
-		Collection<Task<String>> tasks = Arrays.asList(
-			TaskFactory.createAndStart(()->"A"),
-			TaskFactory.createAndStart(()->"B"),
-			TaskFactory.createAndStart(()->"C")
-		);
+public static void main(String[] args) throws Exception {
+    Collection<Task<String>> tasks = Arrays.asList(
+        TaskFactory.createAndStart(()->"A"),
+        TaskFactory.createAndStart(()->"B"),
+        TaskFactory.createAndStart(()->"C")
+    );
 
-		Task<Collection<String>> collectTask = TaskFactory.whenAll(tasks);
+    Task<Collection<String>> collectTask = TaskFactory.whenAll(tasks);
 
-		for(String s : collectTask.getResult())
-			System.out.println(s);
-	}
+    for(String s : collectTask.getResult())
+        System.out.println(s);
+}
 ```
 
 ### WhenAny
 `whenAny` method returns a Task that will only be completed when one of the given tasks completes. The result of the returned task is the task that finished first.
 Here you have an example:
 ```java
-	public static void main(String[] args) throws Exception {
-		Collection<Task<String>> tasks = Arrays.asList(
-			TaskFactory.createAndStart(()->"A"),
-			TaskFactory.createAndStart(()->"B"),
-			TaskFactory.createAndStart(()->"C")
-		);
+public static void main(String[] args) throws Exception {
+    Collection<Task<String>> tasks = Arrays.asList(
+        TaskFactory.createAndStart(()->"A"),
+        TaskFactory.createAndStart(()->"B"),
+        TaskFactory.createAndStart(()->"C")
+    );
 
-		Task<Task<String>> collectTask = TaskFactory.whenAny(tasks);
-		System.out.println(collectTask.getResult().getResult());
-	}
+    Task<Task<String>> collectTask = TaskFactory.whenAny(tasks);
+    System.out.println(collectTask.getResult().getResult());
+}
 ```
 
 ### Unwrap
@@ -351,13 +351,13 @@ It can be convenient in some scenarios that a task returns another Task and we e
 Here you have and example:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		Task<Task<String>> task = TaskFactory.createAndStart(() -> TaskFactory.createAndStart(() -> "Task"));
+public static void main(String[] args) throws Exception {
+    Task<Task<String>> task = TaskFactory.createAndStart(() -> TaskFactory.createAndStart(() -> "Task"));
 
-		Task<String> unwrappedTask = TaskFactory.unwrap(task);
+    Task<String> unwrappedTask = TaskFactory.unwrap(task);
 
-		System.out.println(unwrappedTask.getResult());
-	}
+    System.out.println(unwrappedTask.getResult());
+}
 ```
 
 
@@ -368,30 +368,30 @@ In order to solve this, Task has some variants of constructor that receives an a
 Let´s see how can we execute our Tasks on a Pool:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		ExecutorService pool = Executors.newFixedThreadPool(8);
-		Consumer<Runnable> scheduler = pool::submit;
-		Task<?> task = new Task<>(() -> System.out.println("Hello World!"), scheduler);
+public static void main(String[] args) throws Exception {
+    ExecutorService pool = Executors.newFixedThreadPool(8);
+    Consumer<Runnable> scheduler = pool::submit;
+    Task<?> task = new Task<>(() -> System.out.println("Hello World!"), scheduler);
 
-		task.start();
+    task.start();
 
-		task.getResult();
-		pool.shutdown();
-	}
+    task.getResult();
+    pool.shutdown();
+}
 ```
 
 This is exactly what `TaskPool` does. When you create Task through an instance of `TaskPool`, TaskPool will pass its pool as scheduler to the Task. So the previous example written with `TaskPool` looks like:
 
 ```java
-	public static void main(String[] args) throws Exception {
-		TaskPool pool = new TaskPool(8);
-		Task<?> task = pool.create(() -> System.out.println("Hello World!"));
+public static void main(String[] args) throws Exception {
+    TaskPool pool = new TaskPool(8);
+    Task<?> task = pool.create(() -> System.out.println("Hello World!"));
 
-		task.start();
+    task.start();
 
-		task.getResult();
-		pool.close();
-	}
+    task.getResult();
+    pool.close();
+}
 ```
 
 On a `TaskPool` instance you have all methods we saw on [`TaskFactory`](#taskfactory).
