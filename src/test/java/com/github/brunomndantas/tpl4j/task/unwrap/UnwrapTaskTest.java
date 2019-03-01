@@ -8,8 +8,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UnwrapTaskTest {
 
@@ -28,28 +27,65 @@ public class UnwrapTaskTest {
 
     @Test
     public void constructorsTest() {
+        String id = "";
         Task<Task<String>> task = new Task<>(() -> null);
         UnwrapTask<String> unwrapTask;
 
-        unwrapTask = new UnwrapTask<>(task, SCHEDULER, OPTIONS);
+        unwrapTask = new UnwrapTask<>(id, task, SCHEDULER, OPTIONS);
+        assertSame(id, unwrapTask.getId());
         assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
         assertSame(SCHEDULER, unwrapTask.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), unwrapTask.getOptions());
         assertSame(task.getJob(), unwrapTask.getTask().getJob());
 
-        unwrapTask = new UnwrapTask<>(task, OPTIONS);
+        unwrapTask = new UnwrapTask<>(task, SCHEDULER, OPTIONS);
+        assertNotNull(unwrapTask.getId());
+        assertFalse(unwrapTask.getId().isEmpty());
+        assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
+        assertSame(SCHEDULER, unwrapTask.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), unwrapTask.getOptions());
+        assertSame(task.getJob(), unwrapTask.getTask().getJob());
+
+        unwrapTask = new UnwrapTask<>(id, task, OPTIONS);
+        assertSame(id, unwrapTask.getId());
         assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
         assertSame(Task.DEFAULT_SCHEDULER, unwrapTask.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), unwrapTask.getOptions());
         assertSame(task.getJob(), unwrapTask.getTask().getJob());
 
-        unwrapTask = new UnwrapTask<>(task, SCHEDULER);
+        unwrapTask = new UnwrapTask<>(task, OPTIONS);
+        assertNotNull(unwrapTask.getId());
+        assertFalse(unwrapTask.getId().isEmpty());
+        assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
+        assertSame(Task.DEFAULT_SCHEDULER, unwrapTask.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), unwrapTask.getOptions());
+        assertSame(task.getJob(), unwrapTask.getTask().getJob());
+
+        unwrapTask = new UnwrapTask<>(id, task, SCHEDULER);
+        assertSame(id, unwrapTask.getId());
         assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
         assertSame(SCHEDULER, unwrapTask.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), unwrapTask.getOptions());
         assertSame(task.getJob(), unwrapTask.getTask().getJob());
 
+        unwrapTask = new UnwrapTask<>(task, SCHEDULER);
+        assertNotNull(unwrapTask.getId());
+        assertFalse(unwrapTask.getId().isEmpty());
+        assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
+        assertSame(SCHEDULER, unwrapTask.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), unwrapTask.getOptions());
+        assertSame(task.getJob(), unwrapTask.getTask().getJob());
+
+        unwrapTask = new UnwrapTask<>(id, task);
+        assertSame(id, unwrapTask.getId());
+        assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
+        assertSame(Task.DEFAULT_SCHEDULER, unwrapTask.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), unwrapTask.getOptions());
+        assertSame(task.getJob(), unwrapTask.getTask().getJob());
+
         unwrapTask = new UnwrapTask<>(task);
+        assertNotNull(unwrapTask.getId());
+        assertFalse(unwrapTask.getId().isEmpty());
         assertTrue(unwrapTask.getJob() instanceof UnwrapJob);
         assertSame(Task.DEFAULT_SCHEDULER, unwrapTask.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), unwrapTask.getOptions());

@@ -30,9 +30,26 @@ public class UnwrapTask<T> extends Task<T> {
 
 
 
-    public UnwrapTask(Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
-        super(new UnwrapJob<>(UUID.randomUUID().toString(), scheduler, Arrays.asList(options), task.getJob()));
+    public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
+        super(new UnwrapJob<>(taskId, scheduler, Arrays.asList(options), task.getJob()));
         this.task = task;
+    }
+
+    public UnwrapTask(String taskId, Task<Task<T>> task, TaskOption... options) {
+        this(taskId, task, Task.DEFAULT_SCHEDULER, options);
+    }
+
+    public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler) {
+        this(taskId, task, scheduler, Task.DEFAULT_OPTIONS);
+    }
+
+    public UnwrapTask(String taskId, Task<Task<T>> task) {
+        this(taskId, task, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+    }
+
+
+    public UnwrapTask(Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(UUID.randomUUID().toString(), task, scheduler, options);
     }
 
     public UnwrapTask(Task<Task<T>> task, TaskOption... options) {

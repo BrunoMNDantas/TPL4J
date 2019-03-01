@@ -29,30 +29,67 @@ public class WhenAnyTaskTest {
 
     @Test
     public void constructorsTest() {
+        String id = "";
         Task<String> t1 = new Task<>(() -> "");
         Task<String> t2 = new Task<>(() -> "");
         Collection<Task<String>> tasks = Arrays.asList(t1, t2);
         WhenAnyTask<String> task;
 
-        task = new WhenAnyTask<>(tasks, SCHEDULER, OPTIONS);
+        task = new WhenAnyTask<>(id, tasks, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getJob() instanceof WhenAnyJob);
         assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
         assertSame(SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
-        task = new WhenAnyTask<>(tasks, OPTIONS);
+        task = new WhenAnyTask<>(tasks, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getJob() instanceof WhenAnyJob);
+        assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
+        assertSame(SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = new WhenAnyTask<>(id, tasks, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getJob() instanceof WhenAnyJob);
         assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
-        task = new WhenAnyTask<>(tasks, SCHEDULER);
+        task = new WhenAnyTask<>(tasks, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getJob() instanceof WhenAnyJob);
+        assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = new WhenAnyTask<>(id, tasks, SCHEDULER);
+        assertSame(id, task.getId());
         assertTrue(task.getJob() instanceof WhenAnyJob);
         assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
         assertSame(SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
+        task = new WhenAnyTask<>(tasks, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getJob() instanceof WhenAnyJob);
+        assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
+        assertSame(SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = new WhenAnyTask<>(id, tasks);
+        assertSame(id, task.getId());
+        assertTrue(task.getJob() instanceof WhenAnyJob);
+        assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
         task = new WhenAnyTask<>(tasks);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertTrue(task.getJob() instanceof WhenAnyJob);
         assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());

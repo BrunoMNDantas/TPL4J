@@ -31,6 +31,23 @@ import java.util.function.Consumer;
 
 public class TaskFactory {
 
+    public static <T> Task<T> create(String taskId, IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        return new Task<>(taskId, action, scheduler, options);
+    }
+
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        return new Task<>(taskId, action, scheduler, options);
+    }
+
+    public static Task<Void> create(String taskId, IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        return new Task<>(taskId, action, scheduler, options);
+    }
+
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        return new Task<>(taskId, action, scheduler, options);
+    }
+
+
     public static <T> Task<T> create(IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
         return new Task<>(action, scheduler, options);
     }
@@ -45,6 +62,23 @@ public class TaskFactory {
 
     public static Task<Void> create(IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
         return new Task<>(action, scheduler, options);
+    }
+
+
+    public static <T> Task<T> create(String taskId, IAction<T> action, TaskOption... options) {
+        return new Task<>(taskId, action, options);
+    }
+
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        return new Task<>(taskId, action, options);
+    }
+
+    public static Task<Void> create(String taskId, IVoidAction action, TaskOption... options) {
+        return new Task<>(taskId, action, options);
+    }
+
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        return new Task<>(taskId, action, options);
     }
 
 
@@ -65,6 +99,23 @@ public class TaskFactory {
     }
 
 
+    public static <T> Task<T> create(String taskId, IAction<T> action, Consumer<Runnable> scheduler) {
+        return new Task<>(taskId, action, scheduler);
+    }
+
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler) {
+        return new Task<>(taskId, action, scheduler);
+    }
+
+    public static Task<Void> create(String taskId, IVoidAction action, Consumer<Runnable> scheduler) {
+        return new Task<>(taskId, action, scheduler);
+    }
+
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler) {
+        return new Task<>(taskId, action, scheduler);
+    }
+
+
     public static <T> Task<T> create(IAction<T> action, Consumer<Runnable> scheduler) {
         return new Task<>(action, scheduler);
     }
@@ -82,6 +133,23 @@ public class TaskFactory {
     }
 
 
+    public static <T> Task<T> create(String taskId, IAction<T> action) {
+        return new Task<>(taskId, action);
+    }
+
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action) {
+        return new Task<>(taskId, action);
+    }
+
+    public static Task<Void> create(String taskId, IVoidAction action) {
+        return new Task<>(taskId, action);
+    }
+
+    public static Task<Void> create(String taskId, IEmptyVoidAction action) {
+        return new Task<>(taskId, action);
+    }
+
+
     public static <T> Task<T> create(IAction<T> action) {
         return new Task<>(action);
     }
@@ -96,6 +164,39 @@ public class TaskFactory {
 
     public static Task<Void> create(IEmptyVoidAction action) {
         return new Task<>(action);
+    }
+
+
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        Task<T> task = create(taskId, action, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        Task<T> task = create(taskId, action, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        Task<Void> task = create(taskId, action, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        Task<Void> task = create(taskId, action, scheduler, options);
+
+        task.start();
+
+        return task;
     }
 
 
@@ -125,6 +226,39 @@ public class TaskFactory {
 
     public static Task<Void> createAndStart(IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
         Task<Void> task = create(action, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, TaskOption... options) {
+        Task<T> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        Task<T> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, TaskOption... options) {
+        Task<Void> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        Task<Void> task = create(taskId, action, options);
 
         task.start();
 
@@ -165,6 +299,39 @@ public class TaskFactory {
     }
 
 
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, Consumer<Runnable> scheduler) {
+        Task<T> task = create(taskId, action, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler) {
+        Task<T> task = create(taskId, action, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, Consumer<Runnable> scheduler) {
+        Task<Void> task = create(taskId, action, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler) {
+        Task<Void> task = create(taskId, action, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+
     public static <T> Task<T> createAndStart(IAction<T> action, Consumer<Runnable> scheduler) {
         Task<T> task = create(action, scheduler);
 
@@ -191,6 +358,39 @@ public class TaskFactory {
 
     public static Task<Void> createAndStart(IEmptyVoidAction action, Consumer<Runnable> scheduler) {
         Task<Void> task = create(action, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action) {
+        Task<T> task = create(taskId, action);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action) {
+        Task<T> task = create(taskId, action);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IVoidAction action) {
+        Task<Void> task = create(taskId, action);
+
+        task.start();
+
+        return task;
+    }
+
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action) {
+        Task<Void> task = create(taskId, action);
 
         task.start();
 
@@ -231,6 +431,39 @@ public class TaskFactory {
     }
 
 
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+        WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
+        WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks) {
+        WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks);
+
+        task.start();
+
+        return task;
+    }
+
+
     public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
         WhenAllTask<T> task = new WhenAllTask<>(tasks, scheduler, options);
 
@@ -264,6 +497,39 @@ public class TaskFactory {
     }
 
 
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+        WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
+        WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks) {
+        WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks);
+
+        task.start();
+
+        return task;
+    }
+
+
     public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, scheduler, options);
 
@@ -290,6 +556,39 @@ public class TaskFactory {
 
     public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks);
+
+        task.start();
+
+        return task;
+    }
+
+
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, Consumer<Runnable> scheduler, TaskOption... options) {
+        UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, TaskOption... options) {
+        UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, Consumer<Runnable> scheduler) {
+        UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap) {
+        UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap);
 
         task.start();
 

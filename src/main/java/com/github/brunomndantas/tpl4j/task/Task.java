@@ -40,8 +40,25 @@ public class Task<T> extends BaseTask<T> {
     }
 
 
+    public Task(String taskId, IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(new Job<>(taskId, action, scheduler, Arrays.asList(options)));
+    }
+
+    public Task(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(taskId, new EmptyAction<>(action), scheduler, options);
+    }
+
+    public Task(String taskId, IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(taskId, (IAction<T>)(new VoidAction(action)), scheduler, options);
+    }
+
+    public Task(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(taskId, (IAction<T>) (new EmptyVoidAction(action)), scheduler, options);
+    }
+
+
     public Task(IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
-        this(new Job<>(UUID.randomUUID().toString(), action, scheduler, Arrays.asList(options)));
+        this(UUID.randomUUID().toString(), action, scheduler, options);
     }
 
     public Task(IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
@@ -54,6 +71,23 @@ public class Task<T> extends BaseTask<T> {
 
     public Task(IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
         this((IAction<T>) (new EmptyVoidAction(action)), scheduler, options);
+    }
+
+
+    public Task(String taskId, IAction<T> action, TaskOption... options) {
+        this(taskId, action, DEFAULT_SCHEDULER, options);
+    }
+
+    public Task(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        this(taskId, new EmptyAction<>(action), DEFAULT_SCHEDULER, options);
+    }
+
+    public Task(String taskId, IVoidAction action, TaskOption... options) {
+        this(taskId, (IAction<T>)(new VoidAction(action)), DEFAULT_SCHEDULER, options);
+    }
+
+    public Task(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        this(taskId, (IAction<T>) (new EmptyVoidAction(action)), DEFAULT_SCHEDULER, options);
     }
 
 
@@ -74,6 +108,23 @@ public class Task<T> extends BaseTask<T> {
     }
 
 
+    public Task(String taskId, IAction<T> action, Consumer<Runnable> scheduler) {
+        this(taskId, action, scheduler, DEFAULT_OPTIONS);
+    }
+
+    public Task(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler) {
+        this(taskId, new EmptyAction<>(action), scheduler, DEFAULT_OPTIONS);
+    }
+
+    public Task(String taskId, IVoidAction action, Consumer<Runnable> scheduler) {
+        this(taskId, (IAction<T>)(new VoidAction(action)), scheduler, DEFAULT_OPTIONS);
+    }
+
+    public Task(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler) {
+        this(taskId, (IAction<T>) (new EmptyVoidAction(action)), scheduler, DEFAULT_OPTIONS);
+    }
+
+
     public Task(IAction<T> action, Consumer<Runnable> scheduler) {
         this(action, scheduler, DEFAULT_OPTIONS);
     }
@@ -88,6 +139,23 @@ public class Task<T> extends BaseTask<T> {
 
     public Task(IEmptyVoidAction action, Consumer<Runnable> scheduler) {
         this((IAction<T>) (new EmptyVoidAction(action)), scheduler, DEFAULT_OPTIONS);
+    }
+
+
+    public Task(String taskId, IAction<T> action) {
+        this(taskId, action, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
+    }
+
+    public Task(String taskId, IEmptyAction<T> action) {
+        this(taskId, new EmptyAction<>(action), DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
+    }
+
+    public Task(String taskId, IVoidAction action) {
+        this(taskId, (IAction<T>)(new VoidAction(action)), DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
+    }
+
+    public Task(String taskId, IEmptyVoidAction action) {
+        this(taskId, (IAction<T>) (new EmptyVoidAction(action)), DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
 
@@ -113,6 +181,36 @@ public class Task<T> extends BaseTask<T> {
         super.getStatus().finishedEvent.addListener(task::start);
         return task;
     }
+
+
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<K> taskAction = new LinkAction<>(this, action);
+        Task<K> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
+    }
+
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<Void> taskAction = new LinkVoidAction<>(this, action);
+        Task<Void> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
+    }
+
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<K> taskAction = new LinkEmptyAction<>(this, action);
+        Task<K> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
+    }
+
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<Void> taskAction = new LinkEmptyVoidAction<>(this, action);
+        Task<Void> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
+    }
+
 
     public <K> Task<K> then(ILinkAction<K, T> action, Consumer<Runnable> scheduler, TaskOption... options) {
         IAction<K> taskAction = new LinkAction<>(this, action);
@@ -143,6 +241,23 @@ public class Task<T> extends BaseTask<T> {
     }
 
 
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, Consumer<Runnable> scheduler) {
+        return this.then(taskId, action, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, Consumer<Runnable> scheduler) {
+        return this.then(taskId, action, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, Consumer<Runnable> scheduler) {
+        return this.then(taskId, action, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, Consumer<Runnable> scheduler) {
+        return this.then(taskId, action, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+
     public <K> Task<K> then(ILinkAction<K, T> action, Consumer<Runnable> scheduler) {
         return this.then(action, scheduler, this.getOptions().toArray(new TaskOption[0]));
     }
@@ -157,6 +272,23 @@ public class Task<T> extends BaseTask<T> {
 
     public Task<Void> then(ILinkEmptyVoidAction action, Consumer<Runnable> scheduler) {
         return this.then(action, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, TaskOption... options) {
+        return this.then(taskId, action, this.getScheduler(), options);
+    }
+
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, TaskOption... options) {
+        return this.then(taskId, action, this.getScheduler(), options);
+    }
+
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, TaskOption... options) {
+        return this.then(taskId, action, this.getScheduler(), options);
+    }
+
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, TaskOption... options) {
+        return this.then(taskId, action, this.getScheduler(), options);
     }
 
 
@@ -177,6 +309,23 @@ public class Task<T> extends BaseTask<T> {
     }
 
 
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action) {
+        return this.then(taskId, action, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action) {
+        return this.then(taskId, action, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action) {
+        return this.then(taskId, action, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action) {
+        return this.then(taskId, action, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+
     public <K> Task<K> then(ILinkAction<K, T> action) {
         return this.then(action, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
     }
@@ -191,6 +340,28 @@ public class Task<T> extends BaseTask<T> {
 
     public Task<Void> then(ILinkEmptyVoidAction action) {
         return this.then(action, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<T> taskAction = new RetryAction<>(this, retrySupplier);
+        Task<T> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
+    }
+
+    public Task<T> retry(String taskId, int numberOfTries, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<T> taskAction = new RetryAction<>(this, numberOfTries);
+        Task<T> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
+    }
+
+    public Task<T> retry(String taskId, Consumer<Runnable> scheduler, TaskOption... options) {
+        IAction<T> taskAction = new RetryAction<>(this);
+        Task<T> task = new Task<>(taskId, taskAction, scheduler, options);
+
+        return this.then(task);
     }
 
 
@@ -216,6 +387,19 @@ public class Task<T> extends BaseTask<T> {
     }
 
 
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, Consumer<Runnable> scheduler) {
+        return this.retry(taskId, retrySupplier, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<T> retry(String taskId, int numberOfTries, Consumer<Runnable> scheduler) {
+        return this.retry(taskId, numberOfTries, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<T> retry(String taskId, Consumer<Runnable> scheduler) {
+        return this.retry(taskId, scheduler, this.getOptions().toArray(new TaskOption[0]));
+    }
+
+
     public Task<T> retry(Supplier<Boolean> retrySupplier, Consumer<Runnable> scheduler) {
         return this.retry(retrySupplier, scheduler, this.getOptions().toArray(new TaskOption[0]));
     }
@@ -229,6 +413,19 @@ public class Task<T> extends BaseTask<T> {
     }
 
 
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, TaskOption... options) {
+        return this.retry(taskId, retrySupplier, this.getScheduler(), options);
+    }
+
+    public Task<T> retry(String taskId, int numberOfTries, TaskOption... options) {
+        return this.retry(taskId, numberOfTries, this.getScheduler(), options);
+    }
+
+    public Task<T> retry(String taskId, TaskOption... options) {
+        return this.retry(taskId, this.getScheduler(), options);
+    }
+
+
     public Task<T> retry(Supplier<Boolean> retrySupplier, TaskOption... options) {
         return this.retry(retrySupplier, this.getScheduler(), options);
     }
@@ -239,6 +436,19 @@ public class Task<T> extends BaseTask<T> {
 
     public Task<T> retry(TaskOption... options) {
         return this.retry(this.getScheduler(), options);
+    }
+
+
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier) {
+        return this.retry(taskId, retrySupplier, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<T> retry(String taskId, int numberOfTries) {
+        return this.retry(taskId, numberOfTries, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
+    }
+
+    public Task<T> retry(String taskId) {
+        return this.retry(taskId, this.getScheduler(), this.getOptions().toArray(new TaskOption[0]));
     }
 
 

@@ -31,153 +31,395 @@ public class TaskFactoryTest {
 
     @Test
     public void createTest() {
+        String id = "";
         Task<?> task;
 
+        task = TaskFactory.create(id, ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, VOID_ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, VOID_ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, VOID_ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, VOID_ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_VOID_ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_VOID_ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
+        task = TaskFactory.create(id, EMPTY_VOID_ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+
         task = TaskFactory.create(ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(VOID_ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(VOID_ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(VOID_ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(VOID_ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_VOID_ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_VOID_ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
 
         task = TaskFactory.create(EMPTY_VOID_ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
     }
 
     @Test
     public void createAndStartTest() {
+        String id = "";
         Task<?> task;
 
+        task = TaskFactory.createAndStart(id, ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, VOID_ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, VOID_ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, VOID_ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, VOID_ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_VOID_ACTION, OPTIONS);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_VOID_ACTION, SCHEDULER);
+        assertSame(id, task.getId());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
+        task = TaskFactory.createAndStart(id, EMPTY_VOID_ACTION);
+        assertSame(id, task.getId());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+
         task = TaskFactory.createAndStart(ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(VOID_ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(VOID_ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(VOID_ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(VOID_ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_VOID_ACTION, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_VOID_ACTION, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
         task = TaskFactory.createAndStart(EMPTY_VOID_ACTION);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
@@ -185,31 +427,68 @@ public class TaskFactoryTest {
 
     @Test
     public void whenAllTest() {
+        String id = "";
         Task<String> taskA = new Task<>(() -> "");
         Task<String> taskB = new Task<>(() -> "");
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         WhenAllTask<?> task;
 
-        task = TaskFactory.whenAll(tasks, SCHEDULER, OPTIONS);
+        task = TaskFactory.whenAll(id, tasks, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertSame(tasks, task.getTasks());
 
-        task = TaskFactory.whenAll(tasks, OPTIONS);
+        task = TaskFactory.whenAll(tasks, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = TaskFactory.whenAll(id, tasks, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertSame(tasks, task.getTasks());
 
-        task = TaskFactory.whenAll(tasks, SCHEDULER);
+        task = TaskFactory.whenAll(tasks, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = TaskFactory.whenAll(id, tasks, SCHEDULER);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertSame(tasks, task.getTasks());
 
+        task = TaskFactory.whenAll(tasks, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = TaskFactory.whenAll(id, tasks);
+        assertSame(id, task.getId());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
         task = TaskFactory.whenAll(tasks);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
@@ -218,31 +497,68 @@ public class TaskFactoryTest {
 
     @Test
     public void whenAnyTest() {
+        String id = "";
         Task<String> taskA = new Task<>(() -> "");
         Task<String> taskB = new Task<>(() -> "");
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         WhenAnyTask<?> task;
 
-        task = TaskFactory.whenAny(tasks, SCHEDULER, OPTIONS);
+        task = TaskFactory.whenAny(id, tasks, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertSame(tasks, task.getTasks());
 
-        task = TaskFactory.whenAny(tasks, OPTIONS);
+        task = TaskFactory.whenAny(tasks, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = TaskFactory.whenAny(id, tasks, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertSame(tasks, task.getTasks());
 
-        task = TaskFactory.whenAny(tasks, SCHEDULER);
+        task = TaskFactory.whenAny(tasks, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = TaskFactory.whenAny(id, tasks, SCHEDULER);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertSame(tasks, task.getTasks());
 
+        task = TaskFactory.whenAny(tasks, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
+        task = TaskFactory.whenAny(id, tasks);
+        assertSame(id, task.getId());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(tasks, task.getTasks());
+
         task = TaskFactory.whenAny(tasks);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         Assert.assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
@@ -251,29 +567,66 @@ public class TaskFactoryTest {
 
     @Test
     public void unwrapTest() {
+        String id = "";
         Task<Task<String>> taskToUnwrap = new Task<>(() -> new Task<>(() -> null));
 
         UnwrapTask<?> task;
 
-        task = TaskFactory.unwrap(taskToUnwrap, SCHEDULER, OPTIONS);
+        task = TaskFactory.unwrap(id, taskToUnwrap, SCHEDULER, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertSame(taskToUnwrap, task.getTask());
 
-        task = TaskFactory.unwrap(taskToUnwrap, OPTIONS);
+        task = TaskFactory.unwrap(taskToUnwrap, SCHEDULER, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(taskToUnwrap, task.getTask());
+
+        task = TaskFactory.unwrap(id, taskToUnwrap, OPTIONS);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(OPTIONS), task.getOptions());
         assertSame(taskToUnwrap, task.getTask());
 
-        task = TaskFactory.unwrap(taskToUnwrap, SCHEDULER);
+        task = TaskFactory.unwrap(taskToUnwrap, OPTIONS);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(OPTIONS), task.getOptions());
+        assertSame(taskToUnwrap, task.getTask());
+
+        task = TaskFactory.unwrap(id, taskToUnwrap, SCHEDULER);
+        assertSame(id, task.getId());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
         assertSame(taskToUnwrap, task.getTask());
 
+        task = TaskFactory.unwrap(taskToUnwrap, SCHEDULER);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(taskToUnwrap, task.getTask());
+
+        task = TaskFactory.unwrap(id, taskToUnwrap);
+        assertSame(id, task.getId());
+        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+        assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());
+        assertSame(taskToUnwrap, task.getTask());
+
         task = TaskFactory.unwrap(taskToUnwrap);
+        assertNotNull(task.getId());
+        assertFalse(task.getId().isEmpty());
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
         assertEquals(Arrays.asList(Task.DEFAULT_OPTIONS), task.getOptions());

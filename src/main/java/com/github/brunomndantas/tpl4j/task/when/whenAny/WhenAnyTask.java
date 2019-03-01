@@ -31,15 +31,32 @@ public class WhenAnyTask<T> extends Task<Task<T>> {
 
 
 
-    public WhenAnyTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
         super(new WhenAnyJob<>(
-                UUID.randomUUID().toString(),
+                taskId,
                 scheduler,
                 Arrays.asList(options),
                 tasks
         ));
 
         this.tasks = tasks;
+    }
+
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        this(taskId, tasks, Task.DEFAULT_SCHEDULER, options);
+    }
+
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
+        this(taskId, tasks, scheduler, Task.DEFAULT_OPTIONS);
+    }
+
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks) {
+        this(taskId, tasks, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+    }
+
+
+    public WhenAnyTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(UUID.randomUUID().toString(), tasks, scheduler, options);
     }
 
     public WhenAnyTask(Collection<Task<T>> tasks, TaskOption... options) {

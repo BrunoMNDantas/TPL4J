@@ -42,6 +42,23 @@ public class TaskPool {
     }
 
 
+    public static <T> Task<T> createTask(String taskId, IAction<T> action, TaskOption... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+    public static <T> Task<T> createTask(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+    public static Task<Void> createTask(String taskId, IVoidAction action, TaskOption... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+    public static Task<Void> createTask(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+
     public static <T> Task<T> createTask(IAction<T> action, TaskOption... options) {
         return INSTANCE.create(action, options);
     }
@@ -56,6 +73,23 @@ public class TaskPool {
 
     public static Task<Void> createTask(IEmptyVoidAction action, TaskOption... options) {
         return INSTANCE.create(action, options);
+    }
+
+
+    public static <T> Task<T> createTask(String taskId, IAction<T> action) {
+        return INSTANCE.create(taskId, action);
+    }
+
+    public static <T> Task<T> createTask(String taskId, IEmptyAction<T> action) {
+        return INSTANCE.create(taskId, action);
+    }
+
+    public static Task<Void> createTask(String taskId, IVoidAction action) {
+        return INSTANCE.create(taskId, action);
+    }
+
+    public static Task<Void> createTask(String taskId, IEmptyVoidAction action) {
+        return INSTANCE.create(taskId, action);
     }
 
 
@@ -76,6 +110,23 @@ public class TaskPool {
     }
 
 
+    public static <T> Task<T> createAndStartTask(String taskId, IAction<T> action, TaskOption... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+    public static <T> Task<T> createAndStartTask(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+    public static Task<Void> createAndStartTask(String taskId, IVoidAction action, TaskOption... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+    public static Task<Void> createAndStartTask(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+
     public static <T> Task<T> createAndStartTask(IAction<T> action, TaskOption... options) {
         return INSTANCE.createAndStart(action, options);
     }
@@ -90,6 +141,23 @@ public class TaskPool {
 
     public static Task<Void> createAndStartTask(IEmptyVoidAction action, TaskOption... options) {
         return INSTANCE.createAndStart(action, options);
+    }
+
+
+    public static <T> Task<T> createAndStartTask(String taskId, IAction<T> action) {
+        return INSTANCE.createAndStart(taskId, action);
+    }
+
+    public static <T> Task<T> createAndStartTask(String taskId, IEmptyAction<T> action) {
+        return INSTANCE.createAndStart(taskId, action);
+    }
+
+    public static Task<Void> createAndStartTask(String taskId, IVoidAction action) {
+        return INSTANCE.createAndStart(taskId, action);
+    }
+
+    public static Task<Void> createAndStartTask(String taskId, IEmptyVoidAction action) {
+        return INSTANCE.createAndStart(taskId, action);
     }
 
 
@@ -110,6 +178,15 @@ public class TaskPool {
     }
 
 
+    public static <T> WhenAllTask<T> whenAllTask(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        return INSTANCE.whenAll(taskId, tasks, options);
+    }
+
+    public static <T> WhenAllTask<T> whenAllTask(String taskId, Collection<Task<T>> tasks) {
+        return INSTANCE.whenAll(taskId, tasks);
+    }
+
+
     public static <T> WhenAllTask<T> whenAllTask(Collection<Task<T>> tasks, TaskOption... options) {
         return INSTANCE.whenAll(tasks, options);
     }
@@ -119,12 +196,30 @@ public class TaskPool {
     }
 
 
+    public static <T> WhenAnyTask<T> whenAnyTask(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        return INSTANCE.whenAny(taskId, tasks, options);
+    }
+
+    public static <T> WhenAnyTask<T> whenAnyTask(String taskId, Collection<Task<T>> tasks) {
+        return INSTANCE.whenAny(taskId, tasks);
+    }
+
+
     public static <T> WhenAnyTask<T> whenAnyTask(Collection<Task<T>> tasks, TaskOption... options) {
        return INSTANCE.whenAny(tasks, options);
     }
 
     public static <T> WhenAnyTask<T> whenAnyTask(Collection<Task<T>> tasks) {
         return INSTANCE.whenAny(tasks);
+    }
+
+
+    public static <T> UnwrapTask<T> unwrapTask(String taskId, Task<Task<T>> taskToUnwrap, TaskOption... options) {
+        return INSTANCE.unwrap(taskId, taskToUnwrap, options);
+    }
+
+    public static <T> UnwrapTask<T> unwrapTask(String taskId, Task<Task<T>> taskToUnwrap) {
+        return INSTANCE.unwrap(taskId, taskToUnwrap);
     }
 
 
@@ -161,6 +256,23 @@ public class TaskPool {
 
 
 
+    public <T> Task<T> create(String taskId, IAction<T> action, TaskOption... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+    public <T> Task<T> create(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+    public Task<Void> create(String taskId, IVoidAction action, TaskOption... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+    public Task<Void> create(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+
     public <T> Task<T> create(IAction<T> action, TaskOption... options) {
         return new Task<>(action, this.scheduler, options);
     }
@@ -178,6 +290,23 @@ public class TaskPool {
     }
 
 
+    public <T> Task<T> create(String taskId, IAction<T> action) {
+        return new Task<>(taskId, action, this.scheduler);
+    }
+
+    public <T> Task<T> create(String taskId, IEmptyAction<T> action) {
+        return new Task<>(taskId, action, this.scheduler);
+    }
+
+    public Task<Void> create(String taskId, IVoidAction action) {
+        return new Task<>(taskId, action, this.scheduler);
+    }
+
+    public Task<Void> create(String taskId, IEmptyVoidAction action) {
+        return new Task<>(taskId, action, this.scheduler);
+    }
+
+
     public <T> Task<T> create(IAction<T> action) {
         return new Task<>(action, this.scheduler);
     }
@@ -192,6 +321,39 @@ public class TaskPool {
 
     public Task<Void> create(IEmptyVoidAction action) {
         return new Task<>(action, this.scheduler);
+    }
+
+
+    public <T> Task<T> createAndStart(String taskId, IAction<T> action, TaskOption... options) {
+        Task<T> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, TaskOption... options) {
+        Task<T> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public Task<Void> createAndStart(String taskId, IVoidAction action, TaskOption... options) {
+        Task<Void> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public Task<Void> createAndStart(String taskId, IEmptyVoidAction action, TaskOption... options) {
+        Task<Void> task = create(taskId, action, options);
+
+        task.start();
+
+        return task;
     }
 
 
@@ -221,6 +383,39 @@ public class TaskPool {
 
     public Task<Void> createAndStart(IEmptyVoidAction action, TaskOption... options) {
         Task<Void> task = create(action, options);
+
+        task.start();
+
+        return task;
+    }
+
+
+    public <T> Task<T> createAndStart(String taskId, IAction<T> action) {
+        Task<T> task = create(taskId, action);
+
+        task.start();
+
+        return task;
+    }
+
+    public <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action) {
+        Task<T> task = create(taskId, action);
+
+        task.start();
+
+        return task;
+    }
+
+    public Task<Void> createAndStart(String taskId, IVoidAction action) {
+        Task<Void> task = create(taskId, action);
+
+        task.start();
+
+        return task;
+    }
+
+    public Task<Void> createAndStart(String taskId, IEmptyVoidAction action) {
+        Task<Void> task = create(taskId, action);
 
         task.start();
 
@@ -261,6 +456,23 @@ public class TaskPool {
     }
 
 
+    public <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, this.scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks) {
+        WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, this.scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+
     public <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, TaskOption... options) {
         WhenAllTask<T> task = new WhenAllTask<>(tasks, this.scheduler, options);
 
@@ -278,6 +490,23 @@ public class TaskPool {
     }
 
 
+    public <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+        WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, this.scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks) {
+        WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, this.scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+
     public <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, TaskOption... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, this.scheduler, options);
 
@@ -288,6 +517,23 @@ public class TaskPool {
 
     public <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, this.scheduler);
+
+        task.start();
+
+        return task;
+    }
+
+
+    public <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, TaskOption... options) {
+        UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, this.scheduler, options);
+
+        task.start();
+
+        return task;
+    }
+
+    public <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap) {
+        UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, this.scheduler);
 
         task.start();
 

@@ -1,5 +1,5 @@
 group 'com.github.brunomndantas'
-version '1.0.0'
+version '1.0.1'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
@@ -50,7 +50,7 @@ publishing {
             customizePom(pom)
             groupId 'com.github.brunomndantas'
             artifactId 'tpl4j'
-            version '1.0.0'
+            version '1.0.1'
 
             from components.java
 
