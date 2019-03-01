@@ -1,14 +1,14 @@
 # TPL4J
 TPL4J is a Task Library inspired on C# TPL.
 
-Let's start with our good friend "Hello World". Our goal is to create a task which its job is to print the text "Hello World" on console. For that you can create an instance of Task and pass, as parameter, a lambda with the our code.
+Let's start with our good friend "Hello World". Our goal is to create a task which its job is to print the text "Hello World" on console. For that you can create an instance of Task and pass, as parameter, a lambda with the code.
 
 ```java
 public static void main(String[] args) throws Exception {
 	new Task(() -> System.out.println("Hello World")).start();
 }
 ```
-If you are really anxious and ran this piece of code you probably realize that nothing happened. What a crappy library! Not even the "Hello Word" works!
+If you are really anxious and ran this piece of code you probably realized that nothing happened. What a crappy library! Not even the "Hello Word" works!
 
 Let's see what happened.
 You've created a Task and told to the task that it could start its job. When you invoke method `start()` the task will run our code on a different Thread.
@@ -19,7 +19,7 @@ Ok, here you have some options but since this is a dummy example we will invoke 
 Ok, it's the time. You can call method `getResult()` and run our Hello World. Your code should look like:
 ```java
 public static void main(String[] args) throws Exception {
-    Task task = new Task(() -> System.out.println("Hello World"));
+	Task task = new Task(() -> System.out.println("Hello World"));
 	task.start();
 	task.getResult();
 }
@@ -109,7 +109,7 @@ Output:
 4
 ```
 
-I know, I know. You are probably thinking that it would be easier to to pass a lambda to `then` method. Guess what?... I totally agree ;) that's why you have multiple overloads of method `then`. These variants of method `then` create a Task with the given action, chains it with the current task and return the created Task. With this overloads the previous example could be written like this:
+I know, I know. You are probably thinking that it would be easier to pass a lambda to `then` method. Guess what?... I totally agree ;) that's why you have multiple overloads of method `then`. These variants of method `then` create a Task with the given action, chain it with the current task and return the created Task. With these overloads the previous example could be written like this:
 
 ```java
 public static void main(String[] args) throws Exception {
@@ -125,7 +125,7 @@ public static void main(String[] args) throws Exception {
 
 Latter on [ILinkAction](#ilinkaction) section you can find all overloads of method `then`.
 
-That's it for now. You already have you basic skills up  and running. You can go ahead and develop you project or keep reading to see in more detail some aspects of TPL4J.
+That's it for now. You already have your basic skills up  and running. You can go ahead and develop your project or keep reading to see in more detail some aspects of TPL4J.
 
 
 
@@ -173,9 +173,9 @@ With an `Event` instance you can:
 
 ### IAction<T>
 
-`IAction` is the functional interface to define the action that Tasks will execute. This interface declares a method `run` which produces K and receives an CancellationToken instance. CancellationToken is explained on [Cancel](#cancellationtoken) section.
+`IAction` is the functional interface to define the action that Tasks will execute. This interface declares a method `run` which produces K and receives an `CancellationToken` instance. `CancellationToken` is explained on [Cancel](#cancellationtoken) section.
 
-Since sometimes we just want to execute some action which produces no result or we don't need to deal with `CancellationToken`, Task constructor has variants compatible with the following functional interfaces:
+Since sometimes we just want to execute some action which produces no result or we don't need to deal with `CancellationToken`. Task constructor has variants compatible with the following functional interfaces:
 ```java
 	K run(CancellationToken cancellationToken) throws Exception;
 
@@ -188,7 +188,7 @@ Since sometimes we just want to execute some action which produces no result or 
 
 ### ILinkAction
 
-`ILinkAction` is the functional interface to define the action to be executed after some Task finishes. This interface declares a method `run` which produces K and receives an CancellationToken instance and the previous Task. CancellationToken is explained on [Cancel](#cancellationtoken) section.
+`ILinkAction` is the functional interface to define the action to be executed after some Task finishes. This interface declares a method `run` which produces K, receives an CancellationToken instance and the previous Task. CancellationToken is explained on [Cancel](#cancellationtoken) section.
 
 Similarly to Task constructors, sometimes we just want to execute some action which produces no result or we don't need to deal with `CancellationToken` and the previous Task. `then` method has variants compatible with the following functional interfaces:
 
@@ -336,7 +336,7 @@ public static void main(String[] args) throws Exception {
 ### Unwrap
 
 It can be convenient in some scenarios that a task returns another Task and we end up with a `Task<Task<?>>`. Now we have a Task which its result is another Task but are we only interested on the result of the returned Task.
-`unwrap` method returns a task that will only be completed the the Task return by another Task is completed. This Task's result will be the same of the inner Task.
+`unwrap` method returns a task that will only be completed when the Task returned by another Task is completed. This Task's result will be the same of the inner Task.
 Here you have and example:
 
 ```java
@@ -369,7 +369,7 @@ public static void main(String[] args) throws Exception {
 }
 ```
 
-This is exactly what `TaskPool` does. When you create Task through an instance of `TaskPool`, TaskPool will pass its pool as scheduler to the Task. So the previous example written with `TaskPool` looks like:
+This is exactly what `TaskPool` does. When you create a Task through an instance of `TaskPool`, TaskPool will pass its pool as scheduler to the Task. So the previous example written with `TaskPool` looks like:
 
 ```java
 public static void main(String[] args) throws Exception {
