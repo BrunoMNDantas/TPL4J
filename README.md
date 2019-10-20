@@ -318,6 +318,7 @@ public static void main(String[] args) throws Exception {
 ```
 
 ### WhenAny
+
 `whenAny` method returns a Task that will only be completed when one of the given tasks completes. The result of the returned task is the task that finished first.
 Here you have an example:
 ```java
@@ -349,6 +350,21 @@ public static void main(String[] args) throws Exception {
 }
 ```
 
+### ForEach
+
+`forEach` method returns a Task which internally will create the same number of children as the number of cpus available. Each child task will process the elements of the supplied Iterable. The result of this Task is a Collection containing all results of applying `action` to each element.
+Here you have an example:
+
+```java
+public static void main(String[] args) throws Exception {
+    Collection<String> elements = Arrays.asList("1","2","3");
+    Task<Collection<Integer>> task = TaskFactory.forEach(elements, (element) -> {
+        Thread.sleep(1000);
+        return Integer.parseInt(element);
+    });
+    task.getResult().forEach(System.out::println);
+}
+```
 
 ## TaskPool
 
