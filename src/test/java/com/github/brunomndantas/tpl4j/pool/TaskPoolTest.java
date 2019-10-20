@@ -1,15 +1,15 @@
 package com.github.brunomndantas.tpl4j.pool;
 
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelAction;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleAction;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleVoidAction;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelVoidAction;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.core.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.task.core.action.IEmptyVoidAction;
 import com.github.brunomndantas.tpl4j.task.core.action.IVoidAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleVoidAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelVoidAction;
 import com.github.brunomndantas.tpl4j.task.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.task.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.task.when.whenAny.WhenAnyTask;
@@ -365,83 +365,83 @@ public class TaskPoolTest {
         IParallelAction<String,String> action = (e, t) -> "";
         IParallelVoidAction<String> voidAction = (e, t) -> { };
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
-        IParallelUninterruptibleVoidAction<String> uninterruptiblevoidAction = (e) -> { };
+        IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
         Iterable<String> elements = Arrays.asList("","");
         Task<Collection<String>> task;
 
         
-        task = TaskPool.forEachTask(id, action, elements, OPTIONS);
+        task = TaskPool.forEachTask(id, elements, action, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(id, voidAction, elements, OPTIONS);
+        task = TaskPool.forEachTask(id, elements, voidAction, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(id, uninterruptibleAction, elements, OPTIONS);
+        task = TaskPool.forEachTask(id, elements, uninterruptibleAction, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(id, uninterruptiblevoidAction, elements, OPTIONS);
+        task = TaskPool.forEachTask(id, elements, uninterruptibleVoidAction, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
 
-        task = TaskPool.forEachTask(id, action, elements);
+        task = TaskPool.forEachTask(id, elements, action);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(id, voidAction, elements);
+        task = TaskPool.forEachTask(id, elements, voidAction);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(id, uninterruptibleAction, elements);
+        task = TaskPool.forEachTask(id, elements, uninterruptibleAction);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(id, uninterruptiblevoidAction, elements);
+        task = TaskPool.forEachTask(id, elements, uninterruptibleVoidAction);
         assertSame(id, task.getJob().getTaskId());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
 
-        task = TaskPool.forEachTask(action, elements, OPTIONS);
+        task = TaskPool.forEachTask(elements, action, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(voidAction, elements, OPTIONS);
+        task = TaskPool.forEachTask(elements, voidAction, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(uninterruptibleAction, elements, OPTIONS);
+        task = TaskPool.forEachTask(elements, uninterruptibleAction, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(uninterruptiblevoidAction, elements, OPTIONS);
+        task = TaskPool.forEachTask(elements, uninterruptibleVoidAction, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
@@ -449,28 +449,28 @@ public class TaskPoolTest {
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
 
-        task = TaskPool.forEachTask(action, elements);
+        task = TaskPool.forEachTask(elements, action);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(voidAction, elements);
+        task = TaskPool.forEachTask(elements, voidAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(uninterruptibleAction, elements);
+        task = TaskPool.forEachTask(elements, uninterruptibleAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = TaskPool.forEachTask(uninterruptiblevoidAction, elements);
+        task = TaskPool.forEachTask(elements, uninterruptibleVoidAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(TaskPool.getTaskScheduler(), task.getJob().getScheduler());
@@ -825,83 +825,83 @@ public class TaskPoolTest {
         IParallelAction<String,String> action = (e, t) -> "";
         IParallelVoidAction<String> voidAction = (e, t) -> { };
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
-        IParallelUninterruptibleVoidAction<String> uninterruptiblevoidAction = (e) -> { };
+        IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
         Iterable<String> elements = Arrays.asList("","");
         Task<Collection<String>> task;
 
 
-        task = pool.forEach(id, action, elements, OPTIONS);
+        task = pool.forEach(id, elements, action, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(id, voidAction, elements, OPTIONS);
+        task = pool.forEach(id, elements, voidAction, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(id, uninterruptibleAction, elements, OPTIONS);
+        task = pool.forEach(id, elements, uninterruptibleAction, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(id, uninterruptiblevoidAction, elements, OPTIONS);
+        task = pool.forEach(id, elements, uninterruptibleVoidAction, OPTIONS);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
 
-        task = pool.forEach(id, action, elements);
+        task = pool.forEach(id, elements, action);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(id, voidAction, elements);
+        task = pool.forEach(id, elements, voidAction);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(id, uninterruptibleAction, elements);
+        task = pool.forEach(id, elements, uninterruptibleAction);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(id, uninterruptiblevoidAction, elements);
+        task = pool.forEach(id, elements, uninterruptibleVoidAction);
         assertSame(id, task.getJob().getTaskId());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
 
-        task = pool.forEach(action, elements, OPTIONS);
+        task = pool.forEach(elements, action, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(voidAction, elements, OPTIONS);
+        task = pool.forEach(elements, voidAction, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(uninterruptibleAction, elements, OPTIONS);
+        task = pool.forEach(elements, uninterruptibleAction, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(OPTIONS.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(uninterruptiblevoidAction, elements, OPTIONS);
+        task = pool.forEach(elements, uninterruptibleVoidAction, OPTIONS);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
@@ -909,28 +909,28 @@ public class TaskPoolTest {
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
 
-        task = pool.forEach(action, elements);
+        task = pool.forEach(elements, action);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(voidAction, elements);
+        task = pool.forEach(elements, voidAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(uninterruptibleAction, elements);
+        task = pool.forEach(elements, uninterruptibleAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
-        task = pool.forEach(uninterruptiblevoidAction, elements);
+        task = pool.forEach(elements, uninterruptibleVoidAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertSame(pool.getScheduler(), task.getJob().getScheduler());

@@ -1,19 +1,18 @@
 package com.github.brunomndantas.tpl4j.task.parallel.task;
 
+import com.github.brunomndantas.tpl4j.pool.TaskPool;
+import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.core.TaskOption;
+import com.github.brunomndantas.tpl4j.task.core.job.ChildException;
 import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleAction;
 import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleVoidAction;
 import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelVoidAction;
 import com.github.brunomndantas.tpl4j.task.parallel.job.ParallelJob;
-import com.github.brunomndantas.tpl4j.pool.TaskPool;
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.core.TaskOption;
-import com.github.brunomndantas.tpl4j.task.core.job.ChildException;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
@@ -26,134 +25,134 @@ public class ParallelTaskTest {
         IParallelAction<String,String> action = (e,t) -> "";
         IParallelVoidAction<String> voidAction = (e, t) -> { };
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
-        IParallelUninterruptibleVoidAction<String> uninterruptiblevoidAction = (e) -> { };
-        Iterator<String> iterator = Arrays.asList("","").iterator();
+        IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
+        Iterable<String> elements = Arrays.asList("","");
         Consumer<Runnable> scheduler = (r) -> {};
         TaskOption[] options = new TaskOption[0];
         ParallelTask<String,String> task;
 
-        task = new ParallelTask<>(id, action, iterator, scheduler, options);
+        task = new ParallelTask<>(id, elements, action, scheduler, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, voidAction, iterator, scheduler, options);
+        task = new ParallelTask<>(id, elements, voidAction, scheduler, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptibleAction, iterator, scheduler, options);
+        task = new ParallelTask<>(id, elements, uninterruptibleAction, scheduler, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptiblevoidAction, iterator, scheduler, options);
+        task = new ParallelTask<>(id, elements, uninterruptibleVoidAction, scheduler, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(id, action, iterator, scheduler);
+        task = new ParallelTask<>(id, elements, action, scheduler);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, voidAction, iterator, scheduler);
+        task = new ParallelTask<>(id, elements, voidAction, scheduler);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptibleAction, iterator, scheduler);
+        task = new ParallelTask<>(id, elements, uninterruptibleAction, scheduler);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptiblevoidAction, iterator, scheduler);
+        task = new ParallelTask<>(id, elements, uninterruptibleVoidAction, scheduler);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(id, action, iterator, options);
+        task = new ParallelTask<>(id, elements, action, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, voidAction, iterator, options);
+        task = new ParallelTask<>(id, elements, voidAction, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptibleAction, iterator, options);
+        task = new ParallelTask<>(id, elements, uninterruptibleAction, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptiblevoidAction, iterator, options);
+        task = new ParallelTask<>(id, elements, uninterruptibleVoidAction, options);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(id, action, iterator);
+        task = new ParallelTask<>(id, elements, action);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, voidAction, iterator);
+        task = new ParallelTask<>(id, elements, voidAction);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptibleAction, iterator);
+        task = new ParallelTask<>(id, elements, uninterruptibleAction);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(id, uninterruptiblevoidAction, iterator);
+        task = new ParallelTask<>(id, elements, uninterruptibleVoidAction);
         assertSame(id, task.getJob().getTaskId());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(action, iterator, scheduler, options);
+        task = new ParallelTask<>(elements, action, scheduler, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(voidAction, iterator, scheduler, options);
+        task = new ParallelTask<>(elements, voidAction, scheduler, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptibleAction, iterator, scheduler, options);
+        task = new ParallelTask<>(elements, uninterruptibleAction, scheduler, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptiblevoidAction, iterator, scheduler, options);
+        task = new ParallelTask<>(elements, uninterruptibleVoidAction, scheduler, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
@@ -161,28 +160,28 @@ public class ParallelTaskTest {
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(action, iterator, scheduler);
+        task = new ParallelTask<>(elements, action, scheduler);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(voidAction, iterator, scheduler);
+        task = new ParallelTask<>(elements, voidAction, scheduler);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptibleAction, iterator, scheduler);
+        task = new ParallelTask<>(elements, uninterruptibleAction, scheduler);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(scheduler, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptiblevoidAction, iterator, scheduler);
+        task = new ParallelTask<>(elements, uninterruptibleVoidAction, scheduler);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
@@ -190,28 +189,28 @@ public class ParallelTaskTest {
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(action, iterator, options);
+        task = new ParallelTask<>(elements, action, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(voidAction, iterator, options);
+        task = new ParallelTask<>(elements, voidAction, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptibleAction, iterator, options);
+        task = new ParallelTask<>(elements, uninterruptibleAction, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptiblevoidAction, iterator, options);
+        task = new ParallelTask<>(elements, uninterruptibleVoidAction, options);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
@@ -219,28 +218,28 @@ public class ParallelTaskTest {
         assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
 
-        task = new ParallelTask<>(action, iterator);
+        task = new ParallelTask<>(elements, action);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(voidAction, iterator);
+        task = new ParallelTask<>(elements, voidAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptibleAction, iterator);
+        task = new ParallelTask<>(elements, uninterruptibleAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(Task.DEFAULT_SCHEDULER, task.getJob().getScheduler());
         assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
-        task = new ParallelTask<>(uninterruptiblevoidAction, iterator);
+        task = new ParallelTask<>(elements, uninterruptibleVoidAction);
         assertNotNull(task.getJob().getTaskId());
         assertFalse(task.getJob().getTaskId().isEmpty());
         assertTrue(task.getJob() instanceof ParallelJob);
@@ -253,11 +252,11 @@ public class ParallelTaskTest {
         TaskPool pool = new TaskPool(1);
         String id = "";
         IParallelAction<String,String> action = (e,t) -> { Thread.sleep(2000); return e; };
-        Iterator<String> iterator = Arrays.asList("1","2","3","4").iterator();
+        Iterable<String> elements = Arrays.asList("1","2","3","4");
         Consumer<Runnable> scheduler = pool.getScheduler();
         TaskOption[] options = new TaskOption[0];
 
-        ParallelTask<String,String> task = new ParallelTask<>(id, action, iterator, scheduler, options);
+        ParallelTask<String,String> task = new ParallelTask<>(id, elements, action, scheduler, options);
 
         try {
             task.start();
@@ -274,11 +273,11 @@ public class ParallelTaskTest {
         String id = "";
         Exception exception = new Exception();
         IParallelAction<String,String> action = (e,t) -> { Thread.sleep(2000); throw exception; };
-        Iterator<String> iterator = Arrays.asList("1","2","3","4").iterator();
+        Iterable<String> elements = Arrays.asList("1","2","3","4");
         Consumer<Runnable> scheduler = pool.getScheduler();
         TaskOption[] options = new TaskOption[0];
 
-        ParallelTask<String,String> task = new ParallelTask<>(id, action, iterator, scheduler, options);
+        ParallelTask<String,String> task = new ParallelTask<>(id, elements, action, scheduler, options);
 
         try {
             task.start();

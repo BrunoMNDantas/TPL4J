@@ -16,14 +16,17 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.factory;
 
-import com.github.brunomndantas.tpl4j.task.parallel.action.*;
-import com.github.brunomndantas.tpl4j.task.parallel.task.ParallelTask;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.core.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.task.core.action.IEmptyVoidAction;
 import com.github.brunomndantas.tpl4j.task.core.action.IVoidAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleVoidAction;
+import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelVoidAction;
+import com.github.brunomndantas.tpl4j.task.parallel.task.ParallelTask;
 import com.github.brunomndantas.tpl4j.task.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.task.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.task.when.whenAny.WhenAnyTask;
@@ -631,201 +634,201 @@ public class TaskFactory {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler, options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler, options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, new ParallelUninterruptibleAction<>(action), elements.iterator(), scheduler, options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler, options);
-        task.start();
-        return task;
-    }
-
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler);
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler);
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler);
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), scheduler);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelAction<T,K> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelVoidAction<T> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleAction<T,K> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator(), options);
-        task.start();
-        return task;
-    }
-
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelAction<T,K> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator());
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelVoidAction<T> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator());
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleAction<T,K> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator());
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, action, elements.iterator());
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler, options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler, options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler, options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler, options);
-        task.start();
-        return task;
-    }
-
-
-    public static <T,K> ParallelTask<T,K> forEach(IParallelAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler);
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(IParallelVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler);
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleAction<T,K> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler);
-        task.start();
-        return task;
-    }
-
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements, Consumer<Runnable> scheduler) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), scheduler);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelAction<T,K> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelVoidAction<T> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleAction<T,K> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements, TaskOption... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator(), options);
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelAction<T,K> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator());
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelVoidAction<T> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator());
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleAction<T,K> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator());
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(IParallelUninterruptibleVoidAction<T> action, Iterable<T> elements) {
-        ParallelTask<T,K> task = new ParallelTask<>(action, elements.iterator());
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
+        task.start();
+        return task;
+    }
+
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler);
+        task.start();
+        return task;
+    }
+
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, TaskOption... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
+        task.start();
+        return task;
+    }
+
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action);
+        task.start();
+        return task;
+    }
+
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action) {
+        ParallelTask<T,K> task = new ParallelTask<>(elements, action);
         task.start();
         return task;
 
