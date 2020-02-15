@@ -82,7 +82,7 @@ public class WhenAnyJobTest {
 
     @Test
     public void runWthCancelTaskTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> { if(true) throw t.abort(); return "A"; });
+        Task<String> taskA = new Task<>((t) -> { t.abortIfCancelRequested();; return "A"; });
         Task<String> taskB = new Task<>(() -> { Thread.sleep(3000); return "B"; });
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 

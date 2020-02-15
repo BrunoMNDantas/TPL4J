@@ -78,7 +78,7 @@ public class WhenAllActionTest {
     @Test(expected = CancelledException.class)
     public void runCancelTest() throws Exception {
         Job<String> jobA = new Job<>("", (t) -> "A", SCHEDULER, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> { throw t.abort(); }, SCHEDULER, new LinkedList<>());
+        Job<String> jobB = new Job<>("", (t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, SCHEDULER, new LinkedList<>());
         Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
 
         jobA.schedule();

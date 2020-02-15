@@ -20,7 +20,7 @@ public class JobTest {
     private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(3000); return SUCCESS_RESULT; };
     private static final Exception FAIL_RESULT = new Exception();
     private static final IAction<String> FAIL_ACTION = (token) -> { Thread.sleep(3000); throw FAIL_RESULT; };
-    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); if(token.hasCancelRequest()) throw token.abort(); return SUCCESS_RESULT; };
+    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); token.abortIfCancelRequested(); return SUCCESS_RESULT; };
 
 
 
@@ -139,7 +139,9 @@ public class JobTest {
             childJobB.schedule();
 
             token.cancel();
-            throw token.abort();
+            token.abortIfCancelRequested();
+
+            return null;
         }, SCHEDULER, Arrays.asList(TaskOption.REJECT_CHILDREN));
 
         parentJob.schedule();
@@ -339,7 +341,9 @@ public class JobTest {
             Thread.sleep(500);
 
             token.cancel();
-            throw token.abort();
+            token.abortIfCancelRequested();
+
+            return null;
         }, SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
 
         parentJob.schedule();
@@ -369,7 +373,9 @@ public class JobTest {
             Thread.sleep(500);
 
             token.cancel();
-            throw token.abort();
+            token.abortIfCancelRequested();
+
+            return null;
         }, SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
 
         parentJob.schedule();
@@ -399,7 +405,9 @@ public class JobTest {
 
             Thread.sleep(500);
             token.cancel();
-            throw token.abort();
+            token.abortIfCancelRequested();
+
+            return null;
         }, SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
 
         parentJob.schedule();

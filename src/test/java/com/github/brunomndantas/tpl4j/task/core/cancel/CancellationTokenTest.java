@@ -45,10 +45,16 @@ public class CancellationTokenTest {
     }
 
     @Test
-    public void abortTest() throws CancelledException {
+    public void abortIfCancelRequestedWithoutTest() throws CancelledException {
         CancellationToken token = new CancellationToken();
+        token.abortIfCancelRequested();
+    }
 
-        assertNotNull(token.abort());
+    @Test(expected = CancelledException.class)
+    public void abortIfCancelRequestedWithRequestTest() throws CancelledException {
+        CancellationToken token = new CancellationToken();
+        token.cancel();
+        token.abortIfCancelRequested();
     }
 
 }

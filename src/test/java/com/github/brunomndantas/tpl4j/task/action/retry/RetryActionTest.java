@@ -90,7 +90,7 @@ public class RetryActionTest {
 
             if(count[0] == 3) {
                 cancelToken.cancel();
-                throw cancelToken.abort();
+                cancelToken.abortIfCancelRequested();
             }
 
             throw result;

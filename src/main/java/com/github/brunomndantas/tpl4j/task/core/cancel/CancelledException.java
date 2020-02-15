@@ -19,7 +19,7 @@ package com.github.brunomndantas.tpl4j.task.core.cancel;
 public class CancelledException extends Exception {
 
     public CancelledException() {
-        super("Task Cancelled");
+        super("Task cancelled");
     }
 
 }

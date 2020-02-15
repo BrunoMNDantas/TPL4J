@@ -44,7 +44,6 @@ public class WhenAllJobTest {
 
          assertTrue(job.getResult().isEmpty());
 
-
          Job<String> jobA = new Job<>("", (t) -> { Thread.sleep(3000); return "A"; }, SCHEDULER, new LinkedList<>());
          Job<String> jobB = new Job<>("", (t) -> { Thread.sleep(3000); return "B"; }, SCHEDULER, new LinkedList<>());
          Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);

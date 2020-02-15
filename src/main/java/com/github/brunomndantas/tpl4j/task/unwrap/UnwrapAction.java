@@ -19,6 +19,7 @@ package com.github.brunomndantas.tpl4j.task.unwrap;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.task.core.job.Job;
 
 public class UnwrapAction<T> implements IAction<T> {
@@ -37,12 +38,12 @@ public class UnwrapAction<T> implements IAction<T> {
     @Override
     public T run(CancellationToken cancellationToken) throws Exception {
         if(this.job.getStatus().cancelledEvent.hasFired())
-            throw cancellationToken.abort();
+            throw new CancelledException();
 
         Task<T> task = job.getResult();
 
         if(task.getStatus().cancelledEvent.hasFired())
-            throw cancellationToken.abort();
+            throw new CancelledException();
 
         return task.getResult();
     }

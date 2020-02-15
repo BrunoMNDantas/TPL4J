@@ -16,7 +16,7 @@ public class BaseTaskTest {
     private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(3000); return SUCCESS_RESULT; };
     private static final Exception FAIL_RESULT = new Exception();
     private static final IAction<String> FAIL_ACTION = (token) -> { Thread.sleep(3000); throw FAIL_RESULT; };
-    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); if(token.hasCancelRequest()) throw token.abort(); return SUCCESS_RESULT; };
+    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); token.abortIfCancelRequested(); return SUCCESS_RESULT; };
 
 
 

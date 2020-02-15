@@ -164,7 +164,8 @@ public class SimpleJobTest {
     public void cancelWhileRunningTest() throws InterruptedException {
         SimpleJob<String> job = new SimpleJob<>("ID", (token) -> {
             token.cancel();
-            throw token.abort();
+            token.abortIfCancelRequested();
+            return null;
         }, SCHEDULER);
 
         job.schedule();
@@ -230,7 +231,8 @@ public class SimpleJobTest {
     public void getCancelResultTest() throws Exception {
         SimpleJob<String> job = new SimpleJob<>("ID", (cancelToken) -> {
             cancelToken.cancel();
-            throw cancelToken.abort();
+            cancelToken.abortIfCancelRequested();
+            return null;
         }, SCHEDULER);
 
         job.schedule();

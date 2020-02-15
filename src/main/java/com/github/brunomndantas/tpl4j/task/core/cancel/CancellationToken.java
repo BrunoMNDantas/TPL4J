@@ -54,9 +54,11 @@ public class CancellationToken {
         return cancelRequested.get();
     }
 
-    public CancelledException abort() {
+    public void abortIfCancelRequested() throws CancelledException {
         LOGGER.info("Cancellation Token wth id:" + id + " received abort request!");
-        return new CancelledException();
+
+        if(this.cancelRequested.get())
+            throw new CancelledException();
     }
 
 }

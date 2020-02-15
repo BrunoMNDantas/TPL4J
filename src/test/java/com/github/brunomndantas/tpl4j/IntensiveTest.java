@@ -81,8 +81,7 @@ public class IntensiveTest {
 
         @Override
         public Integer run(CancellationToken cancellationToken) throws Exception {
-            if(cancellationToken.hasCancelRequest())
-                throw cancellationToken.abort();
+            cancellationToken.abortIfCancelRequested();
 
             if(new Random().nextBoolean())
                 throw new RuntimeException("Try again later!");
@@ -106,8 +105,7 @@ public class IntensiveTest {
 
         @Override
         public Calculation run(Task<Integer> previousTask, CancellationToken cancellationToken) throws Exception {
-            if(cancellationToken.hasCancelRequest())
-                throw cancellationToken.abort();
+            cancellationToken.abortIfCancelRequested();
 
             this.calculation.setResult(previousTask.getResult());
 
@@ -120,8 +118,7 @@ public class IntensiveTest {
 
         @Override
         public Boolean run(Task<Calculation> previousTask, CancellationToken cancellationToken) throws Exception {
-            if(cancellationToken.hasCancelRequest())
-                throw cancellationToken.abort();
+            cancellationToken.abortIfCancelRequested();
 
             int result = CalculationAction.calc(previousTask.getResult());
 

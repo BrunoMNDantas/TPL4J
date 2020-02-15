@@ -18,6 +18,7 @@ package com.github.brunomndantas.tpl4j.task.when.whenAll;
 
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.task.core.job.Job;
 
 import java.util.Collection;
@@ -42,7 +43,7 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
             throw collectErrors();
 
         if(this.jobs.stream().anyMatch((job) -> job.getStatus().cancelledEvent.hasFired()))
-            throw cancellationToken.abort();
+            throw new CancelledException();
 
         return collectResults(cancellationToken);
     }
@@ -66,9 +67,7 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
         Collection<T> results = new LinkedList<>();
 
         for(Job<T> job : this.jobs) {
-            if(token.hasCancelRequest())
-                throw token.abort();
-
+            token.abortIfCancelRequested();
             results.add(job.getResult());
         }
 
