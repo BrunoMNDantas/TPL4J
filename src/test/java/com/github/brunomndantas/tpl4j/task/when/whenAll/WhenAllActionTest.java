@@ -40,7 +40,7 @@ public class WhenAllActionTest {
         jobB.getStatus().finishedEvent.await();
 
         WhenAllAction<String> action = new WhenAllAction<>(jobs);
-        Collection<String> results = action.run(new CancellationToken(""));
+        Collection<String> results = action.run(new CancellationToken());
 
         assertEquals(jobs.size(), results.size());
         assertTrue(results.contains(jobA.getValue()));
@@ -66,7 +66,7 @@ public class WhenAllActionTest {
 
         WhenAllAction<String> action = new WhenAllAction<>(jobs);
         try{
-            action.run(new CancellationToken(""));
+            action.run(new CancellationToken());
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertSame(exceptionB, e.getCause());
@@ -89,7 +89,7 @@ public class WhenAllActionTest {
 
         WhenAllAction<String> action = new WhenAllAction<>(jobs);
 
-        action.run(new CancellationToken(""));
+        action.run(new CancellationToken());
     }
 
     @Test(expected = CancelledException.class)
@@ -101,7 +101,7 @@ public class WhenAllActionTest {
 
         jobA.getStatus().finishedEvent.await();
 
-        CancellationToken cancellationToken = new CancellationToken("");
+        CancellationToken cancellationToken = new CancellationToken();
 
         cancellationToken.cancel();
 

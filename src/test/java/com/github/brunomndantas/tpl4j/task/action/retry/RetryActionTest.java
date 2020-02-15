@@ -55,7 +55,7 @@ public class RetryActionTest {
 
         RetryAction<String> retryAction = new RetryAction<>(task, RetryAction.RETRY_UNTIL_SUCCESS);
 
-        assertSame(result, retryAction.run(new CancellationToken("")));
+        assertSame(result, retryAction.run(new CancellationToken()));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class RetryActionTest {
         RetryAction<String> retryAction = new RetryAction<>(task, 3);
 
         try {
-            retryAction.run(new CancellationToken(""));
+            retryAction.run(new CancellationToken());
             fail("Exception should be thrown!");
         } catch(Exception e) {
             assertSame(result, e);
@@ -101,7 +101,7 @@ public class RetryActionTest {
 
         RetryAction<String> retryAction = new RetryAction<>(task, 3);
 
-        retryAction.run(new CancellationToken(""));
+        retryAction.run(new CancellationToken());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class RetryActionTest {
 
         RetryAction<String> retryAction = new RetryAction<>(task, RetryAction.RETRY_UNTIL_SUCCESS);
 
-        retryAction.run(new CancellationToken(""));
+        retryAction.run(new CancellationToken());
 
         assertSame(1, counter[0]);
     }

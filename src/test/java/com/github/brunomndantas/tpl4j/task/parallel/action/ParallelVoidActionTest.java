@@ -17,7 +17,7 @@ public class ParallelVoidActionTest {
     @Test
     public void runSuccessTest() throws Exception {
         String value = "";
-        CancellationToken token = new CancellationToken("");
+        CancellationToken token = new CancellationToken();
         IParallelVoidAction<String> act = (element, t) -> {
             assertSame(element, value);
             assertSame(token, t);

@@ -7,16 +7,20 @@ import static org.junit.Assert.*;
 public class CancellationTokenTest {
 
     @Test
-    public void getTaskIdTest() {
-        String taskId = "ID";
-        CancellationToken token = new CancellationToken(taskId);
+    public void getIdTest() {
+        CancellationToken token = new CancellationToken();
+        assertNotNull(token.getId());
+    }
 
-        assertEquals(taskId, token.getTaskId());
+    @Test
+    public void constructorTest() {
+        CancellationToken token = new CancellationToken();
+        assertNotNull(token.getId());
     }
 
     @Test
     public void hasCancelRequestTest() {
-        CancellationToken token = new CancellationToken("ID");
+        CancellationToken token = new CancellationToken();
 
         assertFalse(token.hasCancelRequest());
 
@@ -27,7 +31,7 @@ public class CancellationTokenTest {
 
     @Test
     public void cancelTest() {
-        CancellationToken token = new CancellationToken("ID");
+        CancellationToken token = new CancellationToken();
 
         token.cancel();
 
@@ -36,7 +40,7 @@ public class CancellationTokenTest {
 
     @Test
     public void abortTest() throws CancelledException {
-        CancellationToken token = new CancellationToken("ID");
+        CancellationToken token = new CancellationToken();
 
         assertNotNull(token.abort());
     }

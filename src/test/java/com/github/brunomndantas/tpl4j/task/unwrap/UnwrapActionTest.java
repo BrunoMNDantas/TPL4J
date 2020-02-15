@@ -42,7 +42,7 @@ public class UnwrapActionTest {
 
         UnwrapAction<String> action = new UnwrapAction<>(job);
 
-        assertSame(result, action.run(new CancellationToken("")));
+        assertSame(result, action.run(new CancellationToken()));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class UnwrapActionTest {
         UnwrapAction<String> action = new UnwrapAction<>(job);
 
         try {
-            action.run(new CancellationToken(""));
+            action.run(new CancellationToken());
             fail("Exception should be thrown!");
         }catch(Exception e) {
             assertSame(result, e);
@@ -78,7 +78,7 @@ public class UnwrapActionTest {
         UnwrapAction<String> action = new UnwrapAction<>(job);
 
         try {
-            action.run(new CancellationToken(""));
+            action.run(new CancellationToken());
             fail("Exception should be thrown!");
         }catch(Exception e) {
             assertSame(result, e);
@@ -96,7 +96,7 @@ public class UnwrapActionTest {
 
         UnwrapAction<String> action = new UnwrapAction<>(job);
 
-        action.run(new CancellationToken(""));
+        action.run(new CancellationToken());
     }
 
     @Test(expected = CancelledException.class)
@@ -114,7 +114,7 @@ public class UnwrapActionTest {
 
         UnwrapAction<String> action = new UnwrapAction<>(job);
 
-        action.run(new CancellationToken(""));
+        action.run(new CancellationToken());
     }
 
 }

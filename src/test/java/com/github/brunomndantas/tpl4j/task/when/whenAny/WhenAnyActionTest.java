@@ -29,7 +29,7 @@ public class WhenAnyActionTest {
     @Test
     public void runEmptyTasksTest() throws Exception {
         WhenAnyAction<String> action = new WhenAnyAction<>(new LinkedList<>());
-        Task<?> result = action.run(new CancellationToken(""));
+        Task<?> result = action.run(new CancellationToken());
 
         assertNull(result);
     }
@@ -46,7 +46,7 @@ public class WhenAnyActionTest {
         taskA.getStatus().finishedEvent.await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
-        Task<?> result = action.run(new CancellationToken(""));
+        Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
         assertFalse(taskB.getStatus().finishedEvent.hasFired());
@@ -64,7 +64,7 @@ public class WhenAnyActionTest {
         taskA.getStatus().finishedEvent.await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
-        Task<?> result = action.run(new CancellationToken(""));
+        Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
         assertFalse(taskB.getStatus().finishedEvent.hasFired());
@@ -83,7 +83,7 @@ public class WhenAnyActionTest {
         taskA.getStatus().finishedEvent.await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
-        Task<?> result = action.run(new CancellationToken(""));
+        Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
         assertFalse(taskB.getStatus().finishedEvent.hasFired());

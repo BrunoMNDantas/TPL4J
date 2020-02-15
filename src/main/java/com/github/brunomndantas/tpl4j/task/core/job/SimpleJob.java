@@ -58,7 +58,7 @@ public class SimpleJob<T> {
         this.action = action;
         this.scheduler = scheduler;
         this.status = new TaskStatus(taskId);
-        this.cancellationToken = new CancellationToken(taskId);
+        this.cancellationToken = new CancellationToken();
     }
 
 

@@ -19,6 +19,7 @@ package com.github.brunomndantas.tpl4j.task.core.cancel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CancellationToken {
@@ -27,21 +28,21 @@ public class CancellationToken {
 
 
 
-    protected volatile String taskId;
-    public String getTaskId() { return this.taskId; }
+    private String id;
+    public String getId() { return this.id; }
 
-    private volatile AtomicBoolean cancelRequested = new AtomicBoolean();
+    private AtomicBoolean cancelRequested = new AtomicBoolean();
 
 
 
-    public CancellationToken(String taskId) {
-        this.taskId = taskId;
+    public CancellationToken() {
+        this.id = UUID.randomUUID().toString();
     }
 
 
 
     public void cancel() {
-        LOGGER.info("Task:" + taskId + " cancel requested!");
+        LOGGER.info("Cancellation Token with id:" + id + " received cancel request!");
         cancelRequested.set(true);
     }
 
@@ -50,7 +51,7 @@ public class CancellationToken {
     }
 
     public CancelledException abort() {
-        LOGGER.info("Task:" + taskId + " abort requested!");
+        LOGGER.info("Cancellation Token wth id:" + id + " received abort request!");
         return new CancelledException();
     }
 
