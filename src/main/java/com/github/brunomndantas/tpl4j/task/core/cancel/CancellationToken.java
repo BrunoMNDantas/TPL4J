@@ -35,8 +35,12 @@ public class CancellationToken {
 
 
 
+    public CancellationToken(String id) {
+        this.id = id;
+    }
+
     public CancellationToken() {
-        this.id = UUID.randomUUID().toString();
+        this(UUID.randomUUID().toString());
     }
 
 

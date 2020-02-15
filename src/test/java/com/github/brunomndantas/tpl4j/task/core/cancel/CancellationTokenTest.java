@@ -8,14 +8,20 @@ public class CancellationTokenTest {
 
     @Test
     public void getIdTest() {
-        CancellationToken token = new CancellationToken();
-        assertNotNull(token.getId());
+        String id = "ID";
+        CancellationToken token = new CancellationToken(id);
+        assertSame(id, token.getId());
     }
 
     @Test
-    public void constructorTest() {
+    public void constructorsTest() {
         CancellationToken token = new CancellationToken();
         assertNotNull(token.getId());
+        assertFalse(token.getId().isEmpty());
+
+        String id = "ID";
+        token = new CancellationToken(id);
+        assertSame(id, token.getId());
     }
 
     @Test
