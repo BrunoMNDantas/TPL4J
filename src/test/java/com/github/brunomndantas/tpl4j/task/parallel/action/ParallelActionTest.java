@@ -2,6 +2,7 @@ package com.github.brunomndantas.tpl4j.task.parallel.action;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -19,13 +20,15 @@ public class ParallelActionTest {
         String id = "";
         IParallelAction<String,String> act = (e, t) -> "";
         Iterator<String> iterator = Arrays.asList("").iterator();
+        CancellationToken cancellationToken = new CancellationToken();
         Consumer<Runnable> scheduler = (r) -> {};
         Collection<TaskOption> options = new LinkedList<>();
-        ParallelAction<String,String> action = new ParallelAction<>(id, act, iterator, scheduler, options);
+        ParallelAction<String,String> action = new ParallelAction<>(id, act, iterator, cancellationToken, scheduler, options);
 
         assertSame(id, action.getTaskId());
         assertSame(act, action.getAction());
         assertSame(iterator, action.getIterator());
+        assertSame(cancellationToken, action.getCancellationToken());
         assertSame(scheduler, action.getScheduler());
         assertEquals(TaskOption.ATTACH_TO_PARENT, action.getOptions()[0]);
     }
@@ -35,9 +38,10 @@ public class ParallelActionTest {
         String id = "";
         IParallelAction<String,String> act = (e, t) -> { Thread.sleep(2000); return e; };
         Iterator<String> iterator = Arrays.asList("1", "2", "3").iterator();
+        CancellationToken cancellationToken = new CancellationToken();
         Consumer<Runnable> scheduler = Task.DEFAULT_SCHEDULER;
         Collection<TaskOption> options = new LinkedList<>();
-        ParallelAction<String,String> action = new ParallelAction<>(id, act, iterator, scheduler, options);
+        ParallelAction<String,String> action = new ParallelAction<>(id, act, iterator, cancellationToken, scheduler, options);
 
         Collection<String> result = action.run(null);
 

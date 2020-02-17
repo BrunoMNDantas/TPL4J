@@ -53,12 +53,12 @@ public class SimpleJob<T> {
 
 
 
-    public SimpleJob(String taskId, IAction<T> action, Consumer<Runnable> scheduler) {
+    public SimpleJob(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this.taskId = taskId;
         this.action = action;
+        this.cancellationToken = cancellationToken;
         this.scheduler = scheduler;
         this.status = new TaskStatus(taskId);
-        this.cancellationToken = new CancellationToken();
     }
 
 

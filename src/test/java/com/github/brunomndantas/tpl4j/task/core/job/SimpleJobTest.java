@@ -1,6 +1,7 @@
 package com.github.brunomndantas.tpl4j.task.core.job;
 
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.function.Consumer;
@@ -14,27 +15,29 @@ public class SimpleJobTest {
     private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(3000); return SUCCESS_RESULT; };
     private static final Exception FAIL_RESULT = new Exception();
     private static final IAction<String> FAIL_ACTION = (token) -> { Thread.sleep(3000); throw FAIL_RESULT; };
+    private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
 
 
+    
     @Test
     public void getTaskIdTest() {
         String taskId = "ID";
 
-        SimpleJob<String> job = new SimpleJob<>(taskId, SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>(taskId, SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         assertEquals(taskId, job.getTaskId());
     }
 
     @Test
     public void getActionTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         assertSame(SUCCESS_ACTION, job.getAction());
     }
 
     @Test
     public void getScheduledTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         assertSame(SCHEDULER, job.getScheduler());
     }
@@ -42,7 +45,7 @@ public class SimpleJobTest {
     @Test
     public void getStatusTest() {
         String taskId = "ID";
-        SimpleJob<String> job = new SimpleJob<>(taskId, SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>(taskId, SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         assertNotNull(job.getStatus());
         assertEquals(taskId, job.getStatus().getTaskId());
@@ -50,13 +53,13 @@ public class SimpleJobTest {
 
     @Test
     public void getCancellationToken() {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
-        assertNotNull(job.getCancellationToken());
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
+        assertSame(CANCELLATION_TOKEN, job.getCancellationToken());
     }
 
     @Test
     public void getValueBeforeFinishTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         String value = job.getValue();
         assertNull(value);
@@ -69,7 +72,7 @@ public class SimpleJobTest {
 
     @Test
     public void getValueAfterFinishTest() throws InterruptedException {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER);
 
         job.schedule();
 
@@ -81,7 +84,7 @@ public class SimpleJobTest {
 
     @Test
     public void getExceptionBeforeFinishTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         Exception exception = job.getException();
         assertNull(exception);
@@ -94,7 +97,7 @@ public class SimpleJobTest {
 
     @Test
     public void getExceptionAfterFinishTest() throws InterruptedException {
-        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER);
 
         job.schedule();
 
@@ -106,7 +109,7 @@ public class SimpleJobTest {
 
     @Test
     public void hasCancelRequestTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         job.cancel();
         assertTrue(job.hasCancelRequest());
@@ -116,7 +119,7 @@ public class SimpleJobTest {
     public void scheduleTest() {
         boolean[] scheduled = new boolean[]{false};
         Consumer<Runnable> scheduler = (action) -> { scheduled[0] = true; new Thread(action).start(); };
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, scheduler);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, scheduler);
 
         job.schedule();
 
@@ -126,7 +129,8 @@ public class SimpleJobTest {
 
     @Test
     public void cancelBeforeScheduleTest() throws InterruptedException {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        CancellationToken cancellationToken = new CancellationToken();
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, cancellationToken, SCHEDULER);
 
         job.cancel();
 
@@ -140,13 +144,14 @@ public class SimpleJobTest {
 
     @Test
     public void cancelWhileScheduledTest() throws InterruptedException {
+        CancellationToken cancellationToken = new CancellationToken();
         Consumer<Runnable> scheduler = (action) -> new Thread(() -> {
             try {
                 Thread.sleep(3000);
             } catch(Exception e){}
             new Thread(action).start();
         }).start();
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, scheduler);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, cancellationToken, scheduler);
 
         job.schedule();
 
@@ -162,11 +167,12 @@ public class SimpleJobTest {
 
     @Test
     public void cancelWhileRunningTest() throws InterruptedException {
+        CancellationToken cancellationToken = new CancellationToken();
         SimpleJob<String> job = new SimpleJob<>("ID", (token) -> {
             token.cancel();
             token.abortIfCancelRequested();
             return null;
-        }, SCHEDULER);
+        }, cancellationToken, SCHEDULER);
 
         job.schedule();
 
@@ -177,7 +183,8 @@ public class SimpleJobTest {
 
     @Test
     public void cancelAfterFinishedTest() throws InterruptedException {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        CancellationToken cancellationToken = new CancellationToken();
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, cancellationToken, SCHEDULER);
 
         job.schedule();
 
@@ -192,7 +199,7 @@ public class SimpleJobTest {
 
     @Test
     public void scheduleTwiceTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         job.schedule();
 
@@ -206,7 +213,7 @@ public class SimpleJobTest {
 
     @Test
     public void getSuccessResultTest() throws Exception {
-        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         job.schedule();
 
@@ -215,7 +222,7 @@ public class SimpleJobTest {
 
     @Test
     public void getFailResultTest() {
-        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, SCHEDULER);
+        SimpleJob<String> job = new SimpleJob<>("ID", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER);
 
         job.schedule();
 
@@ -229,11 +236,12 @@ public class SimpleJobTest {
 
     @Test
     public void getCancelResultTest() throws Exception {
+        CancellationToken cancellationToken = new CancellationToken();
         SimpleJob<String> job = new SimpleJob<>("ID", (cancelToken) -> {
             cancelToken.cancel();
             cancelToken.abortIfCancelRequested();
             return null;
-        }, SCHEDULER);
+        }, cancellationToken, SCHEDULER);
 
         job.schedule();
 

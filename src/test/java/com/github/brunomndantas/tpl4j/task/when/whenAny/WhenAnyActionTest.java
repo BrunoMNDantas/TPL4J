@@ -7,15 +7,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 
 public class WhenAnyActionTest {
-
-    private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
-
-
 
     @Test
     public void getTasksTest() {

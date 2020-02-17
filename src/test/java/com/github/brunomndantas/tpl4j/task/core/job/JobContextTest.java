@@ -15,7 +15,7 @@ public class JobContextTest {
 
         assertNull(context.getJob());
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
         context.setJob(job);
 
         assertSame(job, context.getJob());

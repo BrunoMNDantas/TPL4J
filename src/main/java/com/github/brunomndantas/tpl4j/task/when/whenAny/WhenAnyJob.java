@@ -18,6 +18,7 @@ package com.github.brunomndantas.tpl4j.task.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.task.core.job.Job;
 
 import java.util.Collection;
@@ -32,8 +33,8 @@ public class WhenAnyJob<T> extends Job<Task<T>> {
 
 
 
-    public WhenAnyJob(String taskId, Consumer<Runnable> scheduler, Collection<TaskOption> options, Collection<Task<T>> tasks) {
-        super(taskId, new WhenAnyAction<>(tasks), scheduler, options);
+    public WhenAnyJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options, Collection<Task<T>> tasks) {
+        super(taskId, new WhenAnyAction<>(tasks), cancellationToken, scheduler, options);
         this.tasks = tasks;
     }
 

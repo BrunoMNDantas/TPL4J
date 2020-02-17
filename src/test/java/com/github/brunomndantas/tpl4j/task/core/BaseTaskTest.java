@@ -1,6 +1,7 @@
 package com.github.brunomndantas.tpl4j.task.core;
 
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.task.core.job.Job;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import static org.junit.Assert.*;
 
 public class BaseTaskTest {
 
+    private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
     private static final String SUCCESS_RESULT = "";
     private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(3000); return SUCCESS_RESULT; };
@@ -22,7 +24,7 @@ public class BaseTaskTest {
 
     @Test
     public void getJobTest() {
-        Job<?> job = new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>());
+        Job<?> job = new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
         BaseTask<?> task = new BaseTask<>(job);
 
         assertNotNull(task.getJob());
@@ -32,14 +34,14 @@ public class BaseTaskTest {
     @Test
     public void getIdTest() {
         String id = "";
-        BaseTask<?> task = new BaseTask<>(new Job<>(id, SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>(id, SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         assertSame(id, task.getId());
     }
 
     @Test
     public void getActionTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         assertNotNull(task.getAction());
         assertSame(SUCCESS_ACTION, task.getAction());
@@ -47,21 +49,21 @@ public class BaseTaskTest {
 
     @Test
     public void getSchedulerTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         assertSame(task.getJob().getScheduler(), task.getScheduler());
     }
 
     @Test
     public void getOptionsTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         assertSame(task.getJob().getOptions(), task.getOptions());
     }
 
     @Test
     public void getValueTest() throws InterruptedException {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -72,7 +74,7 @@ public class BaseTaskTest {
 
     @Test
     public void getExceptionTest() throws InterruptedException {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", FAIL_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -83,34 +85,32 @@ public class BaseTaskTest {
 
     @Test
     public void getCancellationTokenTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
-        assertNotNull(task.getCancellationToken());
+        assertSame(CANCELLATION_TOKEN, task.getCancellationToken());
         assertSame(task.getJob().getCancellationToken(), task.getCancellationToken());
     }
 
     @Test
     public void getStatusTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         assertNotNull(task.getStatus());
         assertSame(task.getJob().getStatus(), task.getStatus());
     }
 
-
     @Test
     public void constructorsTest() {
-        Job<?> job = new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>());
+        Job<?> job = new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
         BaseTask<?> task = new BaseTask<>(job);
 
         assertNotNull(task.getJob());
         assertSame(SUCCESS_ACTION, task.getJob().getAction());
     }
 
-
     @Test
     public void startTest() throws InterruptedException {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -123,7 +123,7 @@ public class BaseTaskTest {
 
     @Test
     public void cancelTest() throws InterruptedException {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", CANCEL_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -136,7 +136,7 @@ public class BaseTaskTest {
 
     @Test
     public void getSuccessResultTest() throws Exception {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -145,7 +145,7 @@ public class BaseTaskTest {
 
     @Test
     public void getFailResultTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", FAIL_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -159,7 +159,7 @@ public class BaseTaskTest {
 
     @Test
     public void getCancelResultTest() throws Exception {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", CANCEL_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 
@@ -170,7 +170,7 @@ public class BaseTaskTest {
 
     @Test
     public void hasCancelRequestTest() {
-        BaseTask<?> task = new BaseTask<>(new Job<>("", CANCEL_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<?> task = new BaseTask<>(new Job<>("", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         assertFalse(task.hasCancelRequest());
 
@@ -181,7 +181,7 @@ public class BaseTaskTest {
 
     @Test
     public void startTwiceTest() {
-        BaseTask<String> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, SCHEDULER, new LinkedList<>()));
+        BaseTask<String> task = new BaseTask<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
         task.start();
 

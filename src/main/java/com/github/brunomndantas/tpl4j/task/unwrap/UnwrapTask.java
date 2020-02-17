@@ -18,6 +18,7 @@ package com.github.brunomndantas.tpl4j.task.unwrap;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -30,38 +31,71 @@ public class UnwrapTask<T> extends Task<T> {
 
 
 
-    public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
-        super(new UnwrapJob<>(taskId, scheduler, Arrays.asList(options), task.getJob()));
+    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+        super(new UnwrapJob<>(taskId, cancellationToken, scheduler, Arrays.asList(options), task.getJob()));
         this.task = task;
     }
 
+    public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
+        super(new UnwrapJob<>(taskId, new CancellationToken(), scheduler, Arrays.asList(options), task.getJob()));
+        this.task = task;
+    }
+
+    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, TaskOption... options) {
+        this(taskId, task, cancellationToken, Task.DEFAULT_SCHEDULER, options);
+    }
+
     public UnwrapTask(String taskId, Task<Task<T>> task, TaskOption... options) {
-        this(taskId, task, Task.DEFAULT_SCHEDULER, options);
+        this(taskId, task, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
+    }
+
+    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+        this(taskId, task, cancellationToken, scheduler, Task.DEFAULT_OPTIONS);
     }
 
     public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler) {
-        this(taskId, task, scheduler, Task.DEFAULT_OPTIONS);
+        this(taskId, task, new CancellationToken(), scheduler, Task.DEFAULT_OPTIONS);
+    }
+
+    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken) {
+        this(taskId, task, cancellationToken, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
     public UnwrapTask(String taskId, Task<Task<T>> task) {
-        this(taskId, task, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+        this(taskId, task, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
 
+    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(UUID.randomUUID().toString(), task, cancellationToken, scheduler, options);
+    }
+
     public UnwrapTask(Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
-        this(UUID.randomUUID().toString(), task, scheduler, options);
+        this(UUID.randomUUID().toString(), task, new CancellationToken(), scheduler, options);
+    }
+
+    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, TaskOption... options) {
+        this(task, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
     public UnwrapTask(Task<Task<T>> task, TaskOption... options) {
-        this(task, Task.DEFAULT_SCHEDULER, options);
+        this(task, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
+    }
+
+    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+        this(task, cancellationToken, scheduler, Task.DEFAULT_OPTIONS);
     }
 
     public UnwrapTask(Task<Task<T>> task, Consumer<Runnable> scheduler) {
         this(task, scheduler, Task.DEFAULT_OPTIONS);
     }
 
+    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken) {
+        this(task, cancellationToken, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+    }
+
     public UnwrapTask(Task<Task<T>> task) {
-        this(task, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+        this(task, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
 }

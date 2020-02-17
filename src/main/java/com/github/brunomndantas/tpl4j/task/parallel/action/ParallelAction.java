@@ -1,10 +1,10 @@
 package com.github.brunomndantas.tpl4j.task.parallel.action;
 
-import com.github.brunomndantas.tpl4j.task.parallel.task.ParallelWorkerTask;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.parallel.task.ParallelWorkerTask;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,6 +33,9 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
     private Iterator<T> iterator;
     public Iterator<T> getIterator() { return this.iterator; }
 
+    private CancellationToken cancellationToken;
+    public CancellationToken getCancellationToken() { return this.cancellationToken; }
+
     private Consumer<Runnable> scheduler;
     public Consumer<Runnable> getScheduler(){ return this.scheduler; }
 
@@ -41,10 +44,11 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
 
 
-    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterator<T> iterator, Consumer<Runnable> scheduler, Collection<TaskOption> options) {
+    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterator<T> iterator, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options) {
         this.taskId = taskId;
         this.iterator = iterator;
         this.action = action;
+        this.cancellationToken = cancellationToken;
         this.scheduler = scheduler;
         this.options = attachAttachToParentOption(options);
     }
@@ -64,7 +68,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
         for(int i=0; i<Runtime.getRuntime().availableProcessors(); ++i) {
             id = this.taskId + "#"+i;
 
-            task = new ParallelWorkerTask<>(id, this.action, this.iterator, this.scheduler, this.options);
+            task = new ParallelWorkerTask<>(id, this.action, this.iterator, this.cancellationToken, this.scheduler, this.options);
 
             id += "Collector";
 

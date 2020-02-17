@@ -18,6 +18,7 @@ package com.github.brunomndantas.tpl4j.task.core.job;
 
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
 import com.github.brunomndantas.tpl4j.task.core.action.IAction;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -29,8 +30,8 @@ public class Job<T> extends SimpleJob<T> {
 
 
 
-    public Job(String taskId, IAction<T> action, Consumer<Runnable> scheduler, Collection<TaskOption> options) {
-        super(taskId, action, scheduler);
+    public Job(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options) {
+        super(taskId, action, cancellationToken, scheduler);
         this.options = options;
 
         JobManager.INSTANCE.registerJobCreationOnCurrentThread(this);

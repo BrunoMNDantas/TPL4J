@@ -18,6 +18,7 @@ package com.github.brunomndantas.tpl4j.task.when.whenAll;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.core.TaskOption;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,9 +33,10 @@ public class WhenAllTask<T> extends Task<Collection<T>> {
 
 
 
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
         super(new WhenAllJob<>(
                 taskId,
+                cancellationToken,
                 scheduler,
                 Arrays.asList(options),
                 tasks.stream().map(Task::getJob).collect(Collectors.toList())
@@ -43,33 +45,73 @@ public class WhenAllTask<T> extends Task<Collection<T>> {
         this.tasks = tasks;
     }
 
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+        super(new WhenAllJob<>(
+                taskId,
+                new CancellationToken(),
+                scheduler,
+                Arrays.asList(options),
+                tasks.stream().map(Task::getJob).collect(Collectors.toList())
+        ));
+
+        this.tasks = tasks;
+    }
+
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+        this(taskId, tasks, cancellationToken, Task.DEFAULT_SCHEDULER, options);
+    }
+
     public WhenAllTask(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
-        this(taskId, tasks, Task.DEFAULT_SCHEDULER, options);
+        this(taskId, tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
+    }
+
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+        this(taskId, tasks, cancellationToken, scheduler, Task.DEFAULT_OPTIONS);
     }
 
     public WhenAllTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
-        this(taskId, tasks, scheduler, Task.DEFAULT_OPTIONS);
+        this(taskId, tasks, new CancellationToken(), scheduler, Task.DEFAULT_OPTIONS);
+    }
+
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken) {
+        this(taskId, tasks, cancellationToken, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
     public WhenAllTask(String taskId, Collection<Task<T>> tasks) {
-        this(taskId, tasks, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+        this(taskId, tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
 
+    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+        this(UUID.randomUUID().toString(), tasks, cancellationToken, scheduler, options);
+    }
+
     public WhenAllTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
-        this(UUID.randomUUID().toString(), tasks, scheduler, options);
+        this(UUID.randomUUID().toString(), tasks, new CancellationToken(), scheduler, options);
+    }
+
+    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+        this(tasks, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
     public WhenAllTask(Collection<Task<T>> tasks, TaskOption... options) {
-        this(tasks, Task.DEFAULT_SCHEDULER, options);
+        this(tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
+    }
+
+    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+        this(tasks, cancellationToken, scheduler, Task.DEFAULT_OPTIONS);
     }
 
     public WhenAllTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
-        this(tasks, scheduler, Task.DEFAULT_OPTIONS);
+        this(tasks, new CancellationToken(), scheduler, Task.DEFAULT_OPTIONS);
+    }
+
+    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken) {
+        this(tasks, cancellationToken, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
     public WhenAllTask(Collection<Task<T>> tasks) {
-        this(tasks, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
+        this(tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
 }

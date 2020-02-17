@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 public class WhenAllActionTest {
 
+    private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
 
 
@@ -29,8 +30,8 @@ public class WhenAllActionTest {
 
     @Test
     public void runSuccessTest() throws Exception {
-        Job<String> jobA = new Job<>("", (t) -> "A", SCHEDULER, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> "B", SCHEDULER, new LinkedList<>());
+        Job<String> jobA = new Job<>("", (t) -> "A", new CancellationToken(), SCHEDULER, new LinkedList<>());
+        Job<String> jobB = new Job<>("", (t) -> "B", new CancellationToken(), SCHEDULER, new LinkedList<>());
         Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
 
         jobA.schedule();
@@ -51,9 +52,9 @@ public class WhenAllActionTest {
     public void runFailTest() throws Exception {
         Exception exceptionB = new Exception();
         Exception exceptionC = new Exception();
-        Job<String> jobA = new Job<>("", (t) -> "A", SCHEDULER, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> { throw exceptionB; }, SCHEDULER, new LinkedList<>());
-        Job<String> jobC = new Job<>("", (t) -> { throw exceptionC; }, SCHEDULER, new LinkedList<>());
+        Job<String> jobA = new Job<>("", (t) -> "A", new CancellationToken(), SCHEDULER, new LinkedList<>());
+        Job<String> jobB = new Job<>("", (t) -> { throw exceptionB; }, new CancellationToken(), SCHEDULER, new LinkedList<>());
+        Job<String> jobC = new Job<>("", (t) -> { throw exceptionC; }, new CancellationToken(), SCHEDULER, new LinkedList<>());
         Collection<Job<String>> jobs = Arrays.asList(jobA, jobB, jobC);
 
         jobA.schedule();
@@ -77,8 +78,8 @@ public class WhenAllActionTest {
 
     @Test(expected = CancelledException.class)
     public void runCancelTest() throws Exception {
-        Job<String> jobA = new Job<>("", (t) -> "A", SCHEDULER, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, SCHEDULER, new LinkedList<>());
+        Job<String> jobA = new Job<>("", (t) -> "A", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
+        Job<String> jobB = new Job<>("", (t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
         Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
 
         jobA.schedule();
@@ -94,7 +95,7 @@ public class WhenAllActionTest {
 
     @Test(expected = CancelledException.class)
     public void runCancelTokenTest() throws Exception {
-        Job<String> jobA = new Job<>("", (t) -> "A", SCHEDULER, new LinkedList<>());
+        Job<String> jobA = new Job<>("", (t) -> "A", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
         Collection<Job<String>> jobs = Arrays.asList(jobA);
 
         jobA.schedule();

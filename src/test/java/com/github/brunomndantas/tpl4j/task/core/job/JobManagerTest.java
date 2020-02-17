@@ -15,7 +15,7 @@ public class JobManagerTest {
     public void registerJobCreationOnCurrentThreadTest() {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreationOnCurrentThread(job);
 
@@ -34,7 +34,7 @@ public class JobManagerTest {
     public void registerJobCreationTest() {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(job, currentThreadId);
 
@@ -53,7 +53,7 @@ public class JobManagerTest {
     public void registerJobCreationTwiceTest() {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(job, currentThreadId);
         manager.registerJobCreation(job, currentThreadId);
@@ -63,7 +63,7 @@ public class JobManagerTest {
     public void registerJobExecutionOnCurrentThreadTest() {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(job, currentThreadId);
         manager.registerJobExecutionOnCurrentThread(job);
@@ -78,7 +78,7 @@ public class JobManagerTest {
     public void registerJobExecutionTest() {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(job, currentThreadId);
         manager.registerJobExecution(job, currentThreadId);
@@ -94,8 +94,8 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> parentJob = new Job<>("ID", null, null, new LinkedList<>());
-        Job<?> childJob = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> parentJob = new Job<>("ID", null, null, null, new LinkedList<>());
+        Job<?> childJob = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
@@ -117,7 +117,7 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobExecution(job, currentThreadId);
     }
@@ -127,8 +127,8 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> jobA = new Job<>("ID", null, null, new LinkedList<>());
-        Job<?> jobB = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> jobA = new Job<>("ID", null, null, null, new LinkedList<>());
+        Job<?> jobB = new Job<>("ID", null, null, null, new LinkedList<>());
 
         try {
             manager.registerJobCreation(jobA, currentThreadId);
@@ -150,7 +150,7 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(job, currentThreadId);
 
@@ -169,7 +169,7 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreation(job, currentThreadId);
 
@@ -192,7 +192,7 @@ public class JobManagerTest {
         assertNotNull(contexts);
         assertEquals(0, contexts.size());
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
         manager.registerJobCreation(job, currentThreadId);
 
         contexts = manager.getJobContextsCreatedByThread(currentThreadId);
@@ -207,7 +207,7 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
         manager.registerJobCreation(job, currentThreadId);
 
         Collection<JobContext> contexts = manager.getJobContextsExecutedByThread(currentThreadId);
@@ -234,7 +234,7 @@ public class JobManagerTest {
         assertNotNull(contexts);
         assertEquals(0, contexts.size());
 
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
         manager.registerJobCreation(job, currentThreadId);
 
         contexts = manager.getJobContextsManagedByThread(currentThreadId);
@@ -257,9 +257,9 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> parentJob = new Job<>("ID", null, null, new LinkedList<>());
-        Job<?> childJob = new Job<>("ID", null, null, new LinkedList<>());
-        Job<?> attachedChildJob = new Job<>("ID", null, null, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+        Job<?> parentJob = new Job<>("ID", null, null, null, new LinkedList<>());
+        Job<?> childJob = new Job<>("ID", null, null, null, new LinkedList<>());
+        Job<?> attachedChildJob = new Job<>("ID", null, null, null, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
@@ -284,8 +284,8 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> parentJob = new Job<>("ID", null, null, Arrays.asList(TaskOption.REJECT_CHILDREN));
-        Job<?> attachedChildJob = new Job<>("ID", null, null, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+        Job<?> parentJob = new Job<>("ID", null, null, null, Arrays.asList(TaskOption.REJECT_CHILDREN));
+        Job<?> attachedChildJob = new Job<>("ID", null, null, null, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
@@ -300,7 +300,7 @@ public class JobManagerTest {
     @Test
     public void unregisterJobExecutionTest() {
         JobManager manager = new JobManager();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobCreationOnCurrentThread(job);
         manager.registerJobExecutionOnCurrentThread(job);
@@ -314,7 +314,7 @@ public class JobManagerTest {
     @Test(expected = IllegalArgumentException.class)
     public void unregisterUnregisteredJobExecutionTest() {
         JobManager manager = new JobManager();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.unregisterJobExecution(job);
     }
@@ -322,7 +322,7 @@ public class JobManagerTest {
     @Test(expected = IllegalArgumentException.class)
     public void unregisterExecutionUnregisteredJobExecutionTest() {
         JobManager manager = new JobManager();
-        Job<?> job = new Job<>("ID", null, null, new LinkedList<>());
+        Job<?> job = new Job<>("ID", null, null, null, new LinkedList<>());
 
         manager.registerJobExecutionOnCurrentThread(job);
         manager.unregisterJobExecution(job);

@@ -1,6 +1,7 @@
 package com.github.brunomndantas.tpl4j.task.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ import static org.junit.Assert.*;
 public class WhenAnyJobTest {
 
     private static final ExecutorService POOL = Executors.newSingleThreadExecutor();
+    private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Consumer<Runnable> SCHEDULER = POOL::submit;
 
 
@@ -31,14 +33,14 @@ public class WhenAnyJobTest {
     public void getJobsTest() {
         Collection<Task<String>> tasks = new LinkedList<>();
 
-        WhenAnyJob<String> job = new WhenAnyJob<>("", SCHEDULER, new LinkedList<>(), tasks);
+        WhenAnyJob<String> job = new WhenAnyJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), tasks);
 
         assertSame(tasks, job.getTasks());
     }
 
     @Test
     public void runWithSuccessTaskTest() throws Exception {
-        WhenAnyJob<String> job = new WhenAnyJob<>("", SCHEDULER, new LinkedList<>(), new LinkedList<>());
+        WhenAnyJob<String> job = new WhenAnyJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), new LinkedList<>());
 
         job.schedule();
 
@@ -51,7 +53,7 @@ public class WhenAnyJobTest {
         taskA.start();
         taskB.start();
 
-        job = new WhenAnyJob<>("", SCHEDULER, new LinkedList<>(), tasks);
+        job = new WhenAnyJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), tasks);
 
         job.schedule();
 
@@ -70,7 +72,7 @@ public class WhenAnyJobTest {
         taskA.start();
         taskB.start();
 
-        WhenAnyJob<String> job = new WhenAnyJob<>("", SCHEDULER, new LinkedList<>(), tasks);
+        WhenAnyJob<String> job = new WhenAnyJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), tasks);
 
         job.schedule();
 
@@ -89,7 +91,7 @@ public class WhenAnyJobTest {
         taskA.start();
         taskB.start();
 
-        WhenAnyJob<String> job = new WhenAnyJob<>("", SCHEDULER, new LinkedList<>(), tasks);
+        WhenAnyJob<String> job = new WhenAnyJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), tasks);
 
         job.schedule();
 
@@ -112,7 +114,7 @@ public class WhenAnyJobTest {
         taskA.start();
         taskB.start();
 
-        WhenAnyJob<String> job = new WhenAnyJob<>("", scheduler, new LinkedList<>(), tasks);
+        WhenAnyJob<String> job = new WhenAnyJob<>("", CANCELLATION_TOKEN, scheduler, new LinkedList<>(), tasks);
 
         job.schedule();
 
