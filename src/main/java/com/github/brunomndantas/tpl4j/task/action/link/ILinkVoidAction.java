@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.task.action.link;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
 
 public interface ILinkVoidAction<K> {
 

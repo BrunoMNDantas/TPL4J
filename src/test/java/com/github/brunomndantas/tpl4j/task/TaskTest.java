@@ -2,9 +2,9 @@ package com.github.brunomndantas.tpl4j.task;
 
 import com.github.brunomndantas.tpl4j.task.action.link.*;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
-import com.github.brunomndantas.tpl4j.task.core.TaskOption;
-import com.github.brunomndantas.tpl4j.task.core.action.*;
-import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.context.TaskOption;
+import com.github.brunomndantas.tpl4j.task.action.action.*;
+import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.Arrays;

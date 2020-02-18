@@ -17,8 +17,8 @@
 package com.github.brunomndantas.tpl4j.task.action.link;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.core.action.IAction;
-import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.action.action.IAction;
+import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
 
 public class LinkVoidAction<T> implements IAction<Void> {
 

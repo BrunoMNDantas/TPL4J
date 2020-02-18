@@ -1,19 +1,19 @@
 package com.github.brunomndantas.tpl4j.factory;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.core.TaskOption;
-import com.github.brunomndantas.tpl4j.task.core.action.IAction;
-import com.github.brunomndantas.tpl4j.task.core.action.IEmptyAction;
-import com.github.brunomndantas.tpl4j.task.core.action.IEmptyVoidAction;
-import com.github.brunomndantas.tpl4j.task.core.action.IVoidAction;
-import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelAction;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleAction;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelUninterruptibleVoidAction;
-import com.github.brunomndantas.tpl4j.task.parallel.action.IParallelVoidAction;
-import com.github.brunomndantas.tpl4j.task.unwrap.UnwrapTask;
-import com.github.brunomndantas.tpl4j.task.when.whenAll.WhenAllTask;
-import com.github.brunomndantas.tpl4j.task.when.whenAny.WhenAnyTask;
+import com.github.brunomndantas.tpl4j.task.context.TaskOption;
+import com.github.brunomndantas.tpl4j.task.action.action.IAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
+import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
+import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleAction;
+import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleVoidAction;
+import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelVoidAction;
+import com.github.brunomndantas.tpl4j.helpers.unwrap.UnwrapTask;
+import com.github.brunomndantas.tpl4j.helpers.when.whenAll.WhenAllTask;
+import com.github.brunomndantas.tpl4j.helpers.when.whenAny.WhenAnyTask;
 import org.junit.Test;
 
 import java.util.Arrays;

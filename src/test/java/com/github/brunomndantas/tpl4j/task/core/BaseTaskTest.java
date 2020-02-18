@@ -1,8 +1,9 @@
 package com.github.brunomndantas.tpl4j.task.core;
 
-import com.github.brunomndantas.tpl4j.task.core.action.IAction;
-import com.github.brunomndantas.tpl4j.task.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.task.core.job.Job;
+import com.github.brunomndantas.tpl4j.task.BaseTask;
+import com.github.brunomndantas.tpl4j.task.action.action.IAction;
+import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.job.Job;
 import org.junit.Test;
 
 import java.util.LinkedList;
