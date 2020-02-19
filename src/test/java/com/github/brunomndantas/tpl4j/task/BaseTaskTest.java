@@ -1,4 +1,4 @@
-package com.github.brunomndantas.tpl4j.task.core;
+package com.github.brunomndantas.tpl4j.task;
 
 import com.github.brunomndantas.tpl4j.task.BaseTask;
 import com.github.brunomndantas.tpl4j.task.action.action.IAction;
