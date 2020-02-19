@@ -1,8 +1,8 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.job;
 
-import com.github.brunomndantas.tpl4j.task.context.TaskOption;
-import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.task.job.Job;
+import com.github.brunomndantas.tpl4j.core.context.TaskOption;
+import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.job.Job;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.ParallelAction;
 

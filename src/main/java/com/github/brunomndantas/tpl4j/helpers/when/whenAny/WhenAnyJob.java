@@ -17,9 +17,9 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.context.TaskOption;
-import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.task.job.Job;
+import com.github.brunomndantas.tpl4j.core.context.TaskOption;
+import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.job.Job;
 
 import java.util.Collection;
 import java.util.function.Consumer;

@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 
-import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.task.job.Job;
+import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.job.Job;
 import org.junit.AfterClass;
 import org.junit.Test;
 

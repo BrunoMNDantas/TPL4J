@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.action;
 
-import com.github.brunomndantas.tpl4j.task.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
