@@ -17,10 +17,10 @@
 package com.github.brunomndantas.tpl4j.core.job;
 
 import com.github.brunomndantas.tpl4j.core.action.action.IAction;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.context.status.Status;
-import com.github.brunomndantas.tpl4j.core.context.status.TaskStatus;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.status.Status;
+import com.github.brunomndantas.tpl4j.core.status.TaskStatus;
 
 import java.util.function.Consumer;
 
