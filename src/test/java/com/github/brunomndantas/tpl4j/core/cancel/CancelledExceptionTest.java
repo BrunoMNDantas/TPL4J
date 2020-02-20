@@ -1,4 +1,4 @@
-package com.github.brunomndantas.tpl4j.core.context.cancel;
+package com.github.brunomndantas.tpl4j.core.cancel;
 
 import org.junit.Test;
 

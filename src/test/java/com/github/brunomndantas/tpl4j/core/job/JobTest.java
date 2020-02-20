@@ -2,7 +2,7 @@ package com.github.brunomndantas.tpl4j.core.job;
 
 import com.github.brunomndantas.tpl4j.core.context.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.action.IAction;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.Arrays;

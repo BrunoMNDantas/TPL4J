@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.Arrays;

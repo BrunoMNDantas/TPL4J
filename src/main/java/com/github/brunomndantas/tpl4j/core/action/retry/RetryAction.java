@@ -18,9 +18,9 @@ package com.github.brunomndantas.tpl4j.core.action.retry;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.action.link.LinkAction;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.context.status.Status;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.status.Status;
 
 import java.util.function.Supplier;
 

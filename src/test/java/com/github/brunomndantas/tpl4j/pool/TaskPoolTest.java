@@ -6,7 +6,7 @@ import com.github.brunomndantas.tpl4j.core.action.action.IAction;
 import com.github.brunomndantas.tpl4j.core.action.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.core.action.action.IEmptyVoidAction;
 import com.github.brunomndantas.tpl4j.core.action.action.IVoidAction;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleVoidAction;

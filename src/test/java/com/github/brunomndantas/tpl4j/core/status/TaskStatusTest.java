@@ -1,4 +1,4 @@
-package com.github.brunomndantas.tpl4j.core.context.status;
+package com.github.brunomndantas.tpl4j.core.status;
 
 import org.junit.Test;
 

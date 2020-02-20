@@ -4,7 +4,7 @@ import com.github.brunomndantas.tpl4j.core.action.link.*;
 import com.github.brunomndantas.tpl4j.core.action.retry.RetryAction;
 import com.github.brunomndantas.tpl4j.core.context.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.action.*;
-import com.github.brunomndantas.tpl4j.core.context.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.Arrays;
