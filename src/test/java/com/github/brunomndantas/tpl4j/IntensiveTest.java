@@ -4,7 +4,7 @@ import com.github.brunomndantas.tpl4j.factory.TaskFactory;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.action.link.ILinkAction;
 import com.github.brunomndantas.tpl4j.core.action.retry.RetryAction;
-import com.github.brunomndantas.tpl4j.core.context.TaskOption;
+import com.github.brunomndantas.tpl4j.core.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;

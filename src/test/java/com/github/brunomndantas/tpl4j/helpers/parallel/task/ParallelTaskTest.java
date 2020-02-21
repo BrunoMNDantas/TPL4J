@@ -2,7 +2,7 @@ package com.github.brunomndantas.tpl4j.helpers.parallel.task;
 
 import com.github.brunomndantas.tpl4j.pool.TaskPool;
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.context.TaskOption;
+import com.github.brunomndantas.tpl4j.core.TaskOption;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.ChildException;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.*;

@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.factory;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.context.TaskOption;
+import com.github.brunomndantas.tpl4j.core.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.action.IAction;
 import com.github.brunomndantas.tpl4j.core.action.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.core.action.action.IEmptyVoidAction;
