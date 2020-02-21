@@ -14,33 +14,13 @@
 *
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-package com.github.brunomndantas.tpl4j.core.action.link;
+package com.github.brunomndantas.tpl4j.task.action.link;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.action.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
-public class LinkVoidAction<T> implements IAction<Void> {
+public interface ILinkVoidAction<K> {
 
-    protected volatile Task<T> previousTask;
-    public Task<T> getPreviousTask() { return this.previousTask; }
-
-    protected volatile ILinkVoidAction<T> action;
-    public ILinkVoidAction<T> getAction() { return this.action; }
-
-
-
-    public LinkVoidAction(Task<T> previousTask, ILinkVoidAction<T> action) {
-        this.previousTask = previousTask;
-        this.action = action;
-    }
-
-
-
-    @Override
-    public Void run(CancellationToken cancellationToken) throws Exception {
-        this.action.run(this.previousTask, cancellationToken);
-        return null;
-    }
+    void run(Task<K> previousTask, CancellationToken cancellationToken) throws Exception;
 
 }

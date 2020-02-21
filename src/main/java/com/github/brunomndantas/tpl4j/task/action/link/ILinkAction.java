@@ -14,10 +14,13 @@
 *
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-package com.github.brunomndantas.tpl4j.core.action.link;
+package com.github.brunomndantas.tpl4j.task.action.link;
 
-public interface ILinkEmptyVoidAction {
+import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
-    void run() throws Exception;
+public interface ILinkAction<T, K> {
+
+    T run(Task<K> previousTask, CancellationToken cancellationToken) throws Exception;
 
 }

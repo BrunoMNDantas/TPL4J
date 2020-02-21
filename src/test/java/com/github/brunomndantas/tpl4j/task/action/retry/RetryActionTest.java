@@ -1,7 +1,7 @@
-package com.github.brunomndantas.tpl4j.core.action.retry;
+package com.github.brunomndantas.tpl4j.task.action.retry;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.action.action.IAction;
+import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import org.junit.Test;

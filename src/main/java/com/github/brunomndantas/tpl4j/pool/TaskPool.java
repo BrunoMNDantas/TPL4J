@@ -18,10 +18,10 @@ package com.github.brunomndantas.tpl4j.pool;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.TaskOption;
-import com.github.brunomndantas.tpl4j.core.action.action.IAction;
-import com.github.brunomndantas.tpl4j.core.action.action.IEmptyAction;
-import com.github.brunomndantas.tpl4j.core.action.action.IEmptyVoidAction;
-import com.github.brunomndantas.tpl4j.core.action.action.IVoidAction;
+import com.github.brunomndantas.tpl4j.core.action.IAction;
+import com.github.brunomndantas.tpl4j.core.action.IEmptyAction;
+import com.github.brunomndantas.tpl4j.core.action.IEmptyVoidAction;
+import com.github.brunomndantas.tpl4j.core.action.IVoidAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleAction;

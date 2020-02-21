@@ -1,7 +1,8 @@
 package com.github.brunomndantas.tpl4j.task;
 
-import com.github.brunomndantas.tpl4j.core.action.link.*;
-import com.github.brunomndantas.tpl4j.core.action.retry.RetryAction;
+import com.github.brunomndantas.tpl4j.core.action.*;
+import com.github.brunomndantas.tpl4j.task.action.link.*;
+import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
 import com.github.brunomndantas.tpl4j.core.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.action.*;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;

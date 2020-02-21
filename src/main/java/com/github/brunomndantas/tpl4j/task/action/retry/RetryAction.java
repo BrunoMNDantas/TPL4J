@@ -14,10 +14,10 @@
 *
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-package com.github.brunomndantas.tpl4j.core.action.retry;
+package com.github.brunomndantas.tpl4j.task.action.retry;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.action.link.LinkAction;
+import com.github.brunomndantas.tpl4j.task.action.link.LinkAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.status.Status;

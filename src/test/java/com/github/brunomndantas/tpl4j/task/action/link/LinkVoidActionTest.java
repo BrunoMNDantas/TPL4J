@@ -1,4 +1,4 @@
-package com.github.brunomndantas.tpl4j.core.action.link;
+package com.github.brunomndantas.tpl4j.task.action.link;
 
 import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;

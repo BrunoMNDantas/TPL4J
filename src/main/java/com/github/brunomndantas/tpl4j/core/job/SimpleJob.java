@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.action.action.IAction;
+import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.status.Status;

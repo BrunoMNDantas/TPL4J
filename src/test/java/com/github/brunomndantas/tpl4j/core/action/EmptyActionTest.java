@@ -1,4 +1,4 @@
-package com.github.brunomndantas.tpl4j.core.action.action;
+package com.github.brunomndantas.tpl4j.core.action;
 
 import org.junit.Test;
 
