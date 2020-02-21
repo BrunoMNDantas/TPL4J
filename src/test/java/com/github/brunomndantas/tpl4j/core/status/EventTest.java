@@ -71,13 +71,13 @@ public class EventTest {
     }
 
     @Test
-    public void awayWithTimeoutTest() throws Exception {
+    public void awaitWithTimeoutTest() throws Exception {
         Event event = new Event();
         assertFalse(event.await(1000));
     }
 
     @Test
-    public void awayWithoutTimeoutTest() throws Exception {
+    public void awaitWithoutTimeoutTest() throws Exception {
         Event event = new Event();
 
         new Thread(() -> {
@@ -89,7 +89,7 @@ public class EventTest {
     }
 
     @Test
-    public void awayForeverTest() throws Exception {
+    public void awaitForeverTest() throws Exception {
         long sleepTime = 3000;
         long exceptedFinish = System.currentTimeMillis() + sleepTime;
 
