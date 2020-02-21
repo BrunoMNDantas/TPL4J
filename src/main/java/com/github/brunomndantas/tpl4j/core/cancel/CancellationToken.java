@@ -28,7 +28,7 @@ public class CancellationToken {
 
 
 
-    private String id;
+    private volatile String id;
     public String getId() { return this.id; }
 
     private AtomicBoolean cancelRequested = new AtomicBoolean();
