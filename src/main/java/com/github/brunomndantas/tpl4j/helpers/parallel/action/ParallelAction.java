@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.action;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.helpers.parallel.task.ParallelWorkerTask;
@@ -13,13 +13,13 @@ import java.util.function.Consumer;
 
 public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
-    private static TaskOption[] attachAttachToParentOption(Collection<TaskOption> options) {
-        Collection<TaskOption> ops = new LinkedList<>(options);
+    private static Option[] attachAttachToParentOption(Collection<Option> options) {
+        Collection<Option> ops = new LinkedList<>(options);
 
-        if(!ops.contains(TaskOption.ATTACH_TO_PARENT))
-            ops.add(TaskOption.ATTACH_TO_PARENT);
+        if(!ops.contains(Option.ATTACH_TO_PARENT))
+            ops.add(Option.ATTACH_TO_PARENT);
 
-        return ops.toArray(new TaskOption[0]);
+        return ops.toArray(new Option[0]);
     }
 
 
@@ -39,12 +39,12 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
     private Consumer<Runnable> scheduler;
     public Consumer<Runnable> getScheduler(){ return this.scheduler; }
 
-    private TaskOption[] options;
-    public TaskOption[] getOptions() { return this.options; }
+    private Option[] options;
+    public Option[] getOptions() { return this.options; }
 
 
 
-    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterator<T> iterator, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options) {
+    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterator<T> iterator, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
         this.taskId = taskId;
         this.iterator = iterator;
         this.action = action;

@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.options;
 
-public enum TaskOption {
+public enum Option {
 
     ACCEPT_CHILDREN,
     REJECT_CHILDREN,

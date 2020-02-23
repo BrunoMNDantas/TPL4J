@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
 import java.util.Arrays;
@@ -31,21 +31,21 @@ public class UnwrapTask<T> extends Task<T> {
 
 
 
-    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         super(new UnwrapJob<>(taskId, cancellationToken, scheduler, Arrays.asList(options), task.getJob()));
         this.task = task;
     }
 
-    public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
+    public UnwrapTask(String taskId, Task<Task<T>> task, Consumer<Runnable> scheduler, Option... options) {
         super(new UnwrapJob<>(taskId, new CancellationToken(), scheduler, Arrays.asList(options), task.getJob()));
         this.task = task;
     }
 
-    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, TaskOption... options) {
+    public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, Option... options) {
         this(taskId, task, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public UnwrapTask(String taskId, Task<Task<T>> task, TaskOption... options) {
+    public UnwrapTask(String taskId, Task<Task<T>> task, Option... options) {
         this(taskId, task, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
@@ -66,19 +66,19 @@ public class UnwrapTask<T> extends Task<T> {
     }
 
 
-    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), task, cancellationToken, scheduler, options);
     }
 
-    public UnwrapTask(Task<Task<T>> task, Consumer<Runnable> scheduler, TaskOption... options) {
+    public UnwrapTask(Task<Task<T>> task, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), task, new CancellationToken(), scheduler, options);
     }
 
-    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, TaskOption... options) {
+    public UnwrapTask(Task<Task<T>> task, CancellationToken cancellationToken, Option... options) {
         this(task, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public UnwrapTask(Task<Task<T>> task, TaskOption... options) {
+    public UnwrapTask(Task<Task<T>> task, Option... options) {
         this(task, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 

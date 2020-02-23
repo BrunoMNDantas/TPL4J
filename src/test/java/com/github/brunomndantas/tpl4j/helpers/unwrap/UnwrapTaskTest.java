@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class UnwrapTaskTest {
 
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Consumer<Runnable> SCHEDULER = (action) -> new Thread(action).start();
-    private static final TaskOption[] OPTIONS = { };
+    private static final Option[] OPTIONS = { };
 
 
 
@@ -75,7 +75,7 @@ public class UnwrapTaskTest {
         validate(unwrapTask, null, task, null, null, null);
     }
 
-    private void validate(UnwrapTask<String> unwrapTask, String id, Task<Task<String>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validate(UnwrapTask<String> unwrapTask, String id, Task<Task<String>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(unwrapTask.getId());
         else

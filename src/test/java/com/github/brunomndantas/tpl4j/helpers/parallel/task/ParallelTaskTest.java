@@ -2,7 +2,7 @@ package com.github.brunomndantas.tpl4j.helpers.parallel.task;
 
 import com.github.brunomndantas.tpl4j.pool.TaskPool;
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.ChildException;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.*;
@@ -27,7 +27,7 @@ public class ParallelTaskTest {
         Iterable<String> elements = Arrays.asList("","");
         CancellationToken cancellationToken = new CancellationToken();
         Consumer<Runnable> scheduler = (r) -> {};
-        TaskOption[] options = new TaskOption[0];
+        Option[] options = new Option[0];
         ParallelTask<String,String> task;
 
         task = new ParallelTask<>(id, elements, action, cancellationToken, scheduler, options);
@@ -176,7 +176,7 @@ public class ParallelTaskTest {
         validate(task, null, elements, uninterruptibleVoidAction, null, null, null);
     }
 
-    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelAction<String,String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelAction<String,String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id != null)
             assertSame(id, task.getJob().getTaskId());
         else
@@ -202,7 +202,7 @@ public class ParallelTaskTest {
             assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
     }
 
-    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelVoidAction<String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelVoidAction<String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id != null)
             assertSame(id, task.getJob().getTaskId());
         else
@@ -228,7 +228,7 @@ public class ParallelTaskTest {
             assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
     }
 
-    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelUninterruptibleAction<String,String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelUninterruptibleAction<String,String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id != null)
             assertSame(id, task.getJob().getTaskId());
         else
@@ -254,7 +254,7 @@ public class ParallelTaskTest {
             assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
     }
 
-    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelUninterruptibleVoidAction<String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validate(ParallelTask<String,String> task, String id, Iterable<String> elements, IParallelUninterruptibleVoidAction<String> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id != null)
             assertSame(id, task.getJob().getTaskId());
         else
@@ -287,7 +287,7 @@ public class ParallelTaskTest {
         IParallelAction<String,String> action = (e,t) -> { Thread.sleep(2000); return e; };
         Iterable<String> elements = Arrays.asList("1","2","3","4");
         Consumer<Runnable> scheduler = pool.getScheduler();
-        TaskOption[] options = new TaskOption[0];
+        Option[] options = new Option[0];
 
         ParallelTask<String,String> task = new ParallelTask<>(id, elements, action, scheduler, options);
 
@@ -308,7 +308,7 @@ public class ParallelTaskTest {
         IParallelAction<String,String> action = (e,t) -> { Thread.sleep(2000); throw exception; };
         Iterable<String> elements = Arrays.asList("1","2","3","4");
         Consumer<Runnable> scheduler = pool.getScheduler();
-        TaskOption[] options = new TaskOption[0];
+        Option[] options = new Option[0];
 
         ParallelTask<String,String> task = new ParallelTask<>(id, elements, action, scheduler, options);
 

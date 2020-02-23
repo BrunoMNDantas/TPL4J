@@ -4,7 +4,7 @@ import com.github.brunomndantas.tpl4j.factory.TaskFactory;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.ILinkAction;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;
@@ -137,7 +137,7 @@ public class IntensiveTest {
         return TaskFactory.createAndStart(new CalculationAction(calculation), scheduler)
             .retry(RetryAction.RETRY_UNTIL_SUCCESS, scheduler)
             .then(new SetResultAction(calculation), scheduler)
-            .then(new VerifyResultAction(), scheduler, TaskOption.ATTACH_TO_PARENT);
+            .then(new VerifyResultAction(), scheduler, Option.ATTACH_TO_PARENT);
     }
 
     private static Collection<Calculation> clone(Collection<Calculation> calculations) {
@@ -222,7 +222,7 @@ public class IntensiveTest {
     public void runTest(Collection<Calculation> calculations, Consumer<Runnable> scheduler) throws Exception {
         Collection<Task<Void>> tasks = new LinkedList<>();
         for(Calculation calculation : calculations)
-            tasks.add(new Task<>(() -> { createCalculationTask(calculation, scheduler); }, scheduler, TaskOption.ACCEPT_CHILDREN));
+            tasks.add(new Task<>(() -> { createCalculationTask(calculation, scheduler); }, scheduler, Option.ACCEPT_CHILDREN));
 
         for(Task<?> task : tasks)
             task.start();

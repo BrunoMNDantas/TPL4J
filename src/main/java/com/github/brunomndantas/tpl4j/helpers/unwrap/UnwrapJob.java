@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
 import com.github.brunomndantas.tpl4j.core.status.State;
@@ -32,7 +32,7 @@ public class UnwrapJob<T> extends Job<T> {
 
 
 
-    public UnwrapJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options, Job<Task<T>> job) {
+    public UnwrapJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Job<Task<T>> job) {
         super(taskId, new UnwrapAction<>(job), cancellationToken, scheduler, options);
         this.job = job;
     }

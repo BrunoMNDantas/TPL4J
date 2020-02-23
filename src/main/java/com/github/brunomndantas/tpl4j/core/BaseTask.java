@@ -19,7 +19,7 @@ package com.github.brunomndantas.tpl4j.core;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.status.Status;
 
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class BaseTask<T> {
 
     public Consumer<Runnable> getScheduler() { return this.job.getScheduler(); }
 
-    public Collection<TaskOption> getOptions() { return this.job.getOptions(); }
+    public Collection<Option> getOptions() { return this.job.getOptions(); }
 
     public T getValue() { return job.getValue(); }
 
