@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.core.job;
 
 import com.github.brunomndantas.tpl4j.core.options.TaskOption;
-import com.github.brunomndantas.tpl4j.core.status.Status;
+import com.github.brunomndantas.tpl4j.core.status.State;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -101,7 +101,7 @@ public class JobManager {
             Collection<JobContext> contexts = getJobContextsExecutedByThread(threadId);
 
             for(JobContext context : contexts)
-                if(context.getJob().status.getValue() == Status.RUNNING)
+                if(context.getJob().status.getValue() == State.RUNNING)
                     return context;
 
             return null;

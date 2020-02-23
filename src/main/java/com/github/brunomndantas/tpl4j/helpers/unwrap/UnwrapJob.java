@@ -20,7 +20,7 @@ import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
-import com.github.brunomndantas.tpl4j.core.status.Status;
+import com.github.brunomndantas.tpl4j.core.status.State;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -43,7 +43,7 @@ public class UnwrapJob<T> extends Job<T> {
     protected void run() {
         this.job.getStatus().finishedEvent.addListener(() -> {
             super.scheduler.accept(() -> {
-                if(this.job.getStatus().getValue() != Status.SUCCEEDED)
+                if(this.job.getStatus().getValue() != State.SUCCEEDED)
                     super.scheduler.accept(() -> super.run());
                 else
                     this.job.getValue().getStatus().finishedEvent.addListener(() -> {

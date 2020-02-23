@@ -20,7 +20,7 @@ import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
 import com.github.brunomndantas.tpl4j.core.options.TaskOption;
-import com.github.brunomndantas.tpl4j.core.status.TaskStatus;
+import com.github.brunomndantas.tpl4j.core.status.Status;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -44,7 +44,7 @@ public class BaseTask<T> {
 
     public CancellationToken getCancellationToken() { return job.getCancellationToken(); }
 
-    public TaskStatus getStatus() { return job.getStatus(); }
+    public Status getStatus() { return job.getStatus(); }
 
 
 

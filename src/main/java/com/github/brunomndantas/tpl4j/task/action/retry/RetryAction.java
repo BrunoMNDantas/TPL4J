@@ -20,7 +20,7 @@ import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.LinkAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.status.Status;
+import com.github.brunomndantas.tpl4j.core.status.State;
 
 import java.util.function.Supplier;
 
@@ -62,7 +62,7 @@ public class RetryAction<T> extends LinkAction<T,T> {
 
     @Override
     public T run(CancellationToken cancellationToken) throws Exception {
-        if(super.previousTask.getStatus().getValue() == Status.SUCCEEDED) {
+        if(super.previousTask.getStatus().getValue() == State.SUCCEEDED) {
             return super.previousTask.getValue();
         } else {
             Exception exception = null;

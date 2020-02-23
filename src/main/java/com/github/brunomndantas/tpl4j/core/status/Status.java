@@ -16,14 +16,98 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.status;
 
-public enum Status {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    CREATED,
-    SCHEDULED,
-    RUNNING,
-    WAITING_CHILDREN,
-    CANCELED,
-    FAILED,
-    SUCCEEDED
+public class Status {
+
+    private final Logger LOGGER = LogManager.getLogger(Status.class);
+
+
+
+    private final Object lock = new Object();
+
+    public final Event scheduledEvent = new Event();
+    public final Event runningEvent = new Event();
+    public final Event waitingForChildrenEvent = new Event();
+    public final Event cancelledEvent = new Event();
+    public final Event failedEvent = new Event();
+    public final Event succeededEvent = new Event();
+    public final Event finishedEvent = new Event();
+
+    private State state = State.CREATED;
+    public State getValue() { synchronized (lock) { return this.state; } }
+
+    private String taskId;
+    public String getTaskId() { synchronized (lock) { return this.taskId; } }
+
+
+
+    public Status(String taskId) {
+        this.taskId = taskId;
+    }
+
+
+
+    public void declareSchedule() {
+        synchronized (lock) {
+            this.state = State.SCHEDULED;
+            scheduledEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Schedule Status!");
+        }
+    }
+
+    public void declareRun() {
+        synchronized (lock) {
+            this.state = State.RUNNING;
+            runningEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Run Status!");
+        }
+    }
+
+    public void declareWaitChildren() {
+        synchronized (lock) {
+            this.state = State.WAITING_CHILDREN;
+            waitingForChildrenEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Wait Children Status!");
+        }
+    }
+
+    public void declareCancel() {
+        synchronized (lock) {
+            this.state = State.CANCELED;
+            cancelledEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Cancel Status!");
+        }
+
+        declareFinish();
+    }
+
+    public void declareFail() {
+        synchronized (lock) {
+            this.state = State.FAILED;
+            failedEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Fail Status!");
+        }
+
+        declareFinish();
+    }
+
+    public void declareSuccess() {
+        synchronized (lock) {
+            this.state = State.SUCCEEDED;
+            succeededEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Success Status!");
+        }
+
+        declareFinish();
+    }
+
+    public void declareFinish() {
+        synchronized (lock) {
+            finishedEvent.fire();
+            LOGGER.info("Task:" + taskId + " declared Finish Status!");
+        }
+    }
 
 }

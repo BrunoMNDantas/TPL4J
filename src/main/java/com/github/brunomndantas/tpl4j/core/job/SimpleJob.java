@@ -19,8 +19,8 @@ package com.github.brunomndantas.tpl4j.core.job;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.core.status.Status;
-import com.github.brunomndantas.tpl4j.core.status.TaskStatus;
 
 import java.util.function.Consumer;
 
@@ -37,8 +37,8 @@ public class SimpleJob<T> {
     protected volatile Consumer<Runnable> scheduler;
     public Consumer<Runnable> getScheduler() { return this.scheduler; }
 
-    protected volatile TaskStatus status;
-    public TaskStatus getStatus() { return this.status; }
+    protected volatile Status status;
+    public Status getStatus() { return this.status; }
 
     protected volatile CancellationToken cancellationToken;
     public CancellationToken getCancellationToken() { return this.cancellationToken; }
@@ -58,7 +58,7 @@ public class SimpleJob<T> {
         this.action = action;
         this.cancellationToken = cancellationToken;
         this.scheduler = scheduler;
-        this.status = new TaskStatus(taskId);
+        this.status = new Status(taskId);
     }
 
 
@@ -66,7 +66,7 @@ public class SimpleJob<T> {
     public T getResult() throws Exception {
         this.getStatus().finishedEvent.await();
 
-        if(this.getStatus().getValue() == Status.FAILED)
+        if(this.getStatus().getValue() == State.FAILED)
             throw this.getException();
         else
             return this.getValue();

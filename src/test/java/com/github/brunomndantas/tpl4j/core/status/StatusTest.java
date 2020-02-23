@@ -5,87 +5,87 @@ import org.junit.Test;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-public class TaskStatusTest {
+public class StatusTest {
 
     @Test
     public void getTaskIdTest() {
         String taskId = "Id";
-        TaskStatus status = new TaskStatus(taskId);
+        Status status = new Status(taskId);
         assertSame(taskId, status.getTaskId());
     }
 
     @Test
     public void getInitialValueTest() {
-        TaskStatus status = new TaskStatus("");
-        assertSame(Status.CREATED, status.getValue());
+        Status status = new Status("");
+        assertSame(State.CREATED, status.getValue());
     }
 
     @Test
     public void declareScheduleTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareSchedule();
 
-        assertSame(Status.SCHEDULED, status.getValue());
+        assertSame(State.SCHEDULED, status.getValue());
         assertTrue(status.scheduledEvent.hasFired());
     }
 
     @Test
     public void declareRunTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareRun();
 
-        assertSame(Status.RUNNING, status.getValue());
+        assertSame(State.RUNNING, status.getValue());
         assertTrue(status.runningEvent.hasFired());
     }
 
     @Test
     public void declareWaitChildrenTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareWaitChildren();
 
-        assertSame(Status.WAITING_CHILDREN, status.getValue());
+        assertSame(State.WAITING_CHILDREN, status.getValue());
         assertTrue(status.waitingForChildrenEvent.hasFired());
     }
 
     @Test
     public void declareCancelTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareCancel();
 
-        assertSame(Status.CANCELED, status.getValue());
+        assertSame(State.CANCELED, status.getValue());
         assertTrue(status.cancelledEvent.hasFired());
         assertTrue(status.finishedEvent.hasFired());
     }
 
     @Test
     public void declareFailTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareFail();
 
-        assertSame(Status.FAILED, status.getValue());
+        assertSame(State.FAILED, status.getValue());
         assertTrue(status.failedEvent.hasFired());
         assertTrue(status.finishedEvent.hasFired());
     }
 
     @Test
     public void declareSuccessTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareSuccess();
 
-        assertSame(Status.SUCCEEDED, status.getValue());
+        assertSame(State.SUCCEEDED, status.getValue());
         assertTrue(status.succeededEvent.hasFired());
         assertTrue(status.finishedEvent.hasFired());
     }
 
     @Test
     public void declareFinishTest() {
-        TaskStatus status = new TaskStatus("");
+        Status status = new Status("");
 
         status.declareFinish();
 
