@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
 import java.util.Arrays;

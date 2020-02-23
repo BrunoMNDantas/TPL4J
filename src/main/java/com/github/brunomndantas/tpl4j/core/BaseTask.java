@@ -19,6 +19,7 @@ package com.github.brunomndantas.tpl4j.core;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import com.github.brunomndantas.tpl4j.core.status.TaskStatus;
 
 import java.util.Collection;

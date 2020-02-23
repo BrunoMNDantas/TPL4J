@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.pool;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;

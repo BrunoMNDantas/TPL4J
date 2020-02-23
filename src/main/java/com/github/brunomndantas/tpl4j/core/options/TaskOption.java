@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-package com.github.brunomndantas.tpl4j.core;
+package com.github.brunomndantas.tpl4j.core.options;
 
 public enum TaskOption {
 

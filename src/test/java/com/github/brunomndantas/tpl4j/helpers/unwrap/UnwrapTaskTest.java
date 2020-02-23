@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Assert;
 import org.junit.Test;

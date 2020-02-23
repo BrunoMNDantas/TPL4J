@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.task;
 
 import com.github.brunomndantas.tpl4j.core.BaseTask;
-import com.github.brunomndantas.tpl4j.core.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import com.github.brunomndantas.tpl4j.core.action.*;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;

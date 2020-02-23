@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.TaskOption;
 import org.junit.Test;
 
 import java.util.Arrays;
