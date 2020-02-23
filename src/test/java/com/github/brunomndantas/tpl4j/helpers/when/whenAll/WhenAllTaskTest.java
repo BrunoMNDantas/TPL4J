@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class WhenAllTaskTest {
 
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Consumer<Runnable> SCHEDULER = (action) -> new Thread(action).start();
-    private static final TaskOption[] OPTIONS = { TaskOption.ACCEPT_CHILDREN };
+    private static final Option[] OPTIONS = { Option.ACCEPT_CHILDREN };
 
 
 
@@ -80,7 +80,7 @@ public class WhenAllTaskTest {
         validate(task, null, tasks, null, null, null);
     }
 
-    private void validate(WhenAllTask<String> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validate(WhenAllTask<String> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else

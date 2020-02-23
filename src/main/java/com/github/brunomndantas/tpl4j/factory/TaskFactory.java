@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.factory;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
@@ -37,138 +37,138 @@ import java.util.function.Consumer;
 
 public class TaskFactory {
 
-    public static <T> Task<T> create(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId,action, cancellationToken, scheduler, options);
     }
 
-    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId,action, cancellationToken, scheduler, options);
     }
 
-    public static Task<Void> create(String taskId, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(String taskId, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId,action, cancellationToken, scheduler, options);
     }
 
-    public static Task<Void> create(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId,action, cancellationToken, scheduler, options);
     }
 
 
-    public static <T> Task<T> create(String taskId, IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId, action, scheduler, options);
     }
 
-    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId, action, scheduler, options);
     }
 
-    public static Task<Void> create(String taskId, IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(String taskId, IVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId, action, scheduler, options);
     }
 
-    public static Task<Void> create(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(taskId, action, scheduler, options);
     }
 
 
-    public static <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, cancellationToken, scheduler, options);
     }
 
-    public static <T> Task<T> create(IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, cancellationToken, scheduler, options);
     }
 
-    public static Task<Void> create(IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, cancellationToken, scheduler, options);
     }
 
-    public static Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, cancellationToken, scheduler, options);
     }
 
 
-    public static <T> Task<T> create(IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(IAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, scheduler, options);
     }
 
-    public static <T> Task<T> create(IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> create(IEmptyAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, scheduler, options);
     }
 
-    public static Task<Void> create(IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(IVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, scheduler, options);
     }
 
-    public static Task<Void> create(IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> create(IEmptyVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         return new Task<>(action, scheduler, options);
     }
 
 
-    public static <T> Task<T> create(String taskId, IAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IAction<T> action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(taskId, action, cancellationToken, options);
     }
 
-    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(taskId, action, cancellationToken, options);
     }
 
-    public static Task<Void> create(String taskId, IVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> create(String taskId, IVoidAction action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(taskId, action, cancellationToken, options);
     }
 
-    public static Task<Void> create(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(taskId, action, cancellationToken, options);
     }
 
 
-    public static <T> Task<T> create(String taskId, IAction<T> action, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IAction<T> action, Option... options) {
         return new Task<>(taskId, action, options);
     }
 
-    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, TaskOption... options) {
+    public static <T> Task<T> create(String taskId, IEmptyAction<T> action, Option... options) {
         return new Task<>(taskId, action, options);
     }
 
-    public static Task<Void> create(String taskId, IVoidAction action, TaskOption... options) {
+    public static Task<Void> create(String taskId, IVoidAction action, Option... options) {
         return new Task<>(taskId, action, options);
     }
 
-    public static Task<Void> create(String taskId, IEmptyVoidAction action, TaskOption... options) {
+    public static Task<Void> create(String taskId, IEmptyVoidAction action, Option... options) {
         return new Task<>(taskId, action, options);
     }
 
 
-    public static <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(action, cancellationToken, options);
     }
 
-    public static <T> Task<T> create(IEmptyAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> create(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(action, cancellationToken, options);
     }
 
-    public static Task<Void> create(IVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> create(IVoidAction action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(action, cancellationToken, options);
     }
 
-    public static Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
         return new Task<>(action, cancellationToken, options);
     }
 
 
-    public static <T> Task<T> create(IAction<T> action, TaskOption... options) {
+    public static <T> Task<T> create(IAction<T> action, Option... options) {
         return new Task<>(action, options);
     }
 
-    public static <T> Task<T> create(IEmptyAction<T> action, TaskOption... options) {
+    public static <T> Task<T> create(IEmptyAction<T> action, Option... options) {
         return new Task<>(action, options);
     }
 
-    public static Task<Void> create(IVoidAction action, TaskOption... options) {
+    public static Task<Void> create(IVoidAction action, Option... options) {
         return new Task<>(action, options);
     }
 
-    public static Task<Void> create(IEmptyVoidAction action, TaskOption... options) {
+    public static Task<Void> create(IEmptyVoidAction action, Option... options) {
         return new Task<>(action, options);
     }
 
@@ -309,7 +309,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(taskId, action, cancellationToken, scheduler, options);
 
         task.start();
@@ -317,7 +317,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(taskId, action, cancellationToken, scheduler, options);
 
         task.start();
@@ -325,7 +325,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(taskId, action, cancellationToken, scheduler, options);
 
         task.start();
@@ -333,7 +333,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(taskId, action, cancellationToken, scheduler, options);
 
         task.start();
@@ -342,7 +342,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(taskId, action, scheduler, options);
 
         task.start();
@@ -350,7 +350,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(taskId, action, scheduler, options);
 
         task.start();
@@ -358,7 +358,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(taskId, action, scheduler, options);
 
         task.start();
@@ -366,7 +366,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(taskId, action, scheduler, options);
 
         task.start();
@@ -375,7 +375,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(action, cancellationToken, scheduler, options);
 
         task.start();
@@ -383,7 +383,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(action, cancellationToken, scheduler, options);
 
         task.start();
@@ -391,7 +391,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(action, cancellationToken, scheduler, options);
 
         task.start();
@@ -399,7 +399,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(action, cancellationToken, scheduler, options);
 
         task.start();
@@ -408,7 +408,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(IAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(action, scheduler, options);
 
         task.start();
@@ -416,7 +416,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(IEmptyAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IEmptyAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         Task<T> task = create(action, scheduler, options);
 
         task.start();
@@ -424,7 +424,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(IVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(action, scheduler, options);
 
         task.start();
@@ -432,7 +432,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IEmptyVoidAction action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static Task<Void> createAndStart(IEmptyVoidAction action, Consumer<Runnable> scheduler, Option... options) {
         Task<Void> task = create(action, scheduler, options);
 
         task.start();
@@ -441,7 +441,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, CancellationToken cancellationToken, Option... options) {
         Task<T> task = create(taskId, action, cancellationToken, options);
 
         task.start();
@@ -449,7 +449,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
         Task<T> task = create(taskId, action, cancellationToken, options);
 
         task.start();
@@ -457,7 +457,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, CancellationToken cancellationToken, Option... options) {
         Task<Void> task = create(taskId, action, cancellationToken, options);
 
         task.start();
@@ -465,7 +465,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
         Task<Void> task = create(taskId, action, cancellationToken, options);
 
         task.start();
@@ -474,7 +474,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IAction<T> action, Option... options) {
         Task<T> task = create(taskId, action, options);
 
         task.start();
@@ -482,7 +482,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, TaskOption... options) {
+    public static <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Option... options) {
         Task<T> task = create(taskId, action, options);
 
         task.start();
@@ -490,7 +490,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IVoidAction action, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IVoidAction action, Option... options) {
         Task<Void> task = create(taskId, action, options);
 
         task.start();
@@ -498,7 +498,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, TaskOption... options) {
+    public static Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Option... options) {
         Task<Void> task = create(taskId, action, options);
 
         task.start();
@@ -507,7 +507,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken, Option... options) {
         Task<T> task = create(action, cancellationToken, options);
 
         task.start();
@@ -515,7 +515,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(IEmptyAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
         Task<T> task = create(action, cancellationToken, options);
 
         task.start();
@@ -523,7 +523,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> createAndStart(IVoidAction action, CancellationToken cancellationToken, Option... options) {
         Task<Void> task = create(action, cancellationToken, options);
 
         task.start();
@@ -531,7 +531,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken, TaskOption... options) {
+    public static Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
         Task<Void> task = create(action, cancellationToken, options);
 
         task.start();
@@ -540,7 +540,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> Task<T> createAndStart(IAction<T> action, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IAction<T> action, Option... options) {
         Task<T> task = create(action, options);
 
         task.start();
@@ -548,7 +548,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> Task<T> createAndStart(IEmptyAction<T> action, TaskOption... options) {
+    public static <T> Task<T> createAndStart(IEmptyAction<T> action, Option... options) {
         Task<T> task = create(action, options);
 
         task.start();
@@ -556,7 +556,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IVoidAction action, TaskOption... options) {
+    public static Task<Void> createAndStart(IVoidAction action, Option... options) {
         Task<Void> task = create(action, options);
 
         task.start();
@@ -564,7 +564,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static Task<Void> createAndStart(IEmptyVoidAction action, TaskOption... options) {
+    public static Task<Void> createAndStart(IEmptyVoidAction action, Option... options) {
         Task<Void> task = create(action, options);
 
         task.start();
@@ -837,7 +837,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, cancellationToken, scheduler, options);
 
         task.start();
@@ -845,7 +845,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, cancellationToken, options);
 
         task.start();
@@ -870,7 +870,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, scheduler, options);
 
         task.start();
@@ -878,7 +878,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, options);
 
         task.start();
@@ -903,7 +903,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(tasks, cancellationToken, scheduler, options);
 
         task.start();
@@ -911,7 +911,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(tasks, cancellationToken, options);
 
         task.start();
@@ -936,7 +936,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(tasks, new  CancellationToken(), scheduler, options);
 
         task.start();
@@ -944,7 +944,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, TaskOption... options) {
+    public static <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(tasks, new  CancellationToken(), options);
 
         task.start();
@@ -969,7 +969,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, cancellationToken, scheduler, options);
 
         task.start();
@@ -977,7 +977,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, cancellationToken, options);
 
         task.start();
@@ -1002,7 +1002,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, scheduler, options);
 
         task.start();
@@ -1010,7 +1010,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, options);
 
         task.start();
@@ -1035,7 +1035,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, cancellationToken, scheduler, options);
 
         task.start();
@@ -1043,7 +1043,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, cancellationToken, options);
 
         task.start();
@@ -1068,7 +1068,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, scheduler, options);
 
         task.start();
@@ -1076,7 +1076,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, TaskOption... options) {
+    public static <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(tasks, options);
 
         task.start();
@@ -1101,7 +1101,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, cancellationToken, scheduler, options);
 
         task.start();
@@ -1109,7 +1109,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, cancellationToken, options);
 
         task.start();
@@ -1134,7 +1134,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, Consumer<Runnable> scheduler, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, scheduler, options);
 
         task.start();
@@ -1142,7 +1142,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, options);
 
         task.start();
@@ -1167,7 +1167,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskToUnwrap, cancellationToken, scheduler, options);
 
         task.start();
@@ -1175,7 +1175,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskToUnwrap, cancellationToken, options);
 
         task.start();
@@ -1200,7 +1200,7 @@ public class TaskFactory {
     }
 
 
-    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, Consumer<Runnable> scheduler, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskToUnwrap, scheduler, options);
 
         task.start();
@@ -1208,7 +1208,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, TaskOption... options) {
+    public static <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskToUnwrap, options);
 
         task.start();
@@ -1233,50 +1233,50 @@ public class TaskFactory {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, scheduler, options);
         task.start();
         return task;
@@ -1333,50 +1333,50 @@ public class TaskFactory {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, options);
         task.start();
         return task;
@@ -1433,50 +1433,50 @@ public class TaskFactory {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, scheduler, options);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, scheduler, options);
         task.start();
         return task;
@@ -1533,50 +1533,50 @@ public class TaskFactory {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, cancellationToken, options);
         task.start();
         return task;
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
         task.start();
         return task;
     }
 
-    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, TaskOption... options) {
+    public static <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
         ParallelTask<T,K> task = new ParallelTask<>(elements, action, options);
         task.start();
         return task;

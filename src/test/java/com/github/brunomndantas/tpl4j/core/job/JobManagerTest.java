@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -259,7 +259,7 @@ public class JobManagerTest {
 
         Job<?> parentJob = new Job<>("ID", null, null, null, new LinkedList<>());
         Job<?> childJob = new Job<>("ID", null, null, null, new LinkedList<>());
-        Job<?> attachedChildJob = new Job<>("ID", null, null, null, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+        Job<?> attachedChildJob = new Job<>("ID", null, null, null, Arrays.asList(Option.ATTACH_TO_PARENT));
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
@@ -284,8 +284,8 @@ public class JobManagerTest {
         JobManager manager = new JobManager();
         long currentThreadId = Thread.currentThread().getId();
 
-        Job<?> parentJob = new Job<>("ID", null, null, null, Arrays.asList(TaskOption.REJECT_CHILDREN));
-        Job<?> attachedChildJob = new Job<>("ID", null, null, null, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+        Job<?> parentJob = new Job<>("ID", null, null, null, Arrays.asList(Option.REJECT_CHILDREN));
+        Job<?> attachedChildJob = new Job<>("ID", null, null, null, Arrays.asList(Option.ATTACH_TO_PARENT));
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);

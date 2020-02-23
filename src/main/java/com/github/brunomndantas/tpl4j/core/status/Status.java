@@ -25,8 +25,6 @@ public class Status {
 
 
 
-    private final Object lock = new Object();
-
     public final Event scheduledEvent = new Event();
     public final Event runningEvent = new Event();
     public final Event waitingForChildrenEvent = new Event();
@@ -36,10 +34,10 @@ public class Status {
     public final Event finishedEvent = new Event();
 
     private State state = State.CREATED;
-    public State getValue() { synchronized (lock) { return this.state; } }
+    public synchronized State getState() { return this.state; }
 
     private String taskId;
-    public String getTaskId() { synchronized (lock) { return this.taskId; } }
+    public synchronized String getTaskId() { return this.taskId; }
 
 
 
@@ -49,65 +47,51 @@ public class Status {
 
 
 
-    public void declareSchedule() {
-        synchronized (lock) {
-            this.state = State.SCHEDULED;
-            scheduledEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Schedule Status!");
-        }
+    public synchronized void declareSchedule() {
+        this.state = State.SCHEDULED;
+        scheduledEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Schedule state!");
     }
 
-    public void declareRun() {
-        synchronized (lock) {
-            this.state = State.RUNNING;
-            runningEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Run Status!");
-        }
+    public synchronized void declareRun() {
+        this.state = State.RUNNING;
+        runningEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Run state!");
     }
 
-    public void declareWaitChildren() {
-        synchronized (lock) {
-            this.state = State.WAITING_CHILDREN;
-            waitingForChildrenEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Wait Children Status!");
-        }
+    public synchronized void declareWaitChildren() {
+        this.state = State.WAITING_CHILDREN;
+        waitingForChildrenEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Wait Children state!");
     }
 
-    public void declareCancel() {
-        synchronized (lock) {
-            this.state = State.CANCELED;
-            cancelledEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Cancel Status!");
-        }
+    public synchronized void declareCancel() {
+        this.state = State.CANCELED;
+        cancelledEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Cancel state!");
 
         declareFinish();
     }
 
-    public void declareFail() {
-        synchronized (lock) {
-            this.state = State.FAILED;
-            failedEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Fail Status!");
-        }
+    public synchronized void declareFail() {
+        this.state = State.FAILED;
+        failedEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Fail state!");
 
         declareFinish();
     }
 
-    public void declareSuccess() {
-        synchronized (lock) {
-            this.state = State.SUCCEEDED;
-            succeededEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Success Status!");
-        }
+    public synchronized void declareSuccess() {
+        this.state = State.SUCCEEDED;
+        succeededEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Success state!");
 
         declareFinish();
     }
 
-    public void declareFinish() {
-        synchronized (lock) {
-            finishedEvent.fire();
-            LOGGER.info("Task:" + taskId + " declared Finish Status!");
-        }
+    public synchronized void declareFinish() {
+        finishedEvent.fire();
+        LOGGER.info("Task with id:" + taskId + " declared Finish state!");
     }
 
 }

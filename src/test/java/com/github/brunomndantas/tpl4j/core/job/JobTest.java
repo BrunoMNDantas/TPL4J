@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class JobTest {
 
     @Test
     public void getOptionsTest() {
-        Collection<TaskOption> options = new LinkedList<>();
+        Collection<Option> options = new LinkedList<>();
 
         Job<?> job = new Job<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, options);
 
@@ -38,7 +38,7 @@ public class JobTest {
 
     @Test
     public void successWithoutChildrenTest() throws InterruptedException {
-        Job<?> job = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        Job<?> job = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         job.schedule();
 
@@ -50,7 +50,7 @@ public class JobTest {
 
     @Test
     public void failWithoutChildrenTest() throws InterruptedException {
-        Job<?> job = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        Job<?> job = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         job.schedule();
 
@@ -62,7 +62,7 @@ public class JobTest {
 
     @Test
     public void cancelWithoutChildrenTest() throws InterruptedException {
-        Job<?> job = new Job<>("ID", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        Job<?> job = new Job<>("ID", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         job.schedule();
 
@@ -81,8 +81,8 @@ public class JobTest {
     public void successRejectingChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -91,7 +91,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.REJECT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.REJECT_CHILDREN));
 
         parentJob.schedule();
 
@@ -106,8 +106,8 @@ public class JobTest {
     public void failRejectingChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -116,7 +116,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.REJECT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.REJECT_CHILDREN));
 
         parentJob.schedule();
 
@@ -131,8 +131,8 @@ public class JobTest {
     public void cancelRejectingChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -144,7 +144,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.REJECT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.REJECT_CHILDREN));
 
         parentJob.schedule();
 
@@ -159,8 +159,8 @@ public class JobTest {
     public void successWithSuccessfulChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -169,7 +169,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -187,8 +187,8 @@ public class JobTest {
     public void successWithFailedChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -197,7 +197,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -215,8 +215,8 @@ public class JobTest {
     public void successWithCancelChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", CANCEL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", CANCEL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -225,7 +225,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -245,8 +245,8 @@ public class JobTest {
     public void failWithSuccessfulChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -255,7 +255,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -273,8 +273,8 @@ public class JobTest {
     public void failWithFailedChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -283,7 +283,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -301,8 +301,8 @@ public class JobTest {
     public void failWithCancelledChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", CANCEL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", CANCEL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -311,7 +311,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -331,8 +331,8 @@ public class JobTest {
     public void cancelWithSuccessfulChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -346,7 +346,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -363,8 +363,8 @@ public class JobTest {
     public void cancelWithFailedChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -378,7 +378,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -396,8 +396,8 @@ public class JobTest {
     public void cancelWithCancelledChildrenTest() throws InterruptedException {
         Job[] children = new Job[2];
         Job<?> parentJob = new Job<>("ID", (token) -> {
-            Job<?> childJobA = new Job<>("ID", CANCEL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
-            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ATTACH_TO_PARENT));
+            Job<?> childJobA = new Job<>("ID", CANCEL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
+            Job<?> childJobB = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ATTACH_TO_PARENT));
 
             children[0] = childJobA;
             children[1] = childJobB;
@@ -410,7 +410,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         parentJob.schedule();
 
@@ -431,11 +431,11 @@ public class JobTest {
         Consumer<Runnable> scheduler = (action) -> { counter[0]++; pool.submit(action); };
 
         Job<?> job = new Job<>("Parent", (ct) -> {
-            new Job<>("ChildA", (ctA) -> null, new CancellationToken(), scheduler, Arrays.asList(TaskOption.ATTACH_TO_PARENT)).schedule();
-            new Job<>("ChildB", (ctA) -> null, new CancellationToken(), scheduler, Arrays.asList(TaskOption.ATTACH_TO_PARENT)).schedule();
+            new Job<>("ChildA", (ctA) -> null, new CancellationToken(), scheduler, Arrays.asList(Option.ATTACH_TO_PARENT)).schedule();
+            new Job<>("ChildB", (ctA) -> null, new CancellationToken(), scheduler, Arrays.asList(Option.ATTACH_TO_PARENT)).schedule();
 
             return null;
-        }, new CancellationToken(), scheduler, Arrays.asList(TaskOption.ACCEPT_CHILDREN));
+        }, new CancellationToken(), scheduler, Arrays.asList(Option.ACCEPT_CHILDREN));
 
         job.schedule();
         job.getStatus().finishedEvent.await();

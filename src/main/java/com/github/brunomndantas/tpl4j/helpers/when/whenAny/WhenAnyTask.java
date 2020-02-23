@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class WhenAnyTask<T> extends Task<Task<T>> {
 
 
 
-    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         super(new WhenAnyJob<>(
                 taskId,
                 cancellationToken,
@@ -44,7 +44,7 @@ public class WhenAnyTask<T> extends Task<Task<T>> {
         this.tasks = tasks;
     }
 
-    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
         super(new WhenAnyJob<>(
                 taskId,
                 new CancellationToken(),
@@ -56,11 +56,11 @@ public class WhenAnyTask<T> extends Task<Task<T>> {
         this.tasks = tasks;
     }
 
-    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
         this(taskId, tasks, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, TaskOption... options) {
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, Option... options) {
         this(taskId, tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
@@ -81,19 +81,19 @@ public class WhenAnyTask<T> extends Task<Task<T>> {
     }
 
 
-    public WhenAnyTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public WhenAnyTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), tasks, cancellationToken, scheduler, options);
     }
 
-    public WhenAnyTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, TaskOption... options) {
+    public WhenAnyTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), tasks, new CancellationToken(), scheduler, options);
     }
 
-    public WhenAnyTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, TaskOption... options) {
+    public WhenAnyTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
         this(tasks, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public WhenAnyTask(Collection<Task<T>> tasks, TaskOption... options) {
+    public WhenAnyTask(Collection<Task<T>> tasks, Option... options) {
         this(tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 

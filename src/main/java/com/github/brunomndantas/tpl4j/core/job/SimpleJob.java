@@ -66,7 +66,7 @@ public class SimpleJob<T> {
     public T getResult() throws Exception {
         this.getStatus().finishedEvent.await();
 
-        if(this.getStatus().getValue() == State.FAILED)
+        if(this.getStatus().getState() == State.FAILED)
             throw this.getException();
         else
             return this.getValue();

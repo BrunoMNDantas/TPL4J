@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.status.State;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,7 +101,7 @@ public class JobManager {
             Collection<JobContext> contexts = getJobContextsExecutedByThread(threadId);
 
             for(JobContext context : contexts)
-                if(context.getJob().status.getValue() == State.RUNNING)
+                if(context.getJob().status.getState() == State.RUNNING)
                     return context;
 
             return null;
@@ -148,9 +148,9 @@ public class JobManager {
 
     public Collection<JobContext> getAttachedChildrenContexts(Job<?> job) {
         synchronized (LOCK) {
-            Collection<TaskOption> taskOptions = job.options;
+            Collection<Option> options = job.options;
 
-            if(taskOptions.contains(TaskOption.REJECT_CHILDREN))
+            if(options.contains(Option.REJECT_CHILDREN))
                 return new LinkedList<>();
 
             JobContext taskContext = CONTEXTS_BY_JOB.get(job);
@@ -160,9 +160,9 @@ public class JobManager {
                     .stream()
                     .filter((childContext) -> {
                         Job<?> childJob = childContext.getJob();
-                        Collection<TaskOption> childOptions = childJob.options;
+                        Collection<Option> childOptions = childJob.options;
 
-                        return childOptions.contains(TaskOption.ATTACH_TO_PARENT);
+                        return childOptions.contains(Option.ATTACH_TO_PARENT);
                     })
                     .collect(Collectors.toList());
         }

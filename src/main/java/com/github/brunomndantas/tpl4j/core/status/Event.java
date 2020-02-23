@@ -31,72 +31,57 @@ public class Event {
 
 
 
-    private final Object lock = new Object();
-
     private final Collection<Runnable> listeners = new LinkedList<>();
-
     private boolean fired;
 
 
 
-    public void addListener(Runnable listener) {
-        synchronized (lock) {
-            listeners.add(listener);
+    public synchronized void addListener(Runnable listener) {
+        this.listeners.add(listener);
 
-            if(fired)
-                listener.run();
+        if(this.fired)
+            LISTENERS_RUNNER.submit(listener);
+    }
+
+    public synchronized void removeListener(Runnable listener) {
+        this.listeners.remove(listener);
+    }
+
+    public synchronized boolean await() throws InterruptedException {
+        while(!this.fired)
+            this.wait();
+
+        return true;
+    }
+
+    public synchronized boolean await(long timeout) throws InterruptedException {
+        long finalTime = System.currentTimeMillis() + timeout;
+        long timeToFinish;
+
+        while(true) {
+            timeToFinish = finalTime - System.currentTimeMillis();
+
+            if(this.fired || timeToFinish<=0)
+                break;
+
+            this.wait(timeToFinish);
+        }
+
+        return this.fired;
+    }
+
+    public synchronized void fire() {
+        if(!this.fired) {
+            this.fired = true;
+
+            this.notifyAll();
+
+            this.listeners.forEach(LISTENERS_RUNNER::submit);
         }
     }
 
-    public void removeListener(Runnable listener) {
-        synchronized (lock) {
-            listeners.remove(listener);
-        }
-    }
-
-    public boolean await() throws InterruptedException {
-        synchronized (lock) {
-            while(!fired)
-                lock.wait();
-
-            return true;
-        }
-    }
-
-    public boolean await(long timeout) throws InterruptedException {
-        synchronized (lock) {
-            long finalTime = System.currentTimeMillis() + timeout;
-            long timeToFinish;
-
-            while(true) {
-                timeToFinish = finalTime - System.currentTimeMillis();
-
-                if(fired || timeToFinish<=0)
-                    break;
-
-                lock.wait(timeToFinish);
-            }
-
-            return fired;
-        }
-    }
-
-    public void fire() {
-        synchronized (lock) {
-            if(!fired) {
-                this.fired = true;
-
-                lock.notifyAll();
-
-                listeners.forEach(LISTENERS_RUNNER::submit);
-            }
-        }
-    }
-
-    public boolean hasFired() {
-        synchronized (lock) {
-            return this.fired;
-        }
+    public synchronized boolean hasFired() {
+        return this.fired;
     }
 
 }

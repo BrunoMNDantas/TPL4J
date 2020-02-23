@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.task;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.*;
 import com.github.brunomndantas.tpl4j.helpers.parallel.job.ParallelJob;
@@ -13,36 +13,36 @@ import java.util.function.Consumer;
 
 public class ParallelTask<T,K> extends Task<Collection<K>> {
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         super(new ParallelJob<>(taskId, action, elements.iterator(), cancellationToken, scheduler, Arrays.asList(options)));
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, elements, (IParallelAction<T,K>)new ParallelVoidAction<>(action), cancellationToken, scheduler, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, elements, new ParallelUninterruptibleAction<>(action), cancellationToken, scheduler, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, elements, (IParallelAction<T,K>)new ParallelUninterruptibleVoidAction<>(action), cancellationToken, scheduler, options);
     }
 
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         super(new ParallelJob<>(taskId, action, elements.iterator(), new CancellationToken(), scheduler, Arrays.asList(options)));
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, elements, (IParallelAction<T,K>)new ParallelVoidAction<>(action), new CancellationToken(), scheduler, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, elements, new ParallelUninterruptibleAction<>(action), new CancellationToken(), scheduler, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, elements, (IParallelAction<T,K>)new ParallelUninterruptibleVoidAction<>(action), new CancellationToken(), scheduler, options);
     }
 
@@ -81,36 +81,36 @@ public class ParallelTask<T,K> extends Task<Collection<K>> {
     }
 
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         this(taskId, elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         this(taskId, elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         this(taskId, elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         this(taskId, elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
         this(taskId, elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
         this(taskId, elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
         this(taskId, elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, TaskOption... options) {
+    public ParallelTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
         this(taskId, elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
@@ -149,36 +149,36 @@ public class ParallelTask<T,K> extends Task<Collection<K>> {
     }
 
 
-    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, scheduler, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, scheduler, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, scheduler, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, scheduler, options);
     }
 
 
-    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), scheduler, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), scheduler, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), scheduler, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), scheduler, options);
     }
 
@@ -217,36 +217,36 @@ public class ParallelTask<T,K> extends Task<Collection<K>> {
     }
 
 
-    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, CancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, cancellationToken, Task.DEFAULT_SCHEDULER, options);
     }
 
 
-    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 
-    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, TaskOption... options) {
+    public ParallelTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
         this(UUID.randomUUID().toString(), elements, action, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
     }
 

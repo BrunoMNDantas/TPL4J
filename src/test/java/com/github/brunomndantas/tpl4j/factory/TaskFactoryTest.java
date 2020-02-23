@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.factory;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
@@ -29,7 +29,7 @@ public class TaskFactoryTest {
     private static final IVoidAction VOID_ACTION = (token) -> {};
     private static final IEmptyVoidAction EMPTY_VOID_ACTION = () -> {};
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final TaskOption[] OPTIONS = {};
+    private static final Option[] OPTIONS = {};
     private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
 
 
@@ -184,7 +184,7 @@ public class TaskFactoryTest {
         validateCreate(task, null, null, null, null);
     }
 
-    private void validateCreate(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateCreate(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -358,7 +358,7 @@ public class TaskFactoryTest {
         validateCreateAndStart(task, null, null, null, null);
     }
 
-    private void validateCreateAndStart(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateCreateAndStart(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -432,7 +432,7 @@ public class TaskFactoryTest {
         validateWhenAll(task, null, tasks, null, null, null);
     }
 
-    private void validateWhenAll(WhenAllTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateWhenAll(WhenAllTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -507,7 +507,7 @@ public class TaskFactoryTest {
         validateWhenAny(task, null, tasks, null, null, null);
     }
 
-    private void validateWhenAny(WhenAnyTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateWhenAny(WhenAnyTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -581,7 +581,7 @@ public class TaskFactoryTest {
         validateUnwrap(task, taskToUnwrap, null, null, null, null);
     }
 
-    private void validateUnwrap(UnwrapTask<?> task, Task<?> taskToUnwrap, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateUnwrap(UnwrapTask<?> task, Task<?> taskToUnwrap, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -762,7 +762,7 @@ public class TaskFactoryTest {
         validateForEach(task, null,  null, null, null);
     }
 
-    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else

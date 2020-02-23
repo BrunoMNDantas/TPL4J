@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.task;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.*;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
@@ -24,7 +24,7 @@ public class TaskTest {
     private static final ILinkVoidAction<String> LINK_VOID_ACTION = (task, token) -> {};
     private static final ILinkEmptyVoidAction LINK_EMPTY_VOID_ACTION = () -> {};
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final TaskOption[] OPTIONS = {};
+    private static final Option[] OPTIONS = {};
     private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
 
     
@@ -197,7 +197,7 @@ public class TaskTest {
         validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, null, null);
     }
 
-    private void validateAction(Task<?> task, String id, IAction<?> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateAction(Task<?> task, String id, IAction<?> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -224,7 +224,7 @@ public class TaskTest {
         }
     }
 
-    private void validateVoidAction(Task<?> task, String id, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateVoidAction(Task<?> task, String id, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -251,7 +251,7 @@ public class TaskTest {
         }
     }
 
-    private void validateEmptyAction(Task<?> task, String id, IEmptyAction<?> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateEmptyAction(Task<?> task, String id, IEmptyAction<?> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -278,7 +278,7 @@ public class TaskTest {
         }
     }
 
-    private void validateEmptyVoidAction(Task<?> task, String id, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateEmptyVoidAction(Task<?> task, String id, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -322,7 +322,7 @@ public class TaskTest {
     public void thenTest() {
         String id = "";
         Consumer<Runnable> scheduler = (action) -> new Thread(action).start();
-        TaskOption[] options = new TaskOption[0];
+        Option[] options = new Option[0];
         Task<String> task = new Task<>(ACTION, scheduler, options);
         Task<?> thenTask;
 
@@ -471,7 +471,7 @@ public class TaskTest {
         validateThenLinkEmptyVoidAction(thenTask, task, null, null, null, null);
     }
 
-    private void validateThenLinkAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateThenLinkAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
@@ -495,7 +495,7 @@ public class TaskTest {
             assertEquals(Arrays.asList(options), thenTask.getOptions());
     }
 
-    private void validateThenLinkVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateThenLinkVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
@@ -519,7 +519,7 @@ public class TaskTest {
             assertEquals(Arrays.asList(options), thenTask.getOptions());
     }
 
-    private void validateThenLinkEmptyAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateThenLinkEmptyAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
@@ -543,7 +543,7 @@ public class TaskTest {
             assertEquals(Arrays.asList(options), thenTask.getOptions());
     }
 
-    private void validateThenLinkEmptyVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateThenLinkEmptyVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
@@ -571,7 +571,7 @@ public class TaskTest {
     public void retryTest() {
         String id = "";
         Consumer<Runnable> scheduler = (action) -> new Thread(action).start();
-        TaskOption[] options = new TaskOption[0];
+        Option[] options = new Option[0];
         Task<String> task = new Task<>(ACTION, scheduler, options);
         Task<String> retryTask;
 
@@ -688,7 +688,7 @@ public class TaskTest {
         validateRetry(retryTask, task, null, null, null, null);
     }
 
-    private void validateRetry(Task<String> retryTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateRetry(Task<String> retryTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(retryTask.getId());
         else

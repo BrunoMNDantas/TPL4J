@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.pool;
 
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
 import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
@@ -30,7 +30,7 @@ public class TaskPoolTest {
     private static final IVoidAction VOID_ACTION = (token) -> {};
     private static final IEmptyVoidAction EMPTY_VOID_ACTION = () -> {};
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final TaskOption[] OPTIONS = {};
+    private static final Option[] OPTIONS = {};
 
 
 
@@ -463,7 +463,7 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateCreate(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateCreate(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -565,7 +565,7 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateCreateAndStart(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateCreateAndStart(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -619,7 +619,7 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateWhenAll(WhenAllTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateWhenAll(WhenAllTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -674,7 +674,7 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateWhenAny(WhenAnyTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateWhenAny(WhenAnyTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -727,7 +727,7 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateUnwrap(UnwrapTask<?> task, Task<?> taskToUnwrap, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateUnwrap(UnwrapTask<?> task, Task<?> taskToUnwrap, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
@@ -834,7 +834,7 @@ public class TaskPoolTest {
         validateForEach(task, null, null, pool.getScheduler(), null);
     }
 
-    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, TaskOption... options) {
+    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else

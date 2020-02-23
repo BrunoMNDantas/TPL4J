@@ -30,13 +30,15 @@ public class EventTest {
     }
 
     @Test
-    public void addListenerAfterFireTest() {
+    public void addListenerAfterFireTest() throws Exception {
         Event event = new Event();
 
         event.fire();
 
         boolean[] executed = new boolean[1];
         event.addListener(() -> executed[0] = true);
+
+        Thread.sleep(1000);
 
         assertTrue(executed[0]);
     }

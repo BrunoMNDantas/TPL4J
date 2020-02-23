@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.job;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.ParallelAction;
@@ -24,14 +24,14 @@ public class ParallelJobTest {
         Iterator<String> iterator = Arrays.asList("").iterator();
         CancellationToken cancellationToken = new CancellationToken();
         Consumer<Runnable> scheduler = (r) -> {};
-        Collection<TaskOption> options = new LinkedList<>();
+        Collection<Option> options = new LinkedList<>();
         ParallelJob<String,String> job = new ParallelJob<>(id, act, iterator, cancellationToken, scheduler, options);
 
         assertSame(id, job.getTaskId());
         assertTrue(job.getAction() instanceof ParallelAction);
         assertSame(cancellationToken, job.getCancellationToken());
         assertSame(scheduler, job.getScheduler());
-        assertTrue(job.getOptions().contains(TaskOption.ACCEPT_CHILDREN));
+        assertTrue(job.getOptions().contains(Option.ACCEPT_CHILDREN));
     }
 
 }

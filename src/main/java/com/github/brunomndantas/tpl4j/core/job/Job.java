@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
@@ -25,12 +25,12 @@ import java.util.function.Consumer;
 
 public class Job<T> extends SimpleJob<T> {
 
-    protected volatile Collection<TaskOption> options;
-    public Collection<TaskOption> getOptions() { return this.options; }
+    protected volatile Collection<Option> options;
+    public Collection<Option> getOptions() { return this.options; }
 
 
 
-    public Job(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options) {
+    public Job(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
         super(taskId, action, cancellationToken, scheduler);
         this.options = options;
 

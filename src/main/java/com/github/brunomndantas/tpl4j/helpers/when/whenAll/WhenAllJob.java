@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 
-import com.github.brunomndantas.tpl4j.core.options.TaskOption;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
 
@@ -32,7 +32,7 @@ public class WhenAllJob<T> extends Job<Collection<T>> {
 
 
 
-    public WhenAllJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<TaskOption> options, Collection<Job<T>> jobs) {
+    public WhenAllJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Collection<Job<T>> jobs) {
         super(taskId, new WhenAllAction<>(jobs), cancellationToken, scheduler, options);
         this.jobs = jobs;
     }

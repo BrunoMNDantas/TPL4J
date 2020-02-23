@@ -15,9 +15,9 @@ public class StatusTest {
     }
 
     @Test
-    public void getInitialValueTest() {
+    public void getInitialStateTest() {
         Status status = new Status("");
-        assertSame(State.CREATED, status.getValue());
+        assertSame(State.CREATED, status.getState());
     }
 
     @Test
@@ -26,7 +26,7 @@ public class StatusTest {
 
         status.declareSchedule();
 
-        assertSame(State.SCHEDULED, status.getValue());
+        assertSame(State.SCHEDULED, status.getState());
         assertTrue(status.scheduledEvent.hasFired());
     }
 
@@ -36,7 +36,7 @@ public class StatusTest {
 
         status.declareRun();
 
-        assertSame(State.RUNNING, status.getValue());
+        assertSame(State.RUNNING, status.getState());
         assertTrue(status.runningEvent.hasFired());
     }
 
@@ -46,7 +46,7 @@ public class StatusTest {
 
         status.declareWaitChildren();
 
-        assertSame(State.WAITING_CHILDREN, status.getValue());
+        assertSame(State.WAITING_CHILDREN, status.getState());
         assertTrue(status.waitingForChildrenEvent.hasFired());
     }
 
@@ -56,7 +56,7 @@ public class StatusTest {
 
         status.declareCancel();
 
-        assertSame(State.CANCELED, status.getValue());
+        assertSame(State.CANCELED, status.getState());
         assertTrue(status.cancelledEvent.hasFired());
         assertTrue(status.finishedEvent.hasFired());
     }
@@ -67,7 +67,7 @@ public class StatusTest {
 
         status.declareFail();
 
-        assertSame(State.FAILED, status.getValue());
+        assertSame(State.FAILED, status.getState());
         assertTrue(status.failedEvent.hasFired());
         assertTrue(status.finishedEvent.hasFired());
     }
@@ -78,7 +78,7 @@ public class StatusTest {
 
         status.declareSuccess();
 
-        assertSame(State.SUCCEEDED, status.getValue());
+        assertSame(State.SUCCEEDED, status.getState());
         assertTrue(status.succeededEvent.hasFired());
         assertTrue(status.finishedEvent.hasFired());
     }

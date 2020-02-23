@@ -62,7 +62,7 @@ public class RetryAction<T> extends LinkAction<T,T> {
 
     @Override
     public T run(CancellationToken cancellationToken) throws Exception {
-        if(super.previousTask.getStatus().getValue() == State.SUCCEEDED) {
+        if(super.previousTask.getStatus().getState() == State.SUCCEEDED) {
             return super.previousTask.getValue();
         } else {
             Exception exception = null;
