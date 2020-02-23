@@ -14,11 +14,13 @@
 *
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-package com.github.brunomndantas.tpl4j.core.action;
+package com.github.brunomndantas.tpl4j.task.action.action;
+
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 
 @FunctionalInterface
-public interface IEmptyVoidAction {
+public interface IVoidAction {
 
-    void run() throws Exception;
+    void run(CancellationToken cancellationToken) throws Exception;
 
 }

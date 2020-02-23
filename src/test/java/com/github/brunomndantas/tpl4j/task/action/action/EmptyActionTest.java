@@ -1,5 +1,7 @@
-package com.github.brunomndantas.tpl4j.core.action;
+package com.github.brunomndantas.tpl4j.task.action.action;
 
+import com.github.brunomndantas.tpl4j.task.action.action.EmptyAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;

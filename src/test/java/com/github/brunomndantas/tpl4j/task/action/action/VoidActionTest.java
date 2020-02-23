@@ -1,5 +1,7 @@
-package com.github.brunomndantas.tpl4j.core.action;
+package com.github.brunomndantas.tpl4j.task.action.action;
 
+import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
+import com.github.brunomndantas.tpl4j.task.action.action.VoidAction;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
