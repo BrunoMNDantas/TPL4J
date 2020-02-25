@@ -60,15 +60,6 @@ public class TaskPoolTest {
         task = TaskPool.createTask(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreate(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
 
-        task = TaskPool.createTask(id, ACTION, OPTIONS);
-        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createTask(id, VOID_ACTION, OPTIONS);
-        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createTask(id, EMPTY_ACTION, OPTIONS);
-        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createTask(id, EMPTY_VOID_ACTION, OPTIONS);
-        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.createTask(id, ACTION, CANCELLATION_TOKEN);
         validateCreate(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createTask(id, VOID_ACTION, CANCELLATION_TOKEN);
@@ -77,6 +68,15 @@ public class TaskPoolTest {
         validateCreate(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createTask(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreate(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+
+        task = TaskPool.createTask(id, ACTION, OPTIONS);
+        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createTask(id, VOID_ACTION, OPTIONS);
+        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createTask(id, EMPTY_ACTION, OPTIONS);
+        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createTask(id, EMPTY_VOID_ACTION, OPTIONS);
+        validateCreate(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
 
         task = TaskPool.createTask(id, ACTION);
         validateCreate(task, id, null, TaskPool.getTaskScheduler(), null);
@@ -96,15 +96,6 @@ public class TaskPoolTest {
         task = TaskPool.createTask(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreate(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
 
-        task = TaskPool.createTask(ACTION, OPTIONS);
-        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createTask(VOID_ACTION, OPTIONS);
-        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createTask(EMPTY_ACTION, OPTIONS);
-        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createTask(EMPTY_VOID_ACTION, OPTIONS);
-        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.createTask(ACTION, CANCELLATION_TOKEN);
         validateCreate(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createTask(VOID_ACTION, CANCELLATION_TOKEN);
@@ -113,6 +104,15 @@ public class TaskPoolTest {
         validateCreate(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createTask(EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreate(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+
+        task = TaskPool.createTask(ACTION, OPTIONS);
+        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createTask(VOID_ACTION, OPTIONS);
+        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createTask(EMPTY_ACTION, OPTIONS);
+        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createTask(EMPTY_VOID_ACTION, OPTIONS);
+        validateCreate(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
 
         task = TaskPool.createTask(ACTION);
         validateCreate(task, null, null, TaskPool.getTaskScheduler(), null);
@@ -138,15 +138,6 @@ public class TaskPoolTest {
         task = TaskPool.createAndStartTask(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
 
-        task = TaskPool.createAndStartTask(id, ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createAndStartTask(id, VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createAndStartTask(id, EMPTY_ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createAndStartTask(id, EMPTY_VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.createAndStartTask(id, ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createAndStartTask(id, VOID_ACTION, CANCELLATION_TOKEN);
@@ -155,6 +146,15 @@ public class TaskPoolTest {
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createAndStartTask(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+
+        task = TaskPool.createAndStartTask(id, ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createAndStartTask(id, VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createAndStartTask(id, EMPTY_ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createAndStartTask(id, EMPTY_VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
 
         task = TaskPool.createAndStartTask(id, ACTION);
         validateCreateAndStart(task, id, null, TaskPool.getTaskScheduler(), null);
@@ -174,15 +174,6 @@ public class TaskPoolTest {
         task = TaskPool.createAndStartTask(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
 
-        task = TaskPool.createAndStartTask(ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createAndStartTask(VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createAndStartTask(EMPTY_ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.createAndStartTask(EMPTY_VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.createAndStartTask(ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createAndStartTask(VOID_ACTION, CANCELLATION_TOKEN);
@@ -191,6 +182,15 @@ public class TaskPoolTest {
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.createAndStartTask(EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+
+        task = TaskPool.createAndStartTask(ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createAndStartTask(VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createAndStartTask(EMPTY_ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.createAndStartTask(EMPTY_VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
 
         task = TaskPool.createAndStartTask(ACTION);
         validateCreateAndStart(task, null, null, TaskPool.getTaskScheduler(), null);
@@ -213,21 +213,19 @@ public class TaskPoolTest {
         
         task = TaskPool.whenAllTask(id, tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAll(task, id, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.whenAllTask(id, tasks, OPTIONS);
-        validateWhenAll(task, id, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.whenAllTask(id, tasks, CANCELLATION_TOKEN);
         validateWhenAll(task, id, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+        task = TaskPool.whenAllTask(id, tasks, OPTIONS);
+        validateWhenAll(task, id, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
         task = TaskPool.whenAllTask(id, tasks);
         validateWhenAll(task, id, tasks, null, TaskPool.getTaskScheduler(), null);
 
         task = TaskPool.whenAllTask(tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAll(task, null, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.whenAllTask(tasks, OPTIONS);
-        validateWhenAll(task, null, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.whenAllTask(tasks, CANCELLATION_TOKEN);
         validateWhenAll(task, null, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+        task = TaskPool.whenAllTask(tasks, OPTIONS);
+        validateWhenAll(task, null, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
         task = TaskPool.whenAllTask(tasks);
         validateWhenAll(task, null, tasks, null, TaskPool.getTaskScheduler(), null);
     }
@@ -243,21 +241,19 @@ public class TaskPoolTest {
         
         task = TaskPool.whenAnyTask(id, tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAny(task, id, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.whenAnyTask(id, tasks, OPTIONS);
-        validateWhenAny(task, id, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.whenAnyTask(id, tasks, CANCELLATION_TOKEN);
         validateWhenAny(task, id, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+        task = TaskPool.whenAnyTask(id, tasks, OPTIONS);
+        validateWhenAny(task, id, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
         task = TaskPool.whenAnyTask(id, tasks);
         validateWhenAny(task, id, tasks, null, TaskPool.getTaskScheduler(), null);
 
         task = TaskPool.whenAnyTask(tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAny(task, null, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.whenAnyTask(tasks, OPTIONS);
-        validateWhenAny(task, null, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.whenAnyTask(tasks, CANCELLATION_TOKEN);
         validateWhenAny(task, null, tasks, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+        task = TaskPool.whenAnyTask(tasks, OPTIONS);
+        validateWhenAny(task, null, tasks, null, TaskPool.getTaskScheduler(), OPTIONS);
         task = TaskPool.whenAnyTask(tasks);
         validateWhenAny(task, null, tasks, null, TaskPool.getTaskScheduler(), null);
     }
@@ -271,21 +267,19 @@ public class TaskPoolTest {
         
         task = TaskPool.unwrapTask(id, unwrapTask, CANCELLATION_TOKEN, OPTIONS);
         validateUnwrap(task, unwrapTask, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.unwrapTask(id, unwrapTask, OPTIONS);
-        validateUnwrap(task, unwrapTask, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.unwrapTask(id, unwrapTask, CANCELLATION_TOKEN);
         validateUnwrap(task, unwrapTask, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+        task = TaskPool.unwrapTask(id, unwrapTask, OPTIONS);
+        validateUnwrap(task, unwrapTask, id, null, TaskPool.getTaskScheduler(), OPTIONS);
         task = TaskPool.unwrapTask(id, unwrapTask);
         validateUnwrap(task, unwrapTask, id, null, TaskPool.getTaskScheduler(), null);
 
         task = TaskPool.unwrapTask(unwrapTask, CANCELLATION_TOKEN, OPTIONS);
         validateUnwrap(task, unwrapTask, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.unwrapTask(unwrapTask, OPTIONS);
-        validateUnwrap(task, unwrapTask, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.unwrapTask(unwrapTask, CANCELLATION_TOKEN);
         validateUnwrap(task, unwrapTask, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+        task = TaskPool.unwrapTask(unwrapTask, OPTIONS);
+        validateUnwrap(task, unwrapTask, null, null, TaskPool.getTaskScheduler(), OPTIONS);
         task = TaskPool.unwrapTask(unwrapTask);
         validateUnwrap(task, unwrapTask, null, null, TaskPool.getTaskScheduler(), null);
     }
@@ -309,15 +303,6 @@ public class TaskPoolTest {
         task = TaskPool.forEachTask(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, OPTIONS);
         validateForEach(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
 
-        task = TaskPool.forEachTask(id, elements, action, OPTIONS);
-        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.forEachTask(id, elements, voidAction, OPTIONS);
-        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.forEachTask(id, elements, uninterruptibleAction, OPTIONS);
-        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.forEachTask(id, elements, uninterruptibleVoidAction, OPTIONS);
-        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.forEachTask(id, elements, action, CANCELLATION_TOKEN);
         validateForEach(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.forEachTask(id, elements, voidAction, CANCELLATION_TOKEN);
@@ -326,6 +311,15 @@ public class TaskPoolTest {
         validateForEach(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.forEachTask(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN);
         validateForEach(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+
+        task = TaskPool.forEachTask(id, elements, action, OPTIONS);
+        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.forEachTask(id, elements, voidAction, OPTIONS);
+        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.forEachTask(id, elements, uninterruptibleAction, OPTIONS);
+        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.forEachTask(id, elements, uninterruptibleVoidAction, OPTIONS);
+        validateForEach(task, id, null, TaskPool.getTaskScheduler(), OPTIONS);
 
         task = TaskPool.forEachTask(id, elements, action);
         validateForEach(task, id, null, TaskPool.getTaskScheduler(), null);
@@ -345,15 +339,6 @@ public class TaskPoolTest {
         task = TaskPool.forEachTask(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, OPTIONS);
         validateForEach(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
 
-        task = TaskPool.forEachTask(elements, action, OPTIONS);
-        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.forEachTask(elements, voidAction, OPTIONS);
-        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.forEachTask(elements, uninterruptibleAction, OPTIONS);
-        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-        task = TaskPool.forEachTask(elements, uninterruptibleVoidAction, OPTIONS);
-        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
-
         task = TaskPool.forEachTask(elements, action, CANCELLATION_TOKEN);
         validateForEach(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.forEachTask(elements, voidAction, CANCELLATION_TOKEN);
@@ -362,6 +347,15 @@ public class TaskPoolTest {
         validateForEach(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
         task = TaskPool.forEachTask(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN);
         validateForEach(task, null, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), null);
+
+        task = TaskPool.forEachTask(elements, action, OPTIONS);
+        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.forEachTask(elements, voidAction, OPTIONS);
+        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.forEachTask(elements, uninterruptibleAction, OPTIONS);
+        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
+        task = TaskPool.forEachTask(elements, uninterruptibleVoidAction, OPTIONS);
+        validateForEach(task, null, null, TaskPool.getTaskScheduler(), OPTIONS);
 
         task = TaskPool.forEachTask(elements, action);
         validateForEach(task, null, null, TaskPool.getTaskScheduler(), null);
@@ -397,15 +391,6 @@ public class TaskPoolTest {
         task = pool.create(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreate(task, id, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
 
-        task = pool.create(id, ACTION, OPTIONS);
-        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.create(id, VOID_ACTION, OPTIONS);
-        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.create(id, EMPTY_ACTION, OPTIONS);
-        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.create(id, EMPTY_VOID_ACTION, OPTIONS);
-        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
-
         task = pool.create(id, ACTION, CANCELLATION_TOKEN);
         validateCreate(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.create(id, VOID_ACTION, CANCELLATION_TOKEN);
@@ -414,6 +399,15 @@ public class TaskPoolTest {
         validateCreate(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.create(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreate(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
+
+        task = pool.create(id, ACTION, OPTIONS);
+        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.create(id, VOID_ACTION, OPTIONS);
+        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.create(id, EMPTY_ACTION, OPTIONS);
+        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.create(id, EMPTY_VOID_ACTION, OPTIONS);
+        validateCreate(task, id, null, pool.getScheduler(), OPTIONS);
 
         task = pool.create(id, ACTION);
         validateCreate(task, id, null, pool.getScheduler(), null);
@@ -433,15 +427,6 @@ public class TaskPoolTest {
         task = pool.create(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreate(task, null, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
 
-        task = pool.create(ACTION, OPTIONS);
-        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.create(VOID_ACTION, OPTIONS);
-        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.create(EMPTY_ACTION, OPTIONS);
-        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.create(EMPTY_VOID_ACTION, OPTIONS);
-        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
-
         task = pool.create(ACTION, CANCELLATION_TOKEN);
         validateCreate(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.create(VOID_ACTION, CANCELLATION_TOKEN);
@@ -450,6 +435,15 @@ public class TaskPoolTest {
         validateCreate(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.create(EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreate(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
+
+        task = pool.create(ACTION, OPTIONS);
+        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.create(VOID_ACTION, OPTIONS);
+        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.create(EMPTY_ACTION, OPTIONS);
+        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.create(EMPTY_VOID_ACTION, OPTIONS);
+        validateCreate(task, null, null, pool.getScheduler(), OPTIONS);
 
         task = pool.create(ACTION);
         validateCreate(task, null, null, pool.getScheduler(), null);
@@ -499,15 +493,6 @@ public class TaskPoolTest {
         task = pool.createAndStart(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
 
-        task = pool.createAndStart(id, ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.createAndStart(id, VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.createAndStart(id, EMPTY_ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.createAndStart(id, EMPTY_VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
-
         task = pool.createAndStart(id, ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.createAndStart(id, VOID_ACTION, CANCELLATION_TOKEN);
@@ -516,6 +501,15 @@ public class TaskPoolTest {
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.createAndStart(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
+
+        task = pool.createAndStart(id, ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.createAndStart(id, VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.createAndStart(id, EMPTY_ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.createAndStart(id, EMPTY_VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, id, null, pool.getScheduler(), OPTIONS);
 
         task = pool.createAndStart(id, ACTION);
         validateCreateAndStart(task, id, null, pool.getScheduler(), null);
@@ -535,15 +529,6 @@ public class TaskPoolTest {
         task = pool.createAndStart(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
 
-        task = pool.createAndStart(ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.createAndStart(VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.createAndStart(EMPTY_ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.createAndStart(EMPTY_VOID_ACTION, OPTIONS);
-        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
-
         task = pool.createAndStart(ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.createAndStart(VOID_ACTION, CANCELLATION_TOKEN);
@@ -552,6 +537,15 @@ public class TaskPoolTest {
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.createAndStart(EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateCreateAndStart(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
+
+        task = pool.createAndStart(ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.createAndStart(VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.createAndStart(EMPTY_ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.createAndStart(EMPTY_VOID_ACTION, OPTIONS);
+        validateCreateAndStart(task, null, null, pool.getScheduler(), OPTIONS);
 
         task = pool.createAndStart(ACTION);
         validateCreateAndStart(task, null, null, pool.getScheduler(), null);
@@ -598,21 +592,19 @@ public class TaskPoolTest {
 
         task = pool.whenAll(id, tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAll(task, id, tasks, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
-        task = pool.whenAll(id, tasks, OPTIONS);
-        validateWhenAll(task, id, tasks, null, pool.getScheduler(), OPTIONS);
-
         task = pool.whenAll(id, tasks, CANCELLATION_TOKEN);
         validateWhenAll(task, id, tasks, CANCELLATION_TOKEN, pool.getScheduler(), null);
+        task = pool.whenAll(id, tasks, OPTIONS);
+        validateWhenAll(task, id, tasks, null, pool.getScheduler(), OPTIONS);
         task = pool.whenAll(id, tasks);
         validateWhenAll(task, id, tasks, null, pool.getScheduler(), null);
 
         task = pool.whenAll(tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAll(task, null, tasks, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
-        task = pool.whenAll(tasks, OPTIONS);
-        validateWhenAll(task, null, tasks, null, pool.getScheduler(), OPTIONS);
-
         task = pool.whenAll(tasks, CANCELLATION_TOKEN);
         validateWhenAll(task, null, tasks, CANCELLATION_TOKEN, pool.getScheduler(), null);
+        task = pool.whenAll(tasks, OPTIONS);
+        validateWhenAll(task, null, tasks, null, pool.getScheduler(), OPTIONS);
         task = pool.whenAll(tasks);
         validateWhenAll(task, null, tasks, null, pool.getScheduler(), null);
         
@@ -653,21 +645,19 @@ public class TaskPoolTest {
 
         task = pool.whenAny(id, tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAny(task, id, tasks, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
-        task = pool.whenAny(id, tasks, OPTIONS);
-        validateWhenAny(task, id, tasks, null, pool.getScheduler(), OPTIONS);
-
         task = pool.whenAny(id, tasks, CANCELLATION_TOKEN);
         validateWhenAny(task, id, tasks, CANCELLATION_TOKEN, pool.getScheduler(), null);
+        task = pool.whenAny(id, tasks, OPTIONS);
+        validateWhenAny(task, id, tasks, null, pool.getScheduler(), OPTIONS);
         task = pool.whenAny(id, tasks);
         validateWhenAny(task, id, tasks, null, pool.getScheduler(), null);
 
         task = pool.whenAny(tasks, CANCELLATION_TOKEN, OPTIONS);
         validateWhenAny(task, null, tasks, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
-        task = pool.whenAny(tasks, OPTIONS);
-        validateWhenAny(task, null, tasks, null, pool.getScheduler(), OPTIONS);
-
         task = pool.whenAny(tasks, CANCELLATION_TOKEN);
         validateWhenAny(task, null, tasks, CANCELLATION_TOKEN, pool.getScheduler(), null);
+        task = pool.whenAny(tasks, OPTIONS);
+        validateWhenAny(task, null, tasks, null, pool.getScheduler(), OPTIONS);
         task = pool.whenAny(tasks);
         validateWhenAny(task, null, tasks, null, pool.getScheduler(), null);
         
@@ -706,21 +696,19 @@ public class TaskPoolTest {
 
         task = pool.unwrap(id, unwrapTask, CANCELLATION_TOKEN, OPTIONS);
         validateUnwrap(task, unwrapTask, id, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
-        task = pool.unwrap(id, unwrapTask, OPTIONS);
-        validateUnwrap(task, unwrapTask, id, null, pool.getScheduler(), OPTIONS);
-
         task = pool.unwrap(id, unwrapTask, CANCELLATION_TOKEN);
         validateUnwrap(task, unwrapTask, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
+        task = pool.unwrap(id, unwrapTask, OPTIONS);
+        validateUnwrap(task, unwrapTask, id, null, pool.getScheduler(), OPTIONS);
         task = pool.unwrap(id, unwrapTask);
         validateUnwrap(task, unwrapTask, id, null, pool.getScheduler(), null);
 
         task = pool.unwrap(unwrapTask, CANCELLATION_TOKEN, OPTIONS);
         validateUnwrap(task, unwrapTask, null, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
-        task = pool.unwrap(unwrapTask, OPTIONS);
-        validateUnwrap(task, unwrapTask, null, null, pool.getScheduler(), OPTIONS);
-
         task = pool.unwrap(unwrapTask, CANCELLATION_TOKEN);
         validateUnwrap(task, unwrapTask, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
+        task = pool.unwrap(unwrapTask, OPTIONS);
+        validateUnwrap(task, unwrapTask, null, null, pool.getScheduler(), OPTIONS);
         task = pool.unwrap(unwrapTask);
         validateUnwrap(task, unwrapTask, null, null, pool.getScheduler(), null);
 
@@ -770,15 +758,6 @@ public class TaskPoolTest {
         task = pool.forEach(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, OPTIONS);
         validateForEach(task, id, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
 
-        task = pool.forEach(id, elements, action, OPTIONS);
-        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.forEach(id, elements, voidAction, OPTIONS);
-        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.forEach(id, elements, uninterruptibleAction, OPTIONS);
-        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
-        task = pool.forEach(id, elements, uninterruptibleVoidAction, OPTIONS);
-        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
-
         task = pool.forEach(id, elements, action, CANCELLATION_TOKEN);
         validateForEach(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.forEach(id, elements, voidAction, CANCELLATION_TOKEN);
@@ -787,6 +766,15 @@ public class TaskPoolTest {
         validateForEach(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.forEach(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN);
         validateForEach(task, id, CANCELLATION_TOKEN, pool.getScheduler(), null);
+
+        task = pool.forEach(id, elements, action, OPTIONS);
+        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.forEach(id, elements, voidAction, OPTIONS);
+        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.forEach(id, elements, uninterruptibleAction, OPTIONS);
+        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
+        task = pool.forEach(id, elements, uninterruptibleVoidAction, OPTIONS);
+        validateForEach(task, id, null, pool.getScheduler(), OPTIONS);
 
         task = pool.forEach(id, elements, action);
         validateForEach(task, id, null, pool.getScheduler(), null);
@@ -806,15 +794,6 @@ public class TaskPoolTest {
         task = pool.forEach(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, OPTIONS);
         validateForEach(task, null, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
 
-        task = pool.forEach(elements, action, OPTIONS);
-        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.forEach(elements, voidAction, OPTIONS);
-        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.forEach(elements, uninterruptibleAction, OPTIONS);
-        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
-        task = pool.forEach(elements, uninterruptibleVoidAction, OPTIONS);
-        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
-
         task = pool.forEach(elements, action, CANCELLATION_TOKEN);
         validateForEach(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.forEach(elements, voidAction, CANCELLATION_TOKEN);
@@ -823,6 +802,15 @@ public class TaskPoolTest {
         validateForEach(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
         task = pool.forEach(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN);
         validateForEach(task, null, CANCELLATION_TOKEN, pool.getScheduler(), null);
+
+        task = pool.forEach(elements, action, OPTIONS);
+        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.forEach(elements, voidAction, OPTIONS);
+        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.forEach(elements, uninterruptibleAction, OPTIONS);
+        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
+        task = pool.forEach(elements, uninterruptibleVoidAction, OPTIONS);
+        validateForEach(task, null, null, pool.getScheduler(), OPTIONS);
 
         task = pool.forEach(elements, action);
         validateForEach(task, null, null, pool.getScheduler(), null);

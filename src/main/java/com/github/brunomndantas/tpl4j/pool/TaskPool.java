@@ -63,57 +63,6 @@ public class TaskPool {
     }
 
 
-    public static <T> Task<T> createTask(String taskId, IAction<T> action, Option... options) {
-        return INSTANCE.create(taskId, action, options);
-    }
-
-    public static <T> Task<T> createTask(String taskId, IEmptyAction<T> action, Option... options) {
-        return INSTANCE.create(taskId, action, options);
-    }
-
-    public static Task<Void> createTask(String taskId, IVoidAction action, Option... options) {
-        return INSTANCE.create(taskId, action, options);
-    }
-
-    public static Task<Void> createTask(String taskId, IEmptyVoidAction action, Option... options) {
-        return INSTANCE.create(taskId, action, options);
-    }
-
-
-    public static <T> Task<T> createTask(IAction<T> action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.create(action, cancellationToken, options);
-    }
-
-    public static <T> Task<T> createTask(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.create(action, cancellationToken, options);
-    }
-
-    public static Task<Void> createTask(IVoidAction action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.create(action, cancellationToken, options);
-    }
-
-    public static Task<Void> createTask(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.create(action, cancellationToken, options);
-    }
-
-
-    public static <T> Task<T> createTask(IAction<T> action, Option... options) {
-        return INSTANCE.create(action, options);
-    }
-
-    public static <T> Task<T> createTask(IEmptyAction<T> action, Option... options) {
-        return INSTANCE.create(action, options);
-    }
-
-    public static Task<Void> createTask(IVoidAction action, Option... options) {
-        return INSTANCE.create(action, options);
-    }
-
-    public static Task<Void> createTask(IEmptyVoidAction action, Option... options) {
-        return INSTANCE.create(action, options);
-    }
-
-
     public static <T> Task<T> createTask(String taskId, IAction<T> action, CancellationToken cancellationToken) {
         return INSTANCE.create(taskId, action, cancellationToken);
     }
@@ -128,6 +77,23 @@ public class TaskPool {
 
     public static Task<Void> createTask(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken) {
         return INSTANCE.create(taskId, action, cancellationToken);
+    }
+
+
+    public static <T> Task<T> createTask(String taskId, IAction<T> action, Option... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+    public static <T> Task<T> createTask(String taskId, IEmptyAction<T> action, Option... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+    public static Task<Void> createTask(String taskId, IVoidAction action, Option... options) {
+        return INSTANCE.create(taskId, action, options);
+    }
+
+    public static Task<Void> createTask(String taskId, IEmptyVoidAction action, Option... options) {
+        return INSTANCE.create(taskId, action, options);
     }
 
 
@@ -148,6 +114,23 @@ public class TaskPool {
     }
 
 
+    public static <T> Task<T> createTask(IAction<T> action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.create(action, cancellationToken, options);
+    }
+
+    public static <T> Task<T> createTask(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.create(action, cancellationToken, options);
+    }
+
+    public static Task<Void> createTask(IVoidAction action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.create(action, cancellationToken, options);
+    }
+
+    public static Task<Void> createTask(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.create(action, cancellationToken, options);
+    }
+
+
     public static <T> Task<T> createTask(IAction<T> action, CancellationToken cancellationToken) {
         return INSTANCE.create(action, cancellationToken);
     }
@@ -162,6 +145,23 @@ public class TaskPool {
 
     public static Task<Void> createTask(IEmptyVoidAction action, CancellationToken cancellationToken) {
         return INSTANCE.create(action, cancellationToken);
+    }
+
+
+    public static <T> Task<T> createTask(IAction<T> action, Option... options) {
+        return INSTANCE.create(action, options);
+    }
+
+    public static <T> Task<T> createTask(IEmptyAction<T> action, Option... options) {
+        return INSTANCE.create(action, options);
+    }
+
+    public static Task<Void> createTask(IVoidAction action, Option... options) {
+        return INSTANCE.create(action, options);
+    }
+
+    public static Task<Void> createTask(IEmptyVoidAction action, Option... options) {
+        return INSTANCE.create(action, options);
     }
 
 
@@ -199,57 +199,6 @@ public class TaskPool {
     }
 
 
-    public static <T> Task<T> createAndStartTask(String taskId, IAction<T> action, Option... options) {
-        return INSTANCE.createAndStart(taskId, action, options);
-    }
-
-    public static <T> Task<T> createAndStartTask(String taskId, IEmptyAction<T> action, Option... options) {
-        return INSTANCE.createAndStart(taskId, action, options);
-    }
-
-    public static Task<Void> createAndStartTask(String taskId, IVoidAction action, Option... options) {
-        return INSTANCE.createAndStart(taskId, action, options);
-    }
-
-    public static Task<Void> createAndStartTask(String taskId, IEmptyVoidAction action, Option... options) {
-        return INSTANCE.createAndStart(taskId, action, options);
-    }
-
-
-    public static <T> Task<T> createAndStartTask(IAction<T> action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.createAndStart(action, cancellationToken, options);
-    }
-
-    public static <T> Task<T> createAndStartTask(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.createAndStart(action, cancellationToken, options);
-    }
-
-    public static Task<Void> createAndStartTask(IVoidAction action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.createAndStart(action, cancellationToken, options);
-    }
-
-    public static Task<Void> createAndStartTask(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
-        return INSTANCE.createAndStart(action, cancellationToken, options);
-    }
-
-
-    public static <T> Task<T> createAndStartTask(IAction<T> action, Option... options) {
-        return INSTANCE.createAndStart(action, options);
-    }
-
-    public static <T> Task<T> createAndStartTask(IEmptyAction<T> action, Option... options) {
-        return INSTANCE.createAndStart(action, options);
-    }
-
-    public static Task<Void> createAndStartTask(IVoidAction action, Option... options) {
-        return INSTANCE.createAndStart(action, options);
-    }
-
-    public static Task<Void> createAndStartTask(IEmptyVoidAction action, Option... options) {
-        return INSTANCE.createAndStart(action, options);
-    }
-
-
     public static <T> Task<T> createAndStartTask(String taskId, IAction<T> action, CancellationToken cancellationToken) {
         return INSTANCE.createAndStart(taskId, action, cancellationToken);
     }
@@ -264,6 +213,23 @@ public class TaskPool {
 
     public static Task<Void> createAndStartTask(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken) {
         return INSTANCE.createAndStart(taskId, action, cancellationToken);
+    }
+
+
+    public static <T> Task<T> createAndStartTask(String taskId, IAction<T> action, Option... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+    public static <T> Task<T> createAndStartTask(String taskId, IEmptyAction<T> action, Option... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+    public static Task<Void> createAndStartTask(String taskId, IVoidAction action, Option... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
+    }
+
+    public static Task<Void> createAndStartTask(String taskId, IEmptyVoidAction action, Option... options) {
+        return INSTANCE.createAndStart(taskId, action, options);
     }
 
 
@@ -284,6 +250,23 @@ public class TaskPool {
     }
 
 
+    public static <T> Task<T> createAndStartTask(IAction<T> action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.createAndStart(action, cancellationToken, options);
+    }
+
+    public static <T> Task<T> createAndStartTask(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.createAndStart(action, cancellationToken, options);
+    }
+
+    public static Task<Void> createAndStartTask(IVoidAction action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.createAndStart(action, cancellationToken, options);
+    }
+
+    public static Task<Void> createAndStartTask(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+        return INSTANCE.createAndStart(action, cancellationToken, options);
+    }
+
+
     public static <T> Task<T> createAndStartTask(IAction<T> action, CancellationToken cancellationToken) {
         return INSTANCE.createAndStart(action, cancellationToken);
     }
@@ -298,6 +281,23 @@ public class TaskPool {
 
     public static Task<Void> createAndStartTask(IEmptyVoidAction action, CancellationToken cancellationToken) {
         return INSTANCE.createAndStart(action, cancellationToken);
+    }
+
+
+    public static <T> Task<T> createAndStartTask(IAction<T> action, Option... options) {
+        return INSTANCE.createAndStart(action, options);
+    }
+
+    public static <T> Task<T> createAndStartTask(IEmptyAction<T> action, Option... options) {
+        return INSTANCE.createAndStart(action, options);
+    }
+
+    public static Task<Void> createAndStartTask(IVoidAction action, Option... options) {
+        return INSTANCE.createAndStart(action, options);
+    }
+
+    public static Task<Void> createAndStartTask(IEmptyVoidAction action, Option... options) {
+        return INSTANCE.createAndStart(action, options);
     }
 
 
@@ -326,7 +326,6 @@ public class TaskPool {
         return INSTANCE.whenAll(taskId, tasks, cancellationToken);
     }
 
-
     public static <T> WhenAllTask<T> whenAllTask(String taskId, Collection<Task<T>> tasks, Option... options) {
         return INSTANCE.whenAll(taskId, tasks, options);
     }
@@ -343,7 +342,6 @@ public class TaskPool {
     public static <T> WhenAllTask<T> whenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken) {
         return INSTANCE.whenAll(tasks, cancellationToken);
     }
-
 
     public static <T> WhenAllTask<T> whenAllTask(Collection<Task<T>> tasks, Option... options) {
         return INSTANCE.whenAll(tasks, options);
@@ -362,7 +360,6 @@ public class TaskPool {
         return INSTANCE.whenAny(taskId, tasks, cancellationToken);
     }
 
-
     public static <T> WhenAnyTask<T> whenAnyTask(String taskId, Collection<Task<T>> tasks, Option... options) {
         return INSTANCE.whenAny(taskId, tasks, options);
     }
@@ -379,7 +376,6 @@ public class TaskPool {
     public static <T> WhenAnyTask<T> whenAnyTask(Collection<Task<T>> tasks, CancellationToken cancellationToken) {
         return INSTANCE.whenAny(tasks, cancellationToken);
     }
-
 
     public static <T> WhenAnyTask<T> whenAnyTask(Collection<Task<T>> tasks, Option... options) {
        return INSTANCE.whenAny(tasks, options);
@@ -398,7 +394,6 @@ public class TaskPool {
         return INSTANCE.unwrap(taskId, taskToUnwrap, cancellationToken);
     }
 
-
     public static <T> UnwrapTask<T> unwrapTask(String taskId, Task<Task<T>> taskToUnwrap, Option... options) {
         return INSTANCE.unwrap(taskId, taskToUnwrap, options);
     }
@@ -415,7 +410,6 @@ public class TaskPool {
     public static <T> UnwrapTask<T> unwrapTask(Task<Task<T>> taskToUnwrap, CancellationToken cancellationToken) {
         return INSTANCE.unwrap(taskToUnwrap, cancellationToken);
     }
-
 
     public static <T> UnwrapTask<T> unwrapTask(Task<Task<T>> taskToUnwrap, Option... options) {
         return INSTANCE.unwrap(taskToUnwrap, options);
@@ -443,23 +437,6 @@ public class TaskPool {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEachTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
-        return INSTANCE.forEach(taskId, elements, action, options);
-    }
-
-    public static <T> ParallelTask<T,Void> forEachTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
-        return INSTANCE.forEach(taskId, elements, action, options);
-    }
-
-    public static <T,K> ParallelTask<T,K> forEachTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
-        return INSTANCE.forEach(taskId, elements, action, options);
-    }
-
-    public static <T> ParallelTask<T,Void> forEachTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
-        return INSTANCE.forEach(taskId, elements, action, options);
-    }
-
-
     public static <T,K> ParallelTask<T,K> forEachTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken) {
         return INSTANCE.forEach(taskId, elements, action, cancellationToken);
     }
@@ -474,6 +451,23 @@ public class TaskPool {
 
     public static <T> ParallelTask<T,Void> forEachTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken) {
         return INSTANCE.forEach(taskId, elements, action, cancellationToken);
+    }
+
+
+    public static <T,K> ParallelTask<T,K> forEachTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
+        return INSTANCE.forEach(taskId, elements, action, options);
+    }
+
+    public static <T> ParallelTask<T,Void> forEachTask(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
+        return INSTANCE.forEach(taskId, elements, action, options);
+    }
+
+    public static <T,K> ParallelTask<T,K> forEachTask(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
+        return INSTANCE.forEach(taskId, elements, action, options);
+    }
+
+    public static <T> ParallelTask<T,Void> forEachTask(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
+        return INSTANCE.forEach(taskId, elements, action, options);
     }
 
 
@@ -511,23 +505,6 @@ public class TaskPool {
     }
 
 
-    public static <T,K> ParallelTask<T,K> forEachTask(Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
-        return INSTANCE.forEach(elements, action, options);
-    }
-
-    public static <T> ParallelTask<T,Void> forEachTask(Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
-        return INSTANCE.forEach(elements, action, options);
-    }
-
-    public static <T,K> ParallelTask<T,K> forEachTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
-        return INSTANCE.forEach(elements, action, options);
-    }
-
-    public static <T> ParallelTask<T,Void> forEachTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
-        return INSTANCE.forEach(elements, action, options);
-    }
-
-
     public static <T,K> ParallelTask<T,K> forEachTask(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken) {
         return INSTANCE.forEach(elements, action, cancellationToken);
     }
@@ -542,6 +519,23 @@ public class TaskPool {
 
     public static <T> ParallelTask<T,Void> forEachTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken) {
         return INSTANCE.forEach(elements, action, cancellationToken);
+    }
+
+
+    public static <T,K> ParallelTask<T,K> forEachTask(Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
+        return INSTANCE.forEach(elements, action, options);
+    }
+
+    public static <T> ParallelTask<T,Void> forEachTask(Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
+        return INSTANCE.forEach(elements, action, options);
+    }
+
+    public static <T,K> ParallelTask<T,K> forEachTask(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
+        return INSTANCE.forEach(elements, action, options);
+    }
+
+    public static <T> ParallelTask<T,Void> forEachTask(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
+        return INSTANCE.forEach(elements, action, options);
     }
 
 
@@ -604,57 +598,6 @@ public class TaskPool {
     }
 
 
-    public <T> Task<T> create(String taskId, IAction<T> action, Option... options) {
-        return new Task<>(taskId, action, this.scheduler, options);
-    }
-
-    public <T> Task<T> create(String taskId, IEmptyAction<T> action, Option... options) {
-        return new Task<>(taskId, action, this.scheduler, options);
-    }
-
-    public Task<Void> create(String taskId, IVoidAction action, Option... options) {
-        return new Task<>(taskId, action, this.scheduler, options);
-    }
-
-    public Task<Void> create(String taskId, IEmptyVoidAction action, Option... options) {
-        return new Task<>(taskId, action, this.scheduler, options);
-    }
-
-
-    public <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken, Option... options) {
-        return new Task<>(action, cancellationToken, this.scheduler, options);
-    }
-
-    public <T> Task<T> create(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
-        return new Task<>(action, cancellationToken, this.scheduler, options);
-    }
-
-    public Task<Void> create(IVoidAction action, CancellationToken cancellationToken, Option... options) {
-        return new Task<>(action, cancellationToken, this.scheduler, options);
-    }
-
-    public Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
-        return new Task<>(action, cancellationToken, this.scheduler, options);
-    }
-
-
-    public <T> Task<T> create(IAction<T> action, Option... options) {
-        return new Task<>(action, this.scheduler, options);
-    }
-
-    public <T> Task<T> create(IEmptyAction<T> action, Option... options) {
-        return new Task<>(action, this.scheduler, options);
-    }
-
-    public Task<Void> create(IVoidAction action, Option... options) {
-        return new Task<>(action, this.scheduler, options);
-    }
-
-    public Task<Void> create(IEmptyVoidAction action, Option... options) {
-        return new Task<>(action, this.scheduler, options);
-    }
-
-
     public <T> Task<T> create(String taskId, IAction<T> action, CancellationToken cancellationToken) {
         return new Task<>(taskId, action, cancellationToken, this.scheduler);
     }
@@ -669,6 +612,23 @@ public class TaskPool {
 
     public Task<Void> create(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken) {
         return new Task<>(taskId, action, cancellationToken, this.scheduler);
+    }
+
+
+    public <T> Task<T> create(String taskId, IAction<T> action, Option... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+    public <T> Task<T> create(String taskId, IEmptyAction<T> action, Option... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+    public Task<Void> create(String taskId, IVoidAction action, Option... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
+    }
+
+    public Task<Void> create(String taskId, IEmptyVoidAction action, Option... options) {
+        return new Task<>(taskId, action, this.scheduler, options);
     }
 
 
@@ -689,6 +649,23 @@ public class TaskPool {
     }
 
 
+    public <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken, Option... options) {
+        return new Task<>(action, cancellationToken, this.scheduler, options);
+    }
+
+    public <T> Task<T> create(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
+        return new Task<>(action, cancellationToken, this.scheduler, options);
+    }
+
+    public Task<Void> create(IVoidAction action, CancellationToken cancellationToken, Option... options) {
+        return new Task<>(action, cancellationToken, this.scheduler, options);
+    }
+
+    public Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+        return new Task<>(action, cancellationToken, this.scheduler, options);
+    }
+
+
     public <T> Task<T> create(IAction<T> action, CancellationToken cancellationToken) {
         return new Task<>(action, cancellationToken, this.scheduler);
     }
@@ -703,6 +680,23 @@ public class TaskPool {
 
     public Task<Void> create(IEmptyVoidAction action, CancellationToken cancellationToken) {
         return new Task<>(action, cancellationToken, this.scheduler);
+    }
+
+
+    public <T> Task<T> create(IAction<T> action, Option... options) {
+        return new Task<>(action, this.scheduler, options);
+    }
+
+    public <T> Task<T> create(IEmptyAction<T> action, Option... options) {
+        return new Task<>(action, this.scheduler, options);
+    }
+
+    public Task<Void> create(IVoidAction action, Option... options) {
+        return new Task<>(action, this.scheduler, options);
+    }
+
+    public Task<Void> create(IEmptyVoidAction action, Option... options) {
+        return new Task<>(action, this.scheduler, options);
     }
 
 
@@ -748,81 +742,6 @@ public class TaskPool {
     }
 
 
-    public <T> Task<T> createAndStart(String taskId, IAction<T> action, Option... options) {
-        Task<T> task = create(taskId, action, options);
-        task.start();
-        return task;
-    }
-
-    public <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Option... options) {
-        Task<T> task = create(taskId, action, options);
-        task.start();
-        return task;
-    }
-
-    public Task<Void> createAndStart(String taskId, IVoidAction action, Option... options) {
-        Task<Void> task = create(taskId, action, options);
-        task.start();
-        return task;
-    }
-
-    public Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Option... options) {
-        Task<Void> task = create(taskId, action, options);
-        task.start();
-        return task;
-    }
-
-
-    public <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken, Option... options) {
-        Task<T> task = create(action, cancellationToken, options);
-        task.start();
-        return task;
-    }
-
-    public <T> Task<T> createAndStart(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
-        Task<T> task = create(action, cancellationToken, options);
-        task.start();
-        return task;
-    }
-
-    public Task<Void> createAndStart(IVoidAction action, CancellationToken cancellationToken, Option... options) {
-        Task<Void> task = create(action, cancellationToken, options);
-        task.start();
-        return task;
-    }
-
-    public Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
-        Task<Void> task = create(action, cancellationToken, options);
-        task.start();
-        return task;
-    }
-
-
-    public <T> Task<T> createAndStart(IAction<T> action, Option... options) {
-        Task<T> task = create(action, options);
-        task.start();
-        return task;
-    }
-
-    public <T> Task<T> createAndStart(IEmptyAction<T> action, Option... options) {
-        Task<T> task = create(action, options);
-        task.start();
-        return task;
-    }
-
-    public Task<Void> createAndStart(IVoidAction action, Option... options) {
-        Task<Void> task = create(action, options);
-        task.start();
-        return task;
-    }
-
-    public Task<Void> createAndStart(IEmptyVoidAction action, Option... options) {
-        Task<Void> task = create(action, options);
-        task.start();
-        return task;
-    }
-
-
     public <T> Task<T> createAndStart(String taskId, IAction<T> action, CancellationToken cancellationToken) {
         Task<T> task = create(taskId, action, cancellationToken);
         task.start();
@@ -843,6 +762,31 @@ public class TaskPool {
 
     public Task<Void> createAndStart(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken) {
         Task<Void> task = create(taskId, action, cancellationToken);
+        task.start();
+        return task;
+    }
+
+
+    public <T> Task<T> createAndStart(String taskId, IAction<T> action, Option... options) {
+        Task<T> task = create(taskId, action, options);
+        task.start();
+        return task;
+    }
+
+    public <T> Task<T> createAndStart(String taskId, IEmptyAction<T> action, Option... options) {
+        Task<T> task = create(taskId, action, options);
+        task.start();
+        return task;
+    }
+
+    public Task<Void> createAndStart(String taskId, IVoidAction action, Option... options) {
+        Task<Void> task = create(taskId, action, options);
+        task.start();
+        return task;
+    }
+
+    public Task<Void> createAndStart(String taskId, IEmptyVoidAction action, Option... options) {
+        Task<Void> task = create(taskId, action, options);
         task.start();
         return task;
     }
@@ -873,6 +817,31 @@ public class TaskPool {
     }
 
 
+    public <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken, Option... options) {
+        Task<T> task = create(action, cancellationToken, options);
+        task.start();
+        return task;
+    }
+
+    public <T> Task<T> createAndStart(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
+        Task<T> task = create(action, cancellationToken, options);
+        task.start();
+        return task;
+    }
+
+    public Task<Void> createAndStart(IVoidAction action, CancellationToken cancellationToken, Option... options) {
+        Task<Void> task = create(action, cancellationToken, options);
+        task.start();
+        return task;
+    }
+
+    public Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+        Task<Void> task = create(action, cancellationToken, options);
+        task.start();
+        return task;
+    }
+
+
     public <T> Task<T> createAndStart(IAction<T> action, CancellationToken cancellationToken) {
         Task<T> task = create(action, cancellationToken);
         task.start();
@@ -893,6 +862,31 @@ public class TaskPool {
 
     public Task<Void> createAndStart(IEmptyVoidAction action, CancellationToken cancellationToken) {
         Task<Void> task = create(action, cancellationToken);
+        task.start();
+        return task;
+    }
+
+
+    public <T> Task<T> createAndStart(IAction<T> action, Option... options) {
+        Task<T> task = create(action, options);
+        task.start();
+        return task;
+    }
+
+    public <T> Task<T> createAndStart(IEmptyAction<T> action, Option... options) {
+        Task<T> task = create(action, options);
+        task.start();
+        return task;
+    }
+
+    public Task<Void> createAndStart(IVoidAction action, Option... options) {
+        Task<Void> task = create(action, options);
+        task.start();
+        return task;
+    }
+
+    public Task<Void> createAndStart(IEmptyVoidAction action, Option... options) {
+        Task<Void> task = create(action, options);
         task.start();
         return task;
     }
@@ -935,7 +929,6 @@ public class TaskPool {
         return task;
     }
 
-
     public <T> WhenAllTask<T> whenAll(String taskId, Collection<Task<T>> tasks, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(taskId, tasks, new CancellationToken(), this.scheduler, options);
         task.start();
@@ -960,7 +953,6 @@ public class TaskPool {
         task.start();
         return task;
     }
-
 
     public <T> WhenAllTask<T> whenAll(Collection<Task<T>> tasks, Option... options) {
         WhenAllTask<T> task = new WhenAllTask<>(UUID.randomUUID().toString(), tasks, new CancellationToken(), this.scheduler, options);
@@ -987,7 +979,6 @@ public class TaskPool {
         return task;
     }
 
-
     public <T> WhenAnyTask<T> whenAny(String taskId, Collection<Task<T>> tasks, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(taskId, tasks, new CancellationToken(), this.scheduler, options);
         task.start();
@@ -1012,7 +1003,6 @@ public class TaskPool {
         task.start();
         return task;
     }
-
 
     public <T> WhenAnyTask<T> whenAny(Collection<Task<T>> tasks, Option... options) {
         WhenAnyTask<T> task = new WhenAnyTask<>(UUID.randomUUID().toString(), tasks, new CancellationToken(), this.scheduler, options);
@@ -1039,7 +1029,6 @@ public class TaskPool {
         return task;
     }
 
-
     public <T> UnwrapTask<T> unwrap(String taskId, Task<Task<T>> taskToUnwrap, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(taskId, taskToUnwrap, new CancellationToken(), this.scheduler, options);
         task.start();
@@ -1064,7 +1053,6 @@ public class TaskPool {
         task.start();
         return task;
     }
-
 
     public <T> UnwrapTask<T> unwrap(Task<Task<T>> taskToUnwrap, Option... options) {
         UnwrapTask<T> task = new UnwrapTask<>(UUID.randomUUID().toString(), taskToUnwrap, new CancellationToken(), this.scheduler, options);
@@ -1104,31 +1092,6 @@ public class TaskPool {
     }
 
 
-    public <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-    public <T> ParallelTask<T,Void> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
-        ParallelTask<T,Void> task = new ParallelTask<>(taskId, elements, new ParallelVoidAction<>(action), new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-    public <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, new ParallelUninterruptibleAction<>(action), new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-    public <T> ParallelTask<T,Void> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
-        ParallelTask<T,Void> task = new ParallelTask<>(taskId, elements, new ParallelUninterruptibleVoidAction<>(action), new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-
     public <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken) {
         ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, cancellationToken, this.scheduler, Task.DEFAULT_OPTIONS);
         task.start();
@@ -1149,6 +1112,31 @@ public class TaskPool {
 
     public <T> ParallelTask<T,Void> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken) {
         ParallelTask<T,Void> task = new ParallelTask<>(taskId, elements, new ParallelUninterruptibleVoidAction<>(action), cancellationToken, this.scheduler, Task.DEFAULT_OPTIONS);
+        task.start();
+        return task;
+    }
+
+
+    public <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, action, new CancellationToken(), this.scheduler, options);
+        task.start();
+        return task;
+    }
+
+    public <T> ParallelTask<T,Void> forEach(String taskId, Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
+        ParallelTask<T,Void> task = new ParallelTask<>(taskId, elements, new ParallelVoidAction<>(action), new CancellationToken(), this.scheduler, options);
+        task.start();
+        return task;
+    }
+
+    public <T,K> ParallelTask<T,K> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(taskId, elements, new ParallelUninterruptibleAction<>(action), new CancellationToken(), this.scheduler, options);
+        task.start();
+        return task;
+    }
+
+    public <T> ParallelTask<T,Void> forEach(String taskId, Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
+        ParallelTask<T,Void> task = new ParallelTask<>(taskId, elements, new ParallelUninterruptibleVoidAction<>(action), new CancellationToken(), this.scheduler, options);
         task.start();
         return task;
     }
@@ -1204,31 +1192,6 @@ public class TaskPool {
     }
 
 
-    public <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, action, new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-    public <T> ParallelTask<T,Void> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
-        ParallelTask<T,Void> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelVoidAction<>(action), new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-    public <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
-        ParallelTask<T,K> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelUninterruptibleAction<>(action), new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-    public <T> ParallelTask<T,Void> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
-        ParallelTask<T,Void> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelUninterruptibleVoidAction<>(action), new CancellationToken(), this.scheduler, options);
-        task.start();
-        return task;
-    }
-
-
     public <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken) {
         ParallelTask<T,K> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, action, cancellationToken, this.scheduler, Task.DEFAULT_OPTIONS);
         task.start();
@@ -1249,6 +1212,31 @@ public class TaskPool {
 
     public <T> ParallelTask<T,Void> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, CancellationToken cancellationToken) {
         ParallelTask<T,Void> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelUninterruptibleVoidAction<>(action), cancellationToken, this.scheduler, Task.DEFAULT_OPTIONS);
+        task.start();
+        return task;
+    }
+
+
+    public <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelAction<T,K> action, Option... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, action, new CancellationToken(), this.scheduler, options);
+        task.start();
+        return task;
+    }
+
+    public <T> ParallelTask<T,Void> forEach(Iterable<T> elements, IParallelVoidAction<T> action, Option... options) {
+        ParallelTask<T,Void> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelVoidAction<>(action), new CancellationToken(), this.scheduler, options);
+        task.start();
+        return task;
+    }
+
+    public <T,K> ParallelTask<T,K> forEach(Iterable<T> elements, IParallelUninterruptibleAction<T,K> action, Option... options) {
+        ParallelTask<T,K> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelUninterruptibleAction<>(action), new CancellationToken(), this.scheduler, options);
+        task.start();
+        return task;
+    }
+
+    public <T> ParallelTask<T,Void> forEach(Iterable<T> elements, IParallelUninterruptibleVoidAction<T> action, Option... options) {
+        ParallelTask<T,Void> task = new ParallelTask<>(UUID.randomUUID().toString(), elements, new ParallelUninterruptibleVoidAction<>(action), new CancellationToken(), this.scheduler, options);
         task.start();
         return task;
     }

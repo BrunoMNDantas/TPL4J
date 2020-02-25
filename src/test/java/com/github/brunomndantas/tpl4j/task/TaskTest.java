@@ -1,8 +1,8 @@
 package com.github.brunomndantas.tpl4j.task;
 
-import com.github.brunomndantas.tpl4j.core.options.Option;
-import com.github.brunomndantas.tpl4j.core.action.*;
+import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.*;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
@@ -61,15 +61,6 @@ public class TaskTest {
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
-        task = new Task<>(id, ACTION, SCHEDULER, OPTIONS);
-        validateAction(task, id, ACTION, null, SCHEDULER, OPTIONS);
-        task = new Task<>(id, VOID_ACTION, SCHEDULER, OPTIONS);
-        validateVoidAction(task, id, VOID_ACTION, null, SCHEDULER, OPTIONS);
-        task = new Task<>(id, EMPTY_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
-        task = new Task<>(id, EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
-
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN, SCHEDULER);
         validateAction(task, id, ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
@@ -78,15 +69,6 @@ public class TaskTest {
         validateEmptyAction(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
         validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
-
-        task = new Task<>(id, ACTION, SCHEDULER);
-        validateAction(task, id, ACTION, null, SCHEDULER, null);
-        task = new Task<>(id, VOID_ACTION, SCHEDULER);
-        validateVoidAction(task, id, VOID_ACTION, null, SCHEDULER, null);
-        task = new Task<>(id, EMPTY_ACTION, SCHEDULER);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, SCHEDULER, null);
-        task = new Task<>(id, EMPTY_VOID_ACTION, SCHEDULER);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, null);
 
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateAction(task, id, ACTION, CANCELLATION_TOKEN, null, OPTIONS);
@@ -97,14 +79,14 @@ public class TaskTest {
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
 
-        task = new Task<>(id, ACTION, OPTIONS);
-        validateAction(task, id, ACTION, null, null, OPTIONS);
-        task = new Task<>(id, VOID_ACTION, OPTIONS);
-        validateVoidAction(task, id, VOID_ACTION, null, null, OPTIONS);
-        task = new Task<>(id, EMPTY_ACTION, OPTIONS);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, null, OPTIONS);
-        task = new Task<>(id, EMPTY_VOID_ACTION, OPTIONS);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, null, OPTIONS);
+        task = new Task<>(id, ACTION, SCHEDULER, OPTIONS);
+        validateAction(task, id, ACTION, null, SCHEDULER, OPTIONS);
+        task = new Task<>(id, VOID_ACTION, SCHEDULER, OPTIONS);
+        validateVoidAction(task, id, VOID_ACTION, null, SCHEDULER, OPTIONS);
+        task = new Task<>(id, EMPTY_ACTION, SCHEDULER, OPTIONS);
+        validateEmptyAction(task, id, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
+        task = new Task<>(id, EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
+        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
 
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN);
         validateAction(task, id, ACTION, CANCELLATION_TOKEN, null, null);
@@ -114,6 +96,24 @@ public class TaskTest {
         validateEmptyAction(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, null);
+
+        task = new Task<>(id, ACTION, SCHEDULER);
+        validateAction(task, id, ACTION, null, SCHEDULER, null);
+        task = new Task<>(id, VOID_ACTION, SCHEDULER);
+        validateVoidAction(task, id, VOID_ACTION, null, SCHEDULER, null);
+        task = new Task<>(id, EMPTY_ACTION, SCHEDULER);
+        validateEmptyAction(task, id, EMPTY_ACTION, null, SCHEDULER, null);
+        task = new Task<>(id, EMPTY_VOID_ACTION, SCHEDULER);
+        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, null);
+
+        task = new Task<>(id, ACTION, OPTIONS);
+        validateAction(task, id, ACTION, null, null, OPTIONS);
+        task = new Task<>(id, VOID_ACTION, OPTIONS);
+        validateVoidAction(task, id, VOID_ACTION, null, null, OPTIONS);
+        task = new Task<>(id, EMPTY_ACTION, OPTIONS);
+        validateEmptyAction(task, id, EMPTY_ACTION, null, null, OPTIONS);
+        task = new Task<>(id, EMPTY_VOID_ACTION, OPTIONS);
+        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, null, OPTIONS);
 
         task = new Task<>(id, ACTION);
         validateAction(task, id, ACTION, null, null, null);
@@ -133,15 +133,6 @@ public class TaskTest {
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
-        task = new Task<>(ACTION, SCHEDULER, OPTIONS);
-        validateAction(task, null, ACTION, null, SCHEDULER, OPTIONS);
-        task = new Task<>(VOID_ACTION, SCHEDULER, OPTIONS);
-        validateVoidAction(task, null, VOID_ACTION, null, SCHEDULER, OPTIONS);
-        task = new Task<>(EMPTY_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
-        task = new Task<>(EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
-
         task = new Task<>(ACTION, CANCELLATION_TOKEN, SCHEDULER);
         validateAction(task, null, ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
@@ -150,15 +141,6 @@ public class TaskTest {
         validateEmptyAction(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
         validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
-
-        task = new Task<>(ACTION, SCHEDULER);
-        validateAction(task, null, ACTION, null, SCHEDULER, null);
-        task = new Task<>(VOID_ACTION, SCHEDULER);
-        validateVoidAction(task, null, VOID_ACTION, null, SCHEDULER, null);
-        task = new Task<>(EMPTY_ACTION, SCHEDULER);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, SCHEDULER, null);
-        task = new Task<>(EMPTY_VOID_ACTION, SCHEDULER);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, null);
 
         task = new Task<>(ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateAction(task, null, ACTION, CANCELLATION_TOKEN, null, OPTIONS);
@@ -169,14 +151,14 @@ public class TaskTest {
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
         validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
 
-        task = new Task<>(ACTION, OPTIONS);
-        validateAction(task, null, ACTION, null, null, OPTIONS);
-        task = new Task<>(VOID_ACTION, OPTIONS);
-        validateVoidAction(task, null, VOID_ACTION, null, null, OPTIONS);
-        task = new Task<>(EMPTY_ACTION, OPTIONS);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, null, OPTIONS);
-        task = new Task<>(EMPTY_VOID_ACTION, OPTIONS);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, null, OPTIONS);
+        task = new Task<>(ACTION, SCHEDULER, OPTIONS);
+        validateAction(task, null, ACTION, null, SCHEDULER, OPTIONS);
+        task = new Task<>(VOID_ACTION, SCHEDULER, OPTIONS);
+        validateVoidAction(task, null, VOID_ACTION, null, SCHEDULER, OPTIONS);
+        task = new Task<>(EMPTY_ACTION, SCHEDULER, OPTIONS);
+        validateEmptyAction(task, null, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
+        task = new Task<>(EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
+        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
 
         task = new Task<>(ACTION, CANCELLATION_TOKEN);
         validateAction(task, null, ACTION, CANCELLATION_TOKEN, null, null);
@@ -186,6 +168,24 @@ public class TaskTest {
         validateEmptyAction(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
         validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, null);
+
+        task = new Task<>(ACTION, SCHEDULER);
+        validateAction(task, null, ACTION, null, SCHEDULER, null);
+        task = new Task<>(VOID_ACTION, SCHEDULER);
+        validateVoidAction(task, null, VOID_ACTION, null, SCHEDULER, null);
+        task = new Task<>(EMPTY_ACTION, SCHEDULER);
+        validateEmptyAction(task, null, EMPTY_ACTION, null, SCHEDULER, null);
+        task = new Task<>(EMPTY_VOID_ACTION, SCHEDULER);
+        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, null);
+
+        task = new Task<>(ACTION, OPTIONS);
+        validateAction(task, null, ACTION, null, null, OPTIONS);
+        task = new Task<>(VOID_ACTION, OPTIONS);
+        validateVoidAction(task, null, VOID_ACTION, null, null, OPTIONS);
+        task = new Task<>(EMPTY_ACTION, OPTIONS);
+        validateEmptyAction(task, null, EMPTY_ACTION, null, null, OPTIONS);
+        task = new Task<>(EMPTY_VOID_ACTION, OPTIONS);
+        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, null, OPTIONS);
 
         task = new Task<>(ACTION);
         validateAction(task, null, ACTION, null, null, null);
