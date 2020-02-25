@@ -16,14 +16,42 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.job;
 
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.status.State;
+import com.github.brunomndantas.tpl4j.core.status.Status;
 
 import java.util.Collection;
 import java.util.function.Consumer;
 
-public class Job<T> extends SimpleJob<T> {
+public class Job<T> {
+
+    protected final Object lock = new Object();
+
+    protected volatile String taskId;
+    public String getTaskId() { return this.taskId; }
+
+    protected volatile IAction<T> action;
+    public IAction<T> getAction() { return this.action; }
+
+    protected volatile Consumer<Runnable> scheduler;
+    public Consumer<Runnable> getScheduler() { return this.scheduler; }
+
+    protected volatile Status status;
+    public Status getStatus() { return this.status; }
+
+    protected volatile CancellationToken cancellationToken;
+    public CancellationToken getCancellationToken() { return this.cancellationToken; }
+
+    protected T value;
+    public T getValue() { synchronized (lock) { return this.value; } }
+    protected void setValue(T value) { synchronized (lock) { this.value = value; } }
+
+    protected Exception exception;
+    public Exception getException() { synchronized (lock) { return this.exception; } }
+    protected void setException(Exception exception) { synchronized (lock) { this.exception = exception; } }
 
     protected volatile Collection<Option> options;
     public Collection<Option> getOptions() { return this.options; }
@@ -31,7 +59,11 @@ public class Job<T> extends SimpleJob<T> {
 
 
     public Job(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
-        super(taskId, action, cancellationToken, scheduler);
+        this.taskId = taskId;
+        this.action = action;
+        this.cancellationToken = cancellationToken;
+        this.scheduler = scheduler;
+        this.status = new Status(taskId);
         this.options = options;
 
         JobManager.INSTANCE.registerJobCreationOnCurrentThread(this);
@@ -39,33 +71,94 @@ public class Job<T> extends SimpleJob<T> {
 
 
 
-    @Override
+    public T getResult() throws Exception {
+        this.getStatus().finishedEvent.await();
+
+        if(this.getStatus().getState() == State.FAILED)
+            throw this.getException();
+        else
+            return this.getValue();
+    }
+
+    public void cancel() {
+        cancellationToken.cancel();
+    }
+
+    public boolean hasCancelRequest() {
+        return cancellationToken.hasCancelRequest();
+    }
+
+    public void schedule() {
+        synchronized (lock) {
+            if(this.status.scheduledEvent.hasFired())
+                throw new RuntimeException("Task:" + this.taskId + " already scheduled!");
+
+            this.status.declareSchedule();
+            this.scheduler.accept(this::run);
+        }
+    }
+
     protected void run() {
         JobManager.INSTANCE.registerJobExecutionOnCurrentThread(this);
-        super.run();
+
+        try {
+            if(hasCancelRequest()) {
+                declareCancel();
+                return;
+            }
+
+            this.status.declareRun();
+
+            if(hasCancelRequest()) {
+                declareCancel();
+                return;
+            }
+
+            executeAction();
+
+            declareSuccess();
+        } catch(Exception e) {
+            if(e instanceof CancelledException)
+                declareCancel();
+            else
+                declareFail();
+        }
+
         JobManager.INSTANCE.unregisterJobExecution(this);
     }
 
-    @Override
+    protected T executeAction() throws Exception {
+        try {
+            T value = this.action.run(cancellationToken);
+            setValue(value);
+            return value;
+        } catch (Exception e) {
+            if(!(e instanceof CancelledException))
+                setException(e);
+
+            throw e;
+        }
+    }
+
     protected void declareCancel() {
         Collection<JobContext> children = JobManager.INSTANCE.getAttachedChildrenContexts(this);
 
         if(children.isEmpty())
-            super.declareCancel();
+            this.status.declareCancel();
         else
             registerCancelAfterChildren(children);
     }
 
     protected void registerCancelAfterChildren(Collection<JobContext> childrenContexts) {
-        super.status.declareWaitChildren();
+        this.status.declareWaitChildren();
 
         for(JobContext childContext : childrenContexts) {
             childContext.getJob().cancel();
 
             childContext.getJob().status.finishedEvent.addListener(() -> {
-                super.scheduler.accept(() -> {
+                this.scheduler.accept(() -> {
                     synchronized (childContext) {
-                        if(!super.status.finishedEvent.hasFired() && allFinished(childrenContexts))
+                        if(!this.status.finishedEvent.hasFired() && allFinished(childrenContexts))
                             declareCancelAfterChildren(childrenContexts);
                     }
                 });
@@ -78,34 +171,33 @@ public class Job<T> extends SimpleJob<T> {
             if(childContext.getJob().status.failedEvent.hasFired()) {
                 Exception childException = childContext.getJob().getException();
                 childException = new ChildException(childException.getMessage(), childException);
-                super.setException(childException);
-                super.declareFail();
+                this.setException(childException);
+                this.status.declareFail();
                 return;
             }
         }
 
-        super.declareCancel();
+        this.status.declareCancel();
     }
 
-    @Override
     protected void declareSuccess() {
         Collection<JobContext> children = JobManager.INSTANCE.getAttachedChildrenContexts(this);
 
         if(children.isEmpty())
-            super.declareSuccess();
+            this.status.declareSuccess();
         else
             registerSuccessAfterChildren(children);
     }
 
     protected void registerSuccessAfterChildren(Collection<JobContext> childrenContexts) {
-        super.status.declareWaitChildren();
+        this.status.declareWaitChildren();
 
         synchronized (childrenContexts){
             for(JobContext childContext : childrenContexts) {
                 childContext.getJob().status.finishedEvent.addListener(() -> {
-                    super.scheduler.accept(() -> {
+                    this.scheduler.accept(() -> {
                         synchronized (childContext) {
-                            if(!super.status.finishedEvent.hasFired() && allFinished(childrenContexts))
+                            if(!this.status.finishedEvent.hasFired() && allFinished(childrenContexts))
                                 declareSuccessAfterChildren(childrenContexts);
                         }
                     });
@@ -119,33 +211,32 @@ public class Job<T> extends SimpleJob<T> {
             if(childContext.getJob().status.failedEvent.hasFired()) {
                 Exception childException = childContext.getJob().getException();
                 childException = new ChildException(childException.getMessage(), childException);
-                super.setException(childException);
-                super.declareFail();
+                this.setException(childException);
+                this.status.declareFail();
                 return;
             }
         }
 
-        super.declareSuccess();
+        this.status.declareSuccess();
     }
 
-    @Override
     protected void declareFail() {
         Collection<JobContext> children = JobManager.INSTANCE.getAttachedChildrenContexts(this);
 
         if(children.isEmpty())
-            super.declareFail();
+            this.status.declareFail();
         else
             registerFailAfterChildren(children);
     }
 
     protected void registerFailAfterChildren(Collection<JobContext> childrenContexts) {
-        super.status.declareWaitChildren();
+        this.status.declareWaitChildren();
 
         for(JobContext childContext : childrenContexts) {
             childContext.getJob().status.finishedEvent.addListener(() -> {
-                super.scheduler.accept(() -> {
+                this.scheduler.accept(() -> {
                     synchronized (childContext) {
-                        if(!super.status.finishedEvent.hasFired() && allFinished(childrenContexts))
+                        if(!this.status.finishedEvent.hasFired() && allFinished(childrenContexts))
                             declareFailAfterChildren(childrenContexts);
                     }
                 });
@@ -154,7 +245,7 @@ public class Job<T> extends SimpleJob<T> {
     }
 
     protected void declareFailAfterChildren(Collection<JobContext> childrenContexts) {
-        super.declareFail();
+        this.status.declareFail();
     }
 
     private boolean allFinished(Collection<JobContext> contexts) {
