@@ -7,6 +7,7 @@ import com.github.brunomndantas.tpl4j.helpers.parallel.task.ParallelWorkerTask;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
@@ -64,10 +65,11 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
     private void createWorkTasks(Collection<K> results) {
         String id;
         Task<Collection<K>> task;
+        Iterator<T> iterator = this.elements.iterator();
         for(int i=0; i<Runtime.getRuntime().availableProcessors(); ++i) {
             id = this.taskId + "#"+i;
 
-            task = new ParallelWorkerTask<>(id, this.action, this.elements.iterator(), this.cancellationToken, this.scheduler, this.options);
+            task = new ParallelWorkerTask<>(id, this.action, iterator, this.cancellationToken, this.scheduler, this.options);
 
             id += "Collector";
 
