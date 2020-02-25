@@ -1,13 +1,12 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.action;
 
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.helpers.parallel.task.ParallelWorkerTask;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
@@ -30,8 +29,8 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
     private IParallelAction<T,K> action;
     public IParallelAction<T,K> getAction() { return this.action; }
 
-    private Iterator<T> iterator;
-    public Iterator<T> getIterator() { return this.iterator; }
+    private Iterable<T> elements;
+    public Iterable<T> getElements() { return this.elements; }
 
     private CancellationToken cancellationToken;
     public CancellationToken getCancellationToken() { return this.cancellationToken; }
@@ -44,9 +43,9 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
 
 
-    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterator<T> iterator, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
+    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterable<T> elements, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
         this.taskId = taskId;
-        this.iterator = iterator;
+        this.elements = elements;
         this.action = action;
         this.cancellationToken = cancellationToken;
         this.scheduler = scheduler;
@@ -68,7 +67,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
         for(int i=0; i<Runtime.getRuntime().availableProcessors(); ++i) {
             id = this.taskId + "#"+i;
 
-            task = new ParallelWorkerTask<>(id, this.action, this.iterator, this.cancellationToken, this.scheduler, this.options);
+            task = new ParallelWorkerTask<>(id, this.action, this.elements.iterator(), this.cancellationToken, this.scheduler, this.options);
 
             id += "Collector";
 

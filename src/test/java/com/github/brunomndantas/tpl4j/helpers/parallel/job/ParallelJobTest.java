@@ -1,14 +1,13 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.job;
 
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.ParallelAction;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
@@ -21,11 +20,11 @@ public class ParallelJobTest {
     public void constructorTest() {
         String id = "";
         IParallelAction<String,String> act = (e, t) -> "";
-        Iterator<String> iterator = Arrays.asList("").iterator();
+        Iterable<String> elements = Arrays.asList("");
         CancellationToken cancellationToken = new CancellationToken();
         Consumer<Runnable> scheduler = (r) -> {};
         Collection<Option> options = new LinkedList<>();
-        ParallelJob<String,String> job = new ParallelJob<>(id, act, iterator, cancellationToken, scheduler, options);
+        ParallelJob<String,String> job = new ParallelJob<>(id, act, elements, cancellationToken, scheduler, options);
 
         assertSame(id, job.getTaskId());
         assertTrue(job.getAction() instanceof ParallelAction);

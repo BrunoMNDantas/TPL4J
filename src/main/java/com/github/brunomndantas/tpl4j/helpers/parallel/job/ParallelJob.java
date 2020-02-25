@@ -1,13 +1,12 @@
 package com.github.brunomndantas.tpl4j.helpers.parallel.job;
 
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.ParallelAction;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
@@ -24,10 +23,10 @@ public class ParallelJob<T,K> extends Job<Collection<K>> {
 
 
 
-    public ParallelJob(String taskId, IParallelAction<T,K> action, Iterator<T> iterator, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
+    public ParallelJob(String taskId, IParallelAction<T,K> action, Iterable<T> elements, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
         super(
                 taskId,
-                new ParallelAction<>(taskId, action, iterator, cancellationToken, scheduler, options),
+                new ParallelAction<>(taskId, action, elements, cancellationToken, scheduler, options),
                 cancellationToken,
                 scheduler,
                 attachAcceptChildrenOption(options));
