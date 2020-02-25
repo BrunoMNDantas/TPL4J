@@ -16,13 +16,12 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -43,75 +42,6 @@ public class WhenAllTask<T> extends Task<Collection<T>> {
         ));
 
         this.tasks = tasks;
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
-        super(new WhenAllJob<>(
-                taskId,
-                new CancellationToken(),
-                scheduler,
-                Arrays.asList(options),
-                tasks.stream().map(Task::getJob).collect(Collectors.toList())
-        ));
-
-        this.tasks = tasks;
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
-        this(taskId, tasks, cancellationToken, Task.DEFAULT_SCHEDULER, options);
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, Option... options) {
-        this(taskId, tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
-        this(taskId, tasks, cancellationToken, scheduler, Task.DEFAULT_OPTIONS);
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
-        this(taskId, tasks, new CancellationToken(), scheduler, Task.DEFAULT_OPTIONS);
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken) {
-        this(taskId, tasks, cancellationToken, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
-    }
-
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks) {
-        this(taskId, tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
-    }
-
-
-    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
-        this(UUID.randomUUID().toString(), tasks, cancellationToken, scheduler, options);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler, Option... options) {
-        this(UUID.randomUUID().toString(), tasks, new CancellationToken(), scheduler, options);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Option... options) {
-        this(tasks, cancellationToken, Task.DEFAULT_SCHEDULER, options);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks, Option... options) {
-        this(tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, options);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
-        this(tasks, cancellationToken, scheduler, Task.DEFAULT_OPTIONS);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks, Consumer<Runnable> scheduler) {
-        this(tasks, new CancellationToken(), scheduler, Task.DEFAULT_OPTIONS);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks, CancellationToken cancellationToken) {
-        this(tasks, cancellationToken, Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
-    }
-
-    public WhenAllTask(Collection<Task<T>> tasks) {
-        this(tasks, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
     }
 
 }

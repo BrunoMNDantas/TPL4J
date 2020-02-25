@@ -1,12 +1,8 @@
 package com.github.brunomndantas.tpl4j.factory;
 
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleVoidAction;
@@ -14,6 +10,10 @@ import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelVoidActio
 import com.github.brunomndantas.tpl4j.helpers.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.helpers.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.helpers.when.whenAny.WhenAnyTask;
+import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -615,7 +615,7 @@ public class TaskFactoryTest {
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
         IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
         Iterable<String> elements = Arrays.asList("","");
-        Task<Collection<String>> task;
+        Task<?> task;
 
         task = TaskFactory.forEach(id, elements, action, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);

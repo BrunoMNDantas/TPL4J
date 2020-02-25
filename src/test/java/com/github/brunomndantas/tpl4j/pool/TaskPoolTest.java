@@ -1,12 +1,8 @@
 package com.github.brunomndantas.tpl4j.pool;
 
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleVoidAction;
@@ -14,6 +10,10 @@ import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelVoidActio
 import com.github.brunomndantas.tpl4j.helpers.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.helpers.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.helpers.when.whenAny.WhenAnyTask;
+import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -298,7 +298,7 @@ public class TaskPoolTest {
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
         IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
         Iterable<String> elements = Arrays.asList("","");
-        Task<Collection<String>> task;
+        Task<?> task;
 
         task = TaskPool.forEachTask(id, elements, action, CANCELLATION_TOKEN, OPTIONS);
         validateForEach(task, id, CANCELLATION_TOKEN, TaskPool.getTaskScheduler(), OPTIONS);
@@ -759,7 +759,7 @@ public class TaskPoolTest {
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
         IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
         Iterable<String> elements = Arrays.asList("","");
-        Task<Collection<String>> task;
+        Task<?> task;
 
         task = pool.forEach(id, elements, action, CANCELLATION_TOKEN, OPTIONS);
         validateForEach(task, id, CANCELLATION_TOKEN, pool.getScheduler(), OPTIONS);
