@@ -16,29 +16,51 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task;
 
-import com.github.brunomndantas.tpl4j.core.BaseTask;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.status.Status;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.*;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class Task<T> extends BaseTask<T> {
+public class Task<T> {
 
     public static final Consumer<Runnable> DEFAULT_SCHEDULER = (r) -> new Thread(r).start();
     public static final Option[] DEFAULT_OPTIONS = new Option[]{ Option.ACCEPT_CHILDREN, Option.DETACH_FROM_PARENT };
 
 
 
+    private volatile Job<T> job;
+    public Job<T> getJob() { return this.job; }
+
+    public String getId() { return this.job.getTaskId(); }
+
+    public IAction<T> getAction() { return this.job.getAction(); }
+
+    public Consumer<Runnable> getScheduler() { return this.job.getScheduler(); }
+
+    public Collection<Option> getOptions() { return this.job.getOptions(); }
+
+    public T getValue() { return job.getValue(); }
+
+    public Exception getException() { return job.getException(); }
+
+    public CancellationToken getCancellationToken() { return job.getCancellationToken(); }
+
+    public Status getStatus() { return job.getStatus(); }
+
+
+
     public Task(Job<T> job) {
-        super(job);
+        this.job = job;
     }
 
 
@@ -315,8 +337,25 @@ public class Task<T> extends BaseTask<T> {
 
 
 
+    public void start() {
+        job.schedule();
+    }
+
+    public void cancel() {
+        job.cancel();
+    }
+
+    public T getResult() throws Exception {
+        return job.getResult();
+    }
+
+    public boolean hasCancelRequest() {
+        return job.hasCancelRequest();
+    }
+
+
     public <K> Task<K> then(Task<K> task) {
-        super.getStatus().finishedEvent.addListener(task::start);
+        this.getStatus().finishedEvent.addListener(task::start);
         return task;
     }
 
