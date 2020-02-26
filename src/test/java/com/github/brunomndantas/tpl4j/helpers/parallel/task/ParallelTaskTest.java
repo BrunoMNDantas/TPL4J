@@ -19,6 +19,14 @@ import static org.junit.Assert.*;
 public class ParallelTaskTest {
 
     @Test
+    public void getElementsTest() {
+        Iterable<String> elements = Arrays.asList("","");
+        ParallelTask<String,String> task = new ParallelTask<>(null, elements, null, null, null, null);
+
+        assertSame(elements, task.getElements());
+    }
+
+    @Test
     public void constructorsTest() {
         String id = UUID.randomUUID().toString();
         IParallelAction<String,String> action = (e,t) -> "";
@@ -29,6 +37,7 @@ public class ParallelTaskTest {
         ParallelTask<String,String> task = new ParallelTask<>(id, elements, action, cancellationToken, scheduler, options);
 
         assertSame(id, task.getId());
+        assertSame(elements, task.getElements());
         assertTrue(task.getJob() instanceof ParallelJob);
         assertSame(action, ((ParallelAction)task.getJob().getAction()).getAction());
         assertSame(cancellationToken, task.getCancellationToken());

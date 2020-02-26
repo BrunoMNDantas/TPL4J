@@ -12,8 +12,14 @@ import java.util.function.Consumer;
 
 public class ParallelTask<T,K> extends Task<Collection<K>> {
 
+    private volatile Iterable<T> elements;
+    public Iterable<T> getElements() { return this.elements; }
+
+
+
     public ParallelTask(String taskId, Iterable<T> elements, IParallelAction<T,K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         super(new ParallelJob<>(taskId, action, elements, cancellationToken, scheduler, Arrays.asList(options)));
+        this.elements = elements;
     }
 
 }

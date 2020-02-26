@@ -23,13 +23,19 @@ public class ParallelJob<T,K> extends Job<Collection<K>> {
 
 
 
+    private volatile Iterable<T> elements;
+    public Iterable<T> getElements() { return this.elements; }
+
+
+
     public ParallelJob(String taskId, IParallelAction<T,K> action, Iterable<T> elements, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
-        super(
-                taskId,
+        super(  taskId,
                 new ParallelAction<>(taskId, action, elements, cancellationToken, scheduler, options),
                 cancellationToken,
                 scheduler,
                 attachAcceptChildrenOption(options));
+
+        this.elements = elements;
     }
 
 }
