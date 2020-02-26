@@ -19,7 +19,7 @@ public class ParallelJobTest {
     @Test
     public void getElementsTest() {
         Iterable<String> elements = Arrays.asList("");
-        ParallelJob<String,String> job = new ParallelJob<>(null, null, elements, null, null, null);
+        ParallelJob<String,String> job = new ParallelJob<>(null, null, elements, null, null, new LinkedList<>());
 
         assertSame(elements, job.getElements());
     }

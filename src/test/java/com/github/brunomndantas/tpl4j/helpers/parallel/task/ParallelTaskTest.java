@@ -20,8 +20,13 @@ public class ParallelTaskTest {
 
     @Test
     public void getElementsTest() {
+        String id = UUID.randomUUID().toString();
+        IParallelAction<String,String> action = (e,t) -> "";
         Iterable<String> elements = Arrays.asList("","");
-        ParallelTask<String,String> task = new ParallelTask<>(null, elements, null, null, null, null);
+        CancellationToken cancellationToken = new CancellationToken();
+        Consumer<Runnable> scheduler = (r) -> {};
+        Option[] options = new Option[0];
+        ParallelTask<String,String> task = new ParallelTask<>(id, elements, action, cancellationToken, scheduler, options);
 
         assertSame(elements, task.getElements());
     }
