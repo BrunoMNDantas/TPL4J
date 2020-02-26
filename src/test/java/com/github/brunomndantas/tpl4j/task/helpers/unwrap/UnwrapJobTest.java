@@ -36,13 +36,13 @@ public class UnwrapJobTest {
         Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
 
         t.start();
-        t.getStatus().finishedEvent.await();
+        t.getStatus().getFinishedEvent().await();
         task.start();
 
         UnwrapJob<String> unwrapJob = new UnwrapJob<>("", new CancellationToken(), SCHEDULER, new LinkedList<>(), task);
 
         unwrapJob.schedule();
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         assertSame(result, unwrapJob.getResult());
     }
@@ -72,7 +72,7 @@ public class UnwrapJobTest {
         Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
 
         t.start();
-        t.getStatus().finishedEvent.await();
+        t.getStatus().getFinishedEvent().await();
         task.start();
 
         UnwrapJob<String> unwrapJob = new UnwrapJob<>("", new CancellationToken(), SCHEDULER, new LinkedList<>(), task);
@@ -97,7 +97,7 @@ public class UnwrapJobTest {
         UnwrapJob<String> unwrapJob = new UnwrapJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), task);
 
         unwrapJob.schedule();
-        unwrapJob.getStatus().cancelledEvent.await();
+        unwrapJob.getStatus().getCancelledEvent().await();
     }
 
     @Test
@@ -108,13 +108,13 @@ public class UnwrapJobTest {
 
         t.cancel();
         t.start();
-        t.getStatus().finishedEvent.await();
+        t.getStatus().getFinishedEvent().await();
         task.start();
 
         UnwrapJob<String> unwrapJob = new UnwrapJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), task);
         unwrapJob.schedule();
 
-        unwrapJob.getStatus().cancelledEvent.await();
+        unwrapJob.getStatus().getCancelledEvent().await();
     }
 
     @Test
@@ -132,7 +132,7 @@ public class UnwrapJobTest {
         UnwrapJob<String> unwrapJob = new UnwrapJob<>("", CANCELLATION_TOKEN, scheduler, new LinkedList<>(), task);
 
         unwrapJob.schedule();
-        unwrapJob.getStatus().finishedEvent.await();
+        unwrapJob.getStatus().getFinishedEvent().await();
 
         assertEquals(5, counter[0]);
         //Why 5?

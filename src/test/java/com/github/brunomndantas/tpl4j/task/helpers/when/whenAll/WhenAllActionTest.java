@@ -38,8 +38,8 @@ public class WhenAllActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().finishedEvent.await();
-        taskB.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
+        taskB.getStatus().getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
         Collection<String> results = action.run(new CancellationToken());
@@ -62,9 +62,9 @@ public class WhenAllActionTest {
         taskB.start();
         taskC.start();
 
-        taskA.getStatus().finishedEvent.await();
-        taskB.getStatus().finishedEvent.await();
-        taskC.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
+        taskB.getStatus().getFinishedEvent().await();
+        taskC.getStatus().getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
         try{
@@ -86,8 +86,8 @@ public class WhenAllActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().finishedEvent.await();
-        taskB.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
+        taskB.getStatus().getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
 
@@ -101,7 +101,7 @@ public class WhenAllActionTest {
 
         taskA.start();
 
-        taskA.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
 
         CancellationToken cancellationToken = new CancellationToken();
 

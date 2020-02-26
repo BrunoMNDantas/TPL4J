@@ -81,7 +81,7 @@ public class TaskTest {
 
         task.start();
 
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         assertSame(SUCCESS_RESULT, task.getValue());
     }
@@ -92,7 +92,7 @@ public class TaskTest {
 
         task.start();
 
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         assertSame(FAIL_RESULT, task.getException());
     }
@@ -395,9 +395,9 @@ public class TaskTest {
 
         task.start();
 
-        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertTrue(task.getStatus().getScheduledEvent().hasFired());
 
-        task.getStatus().succeededEvent.await();
+        task.getStatus().getSucceededEvent().await();
 
         assertSame(SUCCESS_RESULT, task.getValue());
     }
@@ -412,7 +412,7 @@ public class TaskTest {
 
         assertTrue(task.hasCancelRequest());
 
-        task.getStatus().cancelledEvent.await();
+        task.getStatus().getCancelledEvent().await();
     }
 
     @Test
@@ -477,13 +477,13 @@ public class TaskTest {
     @Test
     public void thenTaskTest() throws InterruptedException {
         Task<?> task = new Task<>(ACTION);
-        Task<Boolean> thenTask = new Task<>(() -> task.getStatus().finishedEvent.hasFired());
+        Task<Boolean> thenTask = new Task<>(() -> task.getStatus().getFinishedEvent().hasFired());
 
         assertSame(thenTask, task.then(thenTask));
 
         task.start();
 
-        thenTask.getStatus().succeededEvent.await();
+        thenTask.getStatus().getSucceededEvent().await();
         assertTrue(thenTask.getValue());
     }
 

@@ -41,12 +41,12 @@ public class UnwrapJob<T> extends Job<T> {
 
     @Override
     protected void run() {
-        this.task.getStatus().finishedEvent.addListener(() -> {
+        this.task.getStatus().getFinishedEvent().addListener(() -> {
             super.scheduler.accept(() -> {
                 if(this.task.getStatus().getState() != State.SUCCEEDED)
                     super.scheduler.accept(() -> super.run());
                 else
-                    this.task.getValue().getStatus().finishedEvent.addListener(() -> {
+                    this.task.getValue().getStatus().getFinishedEvent().addListener(() -> {
                         super.scheduler.accept(() -> super.run());
                     });
             });

@@ -7,20 +7,21 @@ import static org.junit.Assert.*;
 public class CancellationTokenTest {
 
     @Test
-    public void getIdTest() {
-        String id = "ID";
-        CancellationToken token = new CancellationToken(id);
-        assertSame(id, token.getId());
-    }
-
-    @Test
     public void constructorsTest() {
         CancellationToken token = new CancellationToken();
         assertNotNull(token.getId());
         assertFalse(token.getId().isEmpty());
+        assertNotEquals(token.getId(), new CancellationToken().getId());
 
         String id = "ID";
         token = new CancellationToken(id);
+        assertSame(id, token.getId());
+    }
+
+    @Test
+    public void getIdTest() {
+        String id = "ID";
+        CancellationToken token = new CancellationToken(id);
         assertSame(id, token.getId());
     }
 
@@ -50,11 +51,18 @@ public class CancellationTokenTest {
         token.abortIfCancelRequested();
     }
 
-    @Test(expected = CancelledException.class)
-    public void abortIfCancelRequestedWithRequestTest() throws CancelledException {
+    @Test
+    public void abortIfCancelRequestedWithRequestTest() {
         CancellationToken token = new CancellationToken();
         token.cancel();
-        token.abortIfCancelRequested();
+
+        try {
+            token.abortIfCancelRequested();
+            fail("Exception should be thrown!");
+        } catch (CancelledException e) {
+            assertNotNull(e.getMessage());
+            assertSame(token.getId(), e.getCancellationTokenId());
+        }
     }
 
 }

@@ -16,10 +16,10 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.Option;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.context.job.Job;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -46,7 +46,7 @@ public class WhenAnyJob<T> extends Job<Task<T>> {
             this.finish();
         else
             for(Task<T> task : this.tasks)
-                task.getStatus().finishedEvent.addListener(() -> super.scheduler.accept(this::finish));
+                task.getStatus().getFinishedEvent().addListener(() -> super.scheduler.accept(this::finish));
     }
 
     private void finish() {
@@ -64,7 +64,7 @@ public class WhenAnyJob<T> extends Job<Task<T>> {
 
         return this.tasks
                 .stream()
-                .anyMatch((task) -> task.getStatus().finishedEvent.hasFired());
+                .anyMatch((task) -> task.getStatus().getFinishedEvent().hasFired());
     }
 
 }

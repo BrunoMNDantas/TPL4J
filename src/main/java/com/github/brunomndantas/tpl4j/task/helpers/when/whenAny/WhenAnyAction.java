@@ -39,7 +39,7 @@ public class WhenAnyAction<T> implements IAction<Task<T>> {
     public Task<T> run(CancellationToken cancellationToken) throws Exception {
         return this.tasks
                 .stream()
-                .filter((task) -> task.getStatus().finishedEvent.hasFired())
+                .filter((task) -> task.getStatus().getFinishedEvent().hasFired())
                 .findFirst()
                 .orElse(null);
     }

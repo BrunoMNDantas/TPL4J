@@ -35,10 +35,10 @@ public class UnwrapActionTest {
         Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
 
         t.start();
-        t.getStatus().finishedEvent.await();
+        t.getStatus().getFinishedEvent().await();
 
         task.start();
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -51,7 +51,7 @@ public class UnwrapActionTest {
         Task<Task<String>> task = new Task<>("", (IAction<Task<String>>)(token) -> { throw result; }, new CancellationToken(), SCHEDULER);
 
         task.start();
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -70,10 +70,10 @@ public class UnwrapActionTest {
         Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
 
         t.start();
-        t.getStatus().finishedEvent.await();
+        t.getStatus().getFinishedEvent().await();
 
         task.start();
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -92,7 +92,7 @@ public class UnwrapActionTest {
 
         task.cancel();
         task.start();
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -107,10 +107,10 @@ public class UnwrapActionTest {
 
         t.cancel();
         t.start();
-        t.getStatus().finishedEvent.await();
+        t.getStatus().getFinishedEvent().await();
 
         task.start();
-        task.getStatus().finishedEvent.await();
+        task.getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 

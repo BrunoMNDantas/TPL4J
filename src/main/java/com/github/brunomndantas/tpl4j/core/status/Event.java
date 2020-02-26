@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Event {
+public class Event implements IEvent {
 
     private static final ExecutorService LISTENERS_RUNNER = Executors.newFixedThreadPool(1, (r) -> {
                 Thread t = Executors.defaultThreadFactory().newThread(r);
@@ -36,6 +36,7 @@ public class Event {
 
 
 
+    @Override
     public synchronized void addListener(Runnable listener) {
         this.listeners.add(listener);
 
@@ -43,10 +44,12 @@ public class Event {
             LISTENERS_RUNNER.submit(listener);
     }
 
+    @Override
     public synchronized void removeListener(Runnable listener) {
         this.listeners.remove(listener);
     }
 
+    @Override
     public synchronized boolean await() throws InterruptedException {
         while(!this.fired)
             this.wait();
@@ -54,6 +57,7 @@ public class Event {
         return true;
     }
 
+    @Override
     public synchronized boolean await(long timeout) throws InterruptedException {
         long finalTime = System.currentTimeMillis() + timeout;
         long timeToFinish;
@@ -70,6 +74,7 @@ public class Event {
         return this.fired;
     }
 
+    @Override
     public synchronized void fire() {
         if(!this.fired) {
             this.fired = true;
@@ -80,6 +85,7 @@ public class Event {
         }
     }
 
+    @Override
     public synchronized boolean hasFired() {
         return this.fired;
     }

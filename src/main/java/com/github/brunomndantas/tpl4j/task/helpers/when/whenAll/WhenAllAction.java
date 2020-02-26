@@ -39,11 +39,11 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
 
     @Override
     public Collection<T> run(CancellationToken cancellationToken) throws Exception {
-        if(this.tasks.stream().anyMatch((job) -> job.getStatus().failedEvent.hasFired()))
+        if(this.tasks.stream().anyMatch((job) -> job.getStatus().getFailedEvent().hasFired()))
             throw collectErrors();
 
-        if(this.tasks.stream().anyMatch((job) -> job.getStatus().cancelledEvent.hasFired()))
-            throw new CancelledException();
+        if(this.tasks.stream().anyMatch((job) -> job.getStatus().getCancelledEvent().hasFired()))
+            throw new CancelledException(cancellationToken.getId());
 
         return collectResults(cancellationToken);
     }
@@ -52,7 +52,7 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
         Exception exception = null;
 
         for(Task<T> task : this.tasks) {
-            if(task.getStatus().failedEvent.hasFired()) {
+            if(task.getStatus().getFailedEvent().hasFired()) {
                 if(exception == null)
                     exception = new Exception(task.getException().getMessage(), task.getException());
                 else

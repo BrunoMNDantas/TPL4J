@@ -10,15 +10,16 @@ import static org.junit.Assert.*;
 
 public class OptionsTest {
 
+
     @Test
-    public void getOptionsTest() {
+    public void constructorTest() {
         Collection<Option> ops = new LinkedList<>();
         Options options = new Options(ops);
         assertSame(ops, options.getOptions());
     }
 
     @Test
-    public void constructorTest() {
+    public void getOptionsTest() {
         Collection<Option> ops = new LinkedList<>();
         Options options = new Options(ops);
         assertSame(ops, options.getOptions());

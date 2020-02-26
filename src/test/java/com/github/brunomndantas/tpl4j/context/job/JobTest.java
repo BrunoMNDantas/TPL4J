@@ -84,7 +84,7 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.finishedEvent.await();
+        job.status.getFinishedEvent().await();
 
         String value = job.getValue();
         assertSame(SUCCESS_RESULT, value);
@@ -109,7 +109,7 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.finishedEvent.await();
+        job.status.getFinishedEvent().await();
 
         Exception exception = job.getException();
         assertSame(FAIL_RESULT, exception);
@@ -132,7 +132,7 @@ public class JobTest {
         job.schedule();
 
         assertTrue(scheduled[0]);
-        assertTrue(job.status.scheduledEvent.hasFired());
+        assertTrue(job.status.getScheduledEvent().hasFired());
     }
 
     @Test
@@ -144,10 +144,10 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.finishedEvent.await();
+        job.status.getFinishedEvent().await();
 
-        assertFalse(job.status.runningEvent.hasFired());
-        assertTrue(job.status.cancelledEvent.hasFired());
+        assertFalse(job.status.getRunningEvent().hasFired());
+        assertTrue(job.status.getCancelledEvent().hasFired());
     }
 
     @Test
@@ -167,10 +167,10 @@ public class JobTest {
 
         assertTrue(job.hasCancelRequest());
 
-        job.status.finishedEvent.await();
+        job.status.getFinishedEvent().await();
 
-        assertFalse(job.status.runningEvent.hasFired());
-        assertTrue(job.status.cancelledEvent.hasFired());
+        assertFalse(job.status.getRunningEvent().hasFired());
+        assertTrue(job.status.getCancelledEvent().hasFired());
     }
 
     @Test
@@ -184,9 +184,9 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.finishedEvent.await();
+        job.status.getFinishedEvent().await();
 
-        assertTrue(job.status.cancelledEvent.hasFired());
+        assertTrue(job.status.getCancelledEvent().hasFired());
     }
 
     @Test
@@ -196,13 +196,13 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.finishedEvent.await();
+        job.status.getFinishedEvent().await();
 
         job.cancel();
 
         Thread.sleep(3000);
 
-        assertFalse(job.status.cancelledEvent.hasFired());
+        assertFalse(job.status.getCancelledEvent().hasFired());
     }
 
     @Test
@@ -272,7 +272,7 @@ public class JobTest {
         job.cancel();
         job.schedule();
 
-        job.status.succeededEvent.await();
+        job.status.getSucceededEvent().await();
 
         assertSame(SUCCESS_RESULT, job.getValue());
         assertNull(job.getException());
@@ -282,7 +282,7 @@ public class JobTest {
         job.cancel();
         job.schedule();
 
-        job.status.cancelledEvent.await();
+        job.status.getCancelledEvent().await();
 
         assertNull(job.getValue());
         assertNull(job.getException());
@@ -295,7 +295,7 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.succeededEvent.await();
+        job.status.getSucceededEvent().await();
 
         assertSame(SUCCESS_RESULT, job.getValue());
         assertNull(job.getException());
@@ -307,7 +307,7 @@ public class JobTest {
 
         job.schedule();
 
-        job.status.failedEvent.await();
+        job.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, job.getException());
         assertNull(job.getValue());
@@ -323,7 +323,7 @@ public class JobTest {
 
         job.cancel();
 
-        job.status.cancelledEvent.await();
+        job.status.getCancelledEvent().await();
 
         assertNull(job.getValue());
         assertNull(job.getException());
@@ -348,11 +348,11 @@ public class JobTest {
 
         parentJob.schedule();
 
-        parentJob.status.succeededEvent.await();
+        parentJob.status.getSucceededEvent().await();
 
         assertSame(SUCCESS_RESULT, parentJob.getValue());
-        assertFalse(children[0].status.finishedEvent.hasFired());
-        assertFalse(children[1].status.finishedEvent.hasFired());
+        assertFalse(children[0].status.getFinishedEvent().hasFired());
+        assertFalse(children[1].status.getFinishedEvent().hasFired());
     }
 
     @Test
@@ -373,11 +373,11 @@ public class JobTest {
 
         parentJob.schedule();
 
-        parentJob.status.failedEvent.await();
+        parentJob.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, parentJob.getException());
-        assertFalse(children[0].status.finishedEvent.hasFired());
-        assertFalse(children[1].status.finishedEvent.hasFired());
+        assertFalse(children[0].status.getFinishedEvent().hasFired());
+        assertFalse(children[1].status.getFinishedEvent().hasFired());
     }
 
     @Test
@@ -401,10 +401,10 @@ public class JobTest {
 
         parentJob.schedule();
 
-        parentJob.status.cancelledEvent.await();
+        parentJob.status.getCancelledEvent().await();
 
-        assertFalse(children[0].status.finishedEvent.hasFired());
-        assertFalse(children[1].status.finishedEvent.hasFired());
+        assertFalse(children[0].status.getFinishedEvent().hasFired());
+        assertFalse(children[1].status.getFinishedEvent().hasFired());
     }
 
 
@@ -427,13 +427,13 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.succeededEvent.await();
+        parentJob.status.getSucceededEvent().await();
 
         assertSame(SUCCESS_RESULT, parentJob.getValue());
-        assertTrue(children[0].status.succeededEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getSucceededEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -455,13 +455,13 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.failedEvent.await();
+        parentJob.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, parentJob.getException().getCause());
-        assertTrue(children[0].status.failedEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getFailedEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -483,14 +483,14 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
         children[0].cancel();
 
-        parentJob.status.succeededEvent.await();
+        parentJob.status.getSucceededEvent().await();
 
         assertSame(SUCCESS_RESULT, parentJob.getValue());
-        assertTrue(children[0].status.cancelledEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getCancelledEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
 
@@ -513,13 +513,13 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.failedEvent.await();
+        parentJob.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, parentJob.getException());
-        assertTrue(children[0].status.succeededEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getSucceededEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -541,13 +541,13 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.failedEvent.await();
+        parentJob.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, parentJob.getException());
-        assertTrue(children[0].status.failedEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getFailedEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -570,13 +570,13 @@ public class JobTest {
 
         Thread.sleep(1000);
         children[0].cancel();
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.failedEvent.await();
+        parentJob.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, parentJob.getException());
-        assertTrue(children[0].status.cancelledEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getCancelledEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
 
@@ -604,12 +604,12 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.cancelledEvent.await();
+        parentJob.status.getCancelledEvent().await();
 
-        assertTrue(children[0].status.succeededEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getSucceededEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -636,13 +636,13 @@ public class JobTest {
         parentJob.schedule();
 
         Thread.sleep(1000);
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.failedEvent.await();
+        parentJob.status.getFailedEvent().await();
 
         assertSame(FAIL_RESULT, parentJob.getException().getCause());
-        assertTrue(children[0].status.failedEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getFailedEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -669,12 +669,12 @@ public class JobTest {
 
         Thread.sleep(1000);
         children[0].cancel();
-        assertTrue(parentJob.status.waitingForChildrenEvent.hasFired());
+        assertTrue(parentJob.status.getWaitingForChildrenEvent().hasFired());
 
-        parentJob.status.cancelledEvent.await();
+        parentJob.status.getCancelledEvent().await();
 
-        assertTrue(children[0].status.cancelledEvent.hasFired());
-        assertTrue(children[1].status.succeededEvent.hasFired());
+        assertTrue(children[0].status.getCancelledEvent().hasFired());
+        assertTrue(children[1].status.getSucceededEvent().hasFired());
     }
 
     @Test
@@ -691,7 +691,7 @@ public class JobTest {
         }, new CancellationToken(), scheduler, new LinkedList<>());
 
         job.schedule();
-        job.getStatus().finishedEvent.await();
+        job.getStatus().getFinishedEvent().await();
 
         assertEquals(5, counter[0]);
         //Why 5?

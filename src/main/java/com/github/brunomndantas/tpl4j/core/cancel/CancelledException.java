@@ -18,8 +18,14 @@ package com.github.brunomndantas.tpl4j.core.cancel;
 
 public class CancelledException extends Exception {
 
-    public CancelledException() {
+    private volatile String cancellationTokenId;
+    public String getCancellationTokenId() { return this.cancellationTokenId; }
+
+
+
+    public CancelledException(String cancellationTokenId) {
         super("Task cancelled");
+        this.cancellationTokenId = cancellationTokenId;
     }
 
 }

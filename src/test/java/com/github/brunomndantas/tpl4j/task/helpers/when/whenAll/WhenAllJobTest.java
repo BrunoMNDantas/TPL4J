@@ -101,7 +101,7 @@ public class WhenAllJobTest {
 
         job.schedule();
 
-        job.getStatus().cancelledEvent.await();
+        job.getStatus().getCancelledEvent().await();
     }
 
     @Test
@@ -121,7 +121,7 @@ public class WhenAllJobTest {
 
         job.schedule();
 
-        job.getStatus().finishedEvent.await();
+        job.getStatus().getFinishedEvent().await();
 
         assertEquals(5, counter[0]);
         //Why 5?

@@ -1,6 +1,7 @@
 package com.github.brunomndantas.tpl4j.context.job;
 
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.status.State;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -99,7 +100,7 @@ public class JobManagerTest {
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
-        parentJob.status.declareRun();
+        parentJob.status.setState(State.RUNNING);
 
         manager.registerJobCreation(childJob, currentThreadId);
 
@@ -134,8 +135,8 @@ public class JobManagerTest {
             manager.registerJobCreation(jobA, currentThreadId);
             manager.registerJobCreation(jobB, currentThreadId);
 
-            jobA.getStatus().declareRun();
-            jobB.getStatus().declareRun();
+            jobA.getStatus().setState(State.RUNNING);
+            jobB.getStatus().setState(State.RUNNING);
 
             manager.registerJobExecution(jobA, currentThreadId);
         } catch (Exception e) {
@@ -154,7 +155,7 @@ public class JobManagerTest {
 
         manager.registerJobCreation(job, currentThreadId);
 
-        job.status.declareRun();
+        job.status.setState(State.RUNNING);
 
         manager.registerJobExecution(job, currentThreadId);
 
@@ -263,7 +264,7 @@ public class JobManagerTest {
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
-        parentJob.status.declareRun();
+        parentJob.status.setState(State.RUNNING);
 
         manager.registerJobCreation(childJob, currentThreadId);
 
@@ -289,7 +290,7 @@ public class JobManagerTest {
 
         manager.registerJobCreation(parentJob, currentThreadId);
         manager.registerJobExecution(parentJob, currentThreadId);
-        parentJob.status.declareRun();
+        parentJob.status.setState(State.RUNNING);
 
         manager.registerJobCreation(attachedChildJob, currentThreadId);
 

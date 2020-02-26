@@ -19,25 +19,23 @@ package com.github.brunomndantas.tpl4j.core.status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Status {
+public class Status implements IStatus {
 
     private final Logger LOGGER = LogManager.getLogger(Status.class);
 
 
 
-    public final Event scheduledEvent = new Event();
-    public final Event runningEvent = new Event();
-    public final Event waitingForChildrenEvent = new Event();
-    public final Event cancelledEvent = new Event();
-    public final Event failedEvent = new Event();
-    public final Event succeededEvent = new Event();
-    public final Event finishedEvent = new Event();
-
+    private volatile IEvent scheduledEvent = new Event();
+    private volatile IEvent runningEvent = new Event();
+    private volatile IEvent waitingForChildrenEvent = new Event();
+    private volatile IEvent cancelledEvent = new Event();
+    private volatile IEvent failedEvent = new Event();
+    private volatile IEvent succeededEvent = new Event();
+    private volatile IEvent finishedEvent = new Event();
     private State state = State.CREATED;
-    public synchronized State getState() { return this.state; }
 
-    private String taskId;
-    public synchronized String getTaskId() { return this.taskId; }
+    private volatile String taskId;
+    public String getTaskId() { return this.taskId; }
 
 
 
@@ -47,25 +45,80 @@ public class Status {
 
 
 
-    public synchronized void declareSchedule() {
+    @Override
+    public synchronized State getState() {
+        return this.state;
+    }
+
+    @Override
+    public synchronized void setState(State state) {
+        LOGGER.trace("Setting state of task with id:" + this.taskId + " to " + state);
+
+        switch (state) {
+            case SCHEDULED: this.declareSchedule(); break;
+            case RUNNING: this.declareRun(); break;
+            case WAITING_CHILDREN: this.declareWaitChildren(); break;
+            case SUCCEEDED: this.declareSuccess(); break;
+            case CANCELED: this.declareCancel(); break;
+            case FAILED: this.declareFail(); break;
+            default: throw new RuntimeException("Invalid State:" + state);
+        }
+    }
+
+    @Override
+    public IEvent getScheduledEvent() {
+        return this.scheduledEvent;
+    }
+
+    @Override
+    public IEvent getRunningEvent() {
+        return this.runningEvent;
+    }
+
+    @Override
+    public IEvent getWaitingForChildrenEvent() {
+        return this.waitingForChildrenEvent;
+    }
+
+    @Override
+    public IEvent getCancelledEvent() {
+        return this.cancelledEvent;
+    }
+
+    @Override
+    public IEvent getFailedEvent() {
+        return this.failedEvent;
+    }
+
+    @Override
+    public IEvent getSucceededEvent() {
+        return this.succeededEvent;
+    }
+
+    @Override
+    public IEvent getFinishedEvent() {
+        return this.finishedEvent;
+    }
+
+    private void declareSchedule() {
         this.state = State.SCHEDULED;
         this.scheduledEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Schedule state!");
     }
 
-    public synchronized void declareRun() {
+    private void declareRun() {
         this.state = State.RUNNING;
         this.runningEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Run state!");
     }
 
-    public synchronized void declareWaitChildren() {
+    private void declareWaitChildren() {
         this.state = State.WAITING_CHILDREN;
         this.waitingForChildrenEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Wait Children state!");
     }
 
-    public synchronized void declareCancel() {
+    private void declareCancel() {
         this.state = State.CANCELED;
         this.cancelledEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Cancel state!");
@@ -73,7 +126,7 @@ public class Status {
         this.declareFinish();
     }
 
-    public synchronized void declareFail() {
+    private void declareFail() {
         this.state = State.FAILED;
         this.failedEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Fail state!");
@@ -81,7 +134,7 @@ public class Status {
         this.declareFinish();
     }
 
-    public synchronized void declareSuccess() {
+    private void declareSuccess() {
         this.state = State.SUCCEEDED;
         this.succeededEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Success state!");
@@ -89,7 +142,7 @@ public class Status {
         this.declareFinish();
     }
 
-    public synchronized void declareFinish() {
+    private void declareFinish() {
         this.finishedEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Finish state!");
     }

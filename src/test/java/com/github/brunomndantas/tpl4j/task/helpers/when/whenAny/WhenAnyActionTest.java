@@ -38,13 +38,13 @@ public class WhenAnyActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
         Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().finishedEvent.hasFired());
+        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -56,13 +56,13 @@ public class WhenAnyActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
         Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().finishedEvent.hasFired());
+        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -75,13 +75,13 @@ public class WhenAnyActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().finishedEvent.await();
+        taskA.getStatus().getFinishedEvent().await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
         Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().finishedEvent.hasFired());
+        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
     }
 
 }

@@ -36,13 +36,13 @@ public class UnwrapAction<T> implements IAction<T> {
 
     @Override
     public T run(CancellationToken cancellationToken) throws Exception {
-        if(this.task.getStatus().cancelledEvent.hasFired())
-            throw new CancelledException();
+        if(this.task.getStatus().getCancelledEvent().hasFired())
+            throw new CancelledException(cancellationToken.getId());
 
         Task<T> task = this.task.getResult();
 
-        if(task.getStatus().cancelledEvent.hasFired())
-            throw new CancelledException();
+        if(task.getStatus().getCancelledEvent().hasFired())
+            throw new CancelledException(cancellationToken.getId());
 
         return task.getResult();
     }

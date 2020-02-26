@@ -206,7 +206,7 @@ public class TaskFactoryTest {
         else
             assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
-        assertFalse(task.getStatus().scheduledEvent.hasFired());
+        assertFalse(task.getStatus().getScheduledEvent().hasFired());
     }
 
     @Test
@@ -380,7 +380,7 @@ public class TaskFactoryTest {
         else
             assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertTrue(task.getStatus().getScheduledEvent().hasFired());
     }
 
     @Test
@@ -450,7 +450,7 @@ public class TaskFactoryTest {
         else
             assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertTrue(task.getStatus().getScheduledEvent().hasFired());
         assertSame(tasks, task.getTasks());
     }
 
@@ -521,7 +521,7 @@ public class TaskFactoryTest {
         else
             assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertTrue(task.getStatus().getScheduledEvent().hasFired());
         assertSame(tasks, task.getTasks());
     }
 
@@ -590,7 +590,7 @@ public class TaskFactoryTest {
         else
             assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertTrue(task.getStatus().getScheduledEvent().hasFired());
 
         assertSame(taskToUnwrap, task.getTask());
     }
@@ -773,7 +773,7 @@ public class TaskFactoryTest {
         else
             assertEquals(options.length, task.getJob().getOptions().getOptions().size()); //ACCEPT_CHILDREN
 
-        assertTrue(task.getStatus().scheduledEvent.hasFired());
+        assertTrue(task.getStatus().getScheduledEvent().hasFired());
     }
     
 }

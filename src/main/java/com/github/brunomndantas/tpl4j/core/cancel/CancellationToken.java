@@ -22,16 +22,14 @@ import org.apache.logging.log4j.Logger;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CancellationToken {
+public class CancellationToken implements ICancellationToken {
 
     private final Logger LOGGER = LogManager.getLogger(CancellationToken.class);
 
 
 
     private volatile String id;
-    public String getId() { return this.id; }
-
-    private AtomicBoolean cancelRequested = new AtomicBoolean();
+    private volatile AtomicBoolean cancelRequested = new AtomicBoolean();
 
 
 
@@ -45,20 +43,28 @@ public class CancellationToken {
 
 
 
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
     public void cancel() {
-        LOGGER.info("Cancellation Token with id:" + this.id + " received cancel request!");
+        LOGGER.trace("CancellationToken with id:" + this.id + " received cancel request!");
         this.cancelRequested.set(true);
     }
 
+    @Override
     public boolean hasCancelRequest() {
         return this.cancelRequested.get();
     }
 
+    @Override
     public void abortIfCancelRequested() throws CancelledException {
-        LOGGER.info("Cancellation Token wth id:" + this.id + " received abort request!");
+        LOGGER.trace("CancellationToken wth id:" + this.id + " received abort request!");
 
         if(this.cancelRequested.get())
-            throw new CancelledException();
+            throw new CancelledException(this.id);
     }
 
 }

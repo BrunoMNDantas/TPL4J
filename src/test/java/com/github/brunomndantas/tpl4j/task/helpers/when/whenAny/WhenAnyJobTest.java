@@ -60,7 +60,7 @@ public class WhenAnyJobTest {
         Task<String> result = job.getResult();
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().finishedEvent.hasFired());
+        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class WhenAnyJobTest {
         Task<String> result = job.getResult();
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().finishedEvent.hasFired());
+        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class WhenAnyJobTest {
         Task<String> result = job.getResult();
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().finishedEvent.hasFired());
+        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class WhenAnyJobTest {
 
         job.schedule();
 
-        job.getStatus().finishedEvent.await();
+        job.getStatus().getFinishedEvent().await();
 
         assertEquals(5, counter[0]);
         //Why 5?

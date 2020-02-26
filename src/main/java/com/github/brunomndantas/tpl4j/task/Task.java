@@ -355,7 +355,7 @@ public class Task<T> {
 
 
     public <K> Task<K> then(Task<K> task) {
-        this.getStatus().finishedEvent.addListener(task::start);
+        this.getStatus().getFinishedEvent().addListener(task::start);
         return task;
     }
 

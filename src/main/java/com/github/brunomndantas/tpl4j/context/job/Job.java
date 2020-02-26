@@ -73,7 +73,7 @@ public class Job<T> {
 
 
     public T getResult() throws Exception {
-        this.getStatus().finishedEvent.await();
+        this.getStatus().getFinishedEvent().await();
 
         if(this.getStatus().getState() == State.FAILED)
             throw this.getException();
@@ -91,10 +91,10 @@ public class Job<T> {
 
     public void schedule() {
         synchronized (lock) {
-            if(this.status.scheduledEvent.hasFired())
+            if(this.status.getScheduledEvent().hasFired())
                 throw new RuntimeException("Task:" + this.taskId + " already scheduled!");
 
-            this.status.declareSchedule();
+            this.status.setState(State.SCHEDULED);
             this.scheduler.accept(this::run);
         }
     }
@@ -108,7 +108,7 @@ public class Job<T> {
                 return;
             }
 
-            this.status.declareRun();
+            this.status.setState(State.RUNNING);
 
             if(hasCancelRequest() && !this.options.contains(Option.NOT_CANCELABLE)) {
                 declareCancel();
@@ -145,21 +145,21 @@ public class Job<T> {
         Collection<JobContext> children = JobManager.INSTANCE.getAttachedChildrenContexts(this);
 
         if(children.isEmpty())
-            this.status.declareCancel();
+            this.status.setState(State.CANCELED);
         else
             registerCancelAfterChildren(children);
     }
 
     protected void registerCancelAfterChildren(Collection<JobContext> childrenContexts) {
-        this.status.declareWaitChildren();
+        this.status.setState(State.WAITING_CHILDREN);
 
         for(JobContext childContext : childrenContexts) {
             childContext.getJob().cancel();
 
-            childContext.getJob().status.finishedEvent.addListener(() -> {
+            childContext.getJob().status.getFinishedEvent().addListener(() -> {
                 this.scheduler.accept(() -> {
                     synchronized (childContext) {
-                        if(!this.status.finishedEvent.hasFired() && allFinished(childrenContexts))
+                        if(!this.status.getFinishedEvent().hasFired() && allFinished(childrenContexts))
                             declareCancelAfterChildren(childrenContexts);
                     }
                 });
@@ -169,36 +169,36 @@ public class Job<T> {
 
     protected void declareCancelAfterChildren(Collection<JobContext> childrenContexts) {
         for(JobContext childContext : childrenContexts) {
-            if(childContext.getJob().status.failedEvent.hasFired()) {
+            if(childContext.getJob().status.getFailedEvent().hasFired()) {
                 Exception childException = childContext.getJob().getException();
                 childException = new ChildException(childException.getMessage(), childException);
                 this.setException(childException);
-                this.status.declareFail();
+                this.status.setState(State.FAILED);
                 return;
             }
         }
 
-        this.status.declareCancel();
+        this.status.setState(State.CANCELED);
     }
 
     protected void declareSuccess() {
         Collection<JobContext> children = JobManager.INSTANCE.getAttachedChildrenContexts(this);
 
         if(children.isEmpty())
-            this.status.declareSuccess();
+            this.status.setState(State.SUCCEEDED);
         else
             registerSuccessAfterChildren(children);
     }
 
     protected void registerSuccessAfterChildren(Collection<JobContext> childrenContexts) {
-        this.status.declareWaitChildren();
+        this.status.setState(State.WAITING_CHILDREN);
 
         synchronized (childrenContexts){
             for(JobContext childContext : childrenContexts) {
-                childContext.getJob().status.finishedEvent.addListener(() -> {
+                childContext.getJob().status.getFinishedEvent().addListener(() -> {
                     this.scheduler.accept(() -> {
                         synchronized (childContext) {
-                            if(!this.status.finishedEvent.hasFired() && allFinished(childrenContexts))
+                            if(!this.status.getFinishedEvent().hasFired() && allFinished(childrenContexts))
                                 declareSuccessAfterChildren(childrenContexts);
                         }
                     });
@@ -209,35 +209,35 @@ public class Job<T> {
 
     protected void declareSuccessAfterChildren(Collection<JobContext> childrenContexts) {
         for(JobContext childContext : childrenContexts) {
-            if(childContext.getJob().status.failedEvent.hasFired()) {
+            if(childContext.getJob().status.getFailedEvent().hasFired()) {
                 Exception childException = childContext.getJob().getException();
                 childException = new ChildException(childException.getMessage(), childException);
                 this.setException(childException);
-                this.status.declareFail();
+                this.status.setState(State.FAILED);
                 return;
             }
         }
 
-        this.status.declareSuccess();
+        this.status.setState(State.SUCCEEDED);
     }
 
     protected void declareFail() {
         Collection<JobContext> children = JobManager.INSTANCE.getAttachedChildrenContexts(this);
 
         if(children.isEmpty())
-            this.status.declareFail();
+            this.status.setState(State.FAILED);
         else
             registerFailAfterChildren(children);
     }
 
     protected void registerFailAfterChildren(Collection<JobContext> childrenContexts) {
-        this.status.declareWaitChildren();
+        this.status.setState(State.WAITING_CHILDREN);
 
         for(JobContext childContext : childrenContexts) {
-            childContext.getJob().status.finishedEvent.addListener(() -> {
+            childContext.getJob().status.getFinishedEvent().addListener(() -> {
                 this.scheduler.accept(() -> {
                     synchronized (childContext) {
-                        if(!this.status.finishedEvent.hasFired() && allFinished(childrenContexts))
+                        if(!this.status.getFinishedEvent().hasFired() && allFinished(childrenContexts))
                             declareFailAfterChildren(childrenContexts);
                     }
                 });
@@ -246,13 +246,13 @@ public class Job<T> {
     }
 
     protected void declareFailAfterChildren(Collection<JobContext> childrenContexts) {
-        this.status.declareFail();
+        this.status.setState(State.FAILED);
     }
 
     private boolean allFinished(Collection<JobContext> contexts) {
         return contexts
                 .stream()
-                .allMatch((context) -> context.getJob().status.finishedEvent.hasFired());
+                .allMatch((context) -> context.getJob().status.getFinishedEvent().hasFired());
     }
 
 }

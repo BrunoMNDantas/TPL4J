@@ -46,7 +46,7 @@ public class WhenAllJob<T> extends Job<Collection<T>> {
             this.finish();
         else
             for(Task<T> task : this.tasks)
-                task.getStatus().finishedEvent.addListener(() -> super.scheduler.accept(this::finish));
+                task.getStatus().getFinishedEvent().addListener(() -> super.scheduler.accept(this::finish));
     }
 
     private void finish() {
@@ -61,7 +61,7 @@ public class WhenAllJob<T> extends Job<Collection<T>> {
     private boolean allJobsFinished() {
         return this.tasks
                 .stream()
-                .allMatch((job) -> job.getStatus().finishedEvent.hasFired());
+                .allMatch((job) -> job.getStatus().getFinishedEvent().hasFired());
     }
 
 }
