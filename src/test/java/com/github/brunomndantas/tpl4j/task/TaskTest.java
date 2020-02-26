@@ -2,7 +2,7 @@ package com.github.brunomndantas.tpl4j.task;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.context.job.Job;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.*;
