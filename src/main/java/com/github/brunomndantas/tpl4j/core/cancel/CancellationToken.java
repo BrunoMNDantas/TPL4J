@@ -46,16 +46,16 @@ public class CancellationToken {
 
 
     public void cancel() {
-        LOGGER.info("Cancellation Token with id:" + id + " received cancel request!");
-        cancelRequested.set(true);
+        LOGGER.info("Cancellation Token with id:" + this.id + " received cancel request!");
+        this.cancelRequested.set(true);
     }
 
     public boolean hasCancelRequest() {
-        return cancelRequested.get();
+        return this.cancelRequested.get();
     }
 
     public void abortIfCancelRequested() throws CancelledException {
-        LOGGER.info("Cancellation Token wth id:" + id + " received abort request!");
+        LOGGER.info("Cancellation Token wth id:" + this.id + " received abort request!");
 
         if(this.cancelRequested.get())
             throw new CancelledException();

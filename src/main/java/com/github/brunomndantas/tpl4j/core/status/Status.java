@@ -49,49 +49,49 @@ public class Status {
 
     public synchronized void declareSchedule() {
         this.state = State.SCHEDULED;
-        scheduledEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Schedule state!");
+        this.scheduledEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Schedule state!");
     }
 
     public synchronized void declareRun() {
         this.state = State.RUNNING;
-        runningEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Run state!");
+        this.runningEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Run state!");
     }
 
     public synchronized void declareWaitChildren() {
         this.state = State.WAITING_CHILDREN;
-        waitingForChildrenEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Wait Children state!");
+        this.waitingForChildrenEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Wait Children state!");
     }
 
     public synchronized void declareCancel() {
         this.state = State.CANCELED;
-        cancelledEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Cancel state!");
+        this.cancelledEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Cancel state!");
 
-        declareFinish();
+        this.declareFinish();
     }
 
     public synchronized void declareFail() {
         this.state = State.FAILED;
-        failedEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Fail state!");
+        this.failedEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Fail state!");
 
-        declareFinish();
+        this.declareFinish();
     }
 
     public synchronized void declareSuccess() {
         this.state = State.SUCCEEDED;
-        succeededEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Success state!");
+        this.succeededEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Success state!");
 
-        declareFinish();
+        this.declareFinish();
     }
 
     public synchronized void declareFinish() {
-        finishedEvent.fire();
-        LOGGER.info("Task with id:" + taskId + " declared Finish state!");
+        this.finishedEvent.fire();
+        LOGGER.info("Task with id:" + this.taskId + " declared Finish state!");
     }
 
 }
