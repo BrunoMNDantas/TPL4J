@@ -18,10 +18,8 @@ package com.github.brunomndantas.tpl4j.core.options;
 
 public enum Option {
 
-    ACCEPT_CHILDREN,
     REJECT_CHILDREN,
-
     ATTACH_TO_PARENT,
-    DETACH_FROM_PARENT,
+    NOT_CANCELABLE
 
 }

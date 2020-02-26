@@ -14,12 +14,6 @@ import static org.junit.Assert.*;
 
 public class WhenAllTaskTest {
 
-    private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final Consumer<Runnable> SCHEDULER = (action) -> new Thread(action).start();
-    private static final Option[] OPTIONS = { Option.ACCEPT_CHILDREN };
-
-
-
     @Test
     public void getTasksTest() {
         String id = UUID.randomUUID().toString();

@@ -7,21 +7,9 @@ import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.ParallelAction;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.function.Consumer;
 
 public class ParallelJob<T,K> extends Job<Collection<K>> {
-
-    private static Collection<Option> attachAcceptChildrenOption(Collection<Option> options) {
-        options = new LinkedList<>(options);
-
-        if(!options.contains(Option.ACCEPT_CHILDREN))
-            options.add(Option.ACCEPT_CHILDREN);
-
-        return options;
-    }
-
-
 
     private volatile Iterable<T> elements;
     public Iterable<T> getElements() { return this.elements; }
@@ -33,7 +21,7 @@ public class ParallelJob<T,K> extends Job<Collection<K>> {
                 new ParallelAction<>(taskId, action, elements, cancellationToken, scheduler, options),
                 cancellationToken,
                 scheduler,
-                attachAcceptChildrenOption(options));
+                options);
 
         this.elements = elements;
     }

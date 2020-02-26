@@ -265,10 +265,33 @@ public class JobTest {
         assertSame(options, job.getOptions());
     }
 
+    @Test
+    public void runCheckNotCancelableOption() throws Exception {
+        Job<?> job = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.NOT_CANCELABLE));
+
+        job.cancel();
+        job.schedule();
+
+        job.status.succeededEvent.await();
+
+        assertSame(SUCCESS_RESULT, job.getValue());
+        assertNull(job.getException());
+
+        job = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new LinkedList<>());
+
+        job.cancel();
+        job.schedule();
+
+        job.status.cancelledEvent.await();
+
+        assertNull(job.getValue());
+        assertNull(job.getException());
+    }
+
 
     @Test
     public void successWithoutChildrenTest() throws InterruptedException {
-        Job<?> job = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        Job<?> job = new Job<>("ID", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         job.schedule();
 
@@ -280,7 +303,7 @@ public class JobTest {
 
     @Test
     public void failWithoutChildrenTest() throws InterruptedException {
-        Job<?> job = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        Job<?> job = new Job<>("ID", FAIL_ACTION, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         job.schedule();
 
@@ -292,7 +315,7 @@ public class JobTest {
 
     @Test
     public void cancelWithoutChildrenTest() throws InterruptedException {
-        Job<?> job = new Job<>("ID", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        Job<?> job = new Job<>("ID", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
 
         job.schedule();
 
@@ -399,7 +422,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -427,7 +450,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -455,7 +478,7 @@ public class JobTest {
             childJobB.schedule();
 
             return SUCCESS_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -485,7 +508,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -513,7 +536,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -541,7 +564,7 @@ public class JobTest {
             childJobB.schedule();
 
             throw FAIL_RESULT;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -576,7 +599,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, CANCELLATION_TOKEN, SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -608,7 +631,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -640,7 +663,7 @@ public class JobTest {
             token.abortIfCancelRequested();
 
             return null;
-        }, new CancellationToken(), SCHEDULER, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), SCHEDULER, new LinkedList<>());
 
         parentJob.schedule();
 
@@ -665,7 +688,7 @@ public class JobTest {
             new Job<>("ChildB", (ctA) -> null, new CancellationToken(), scheduler, Arrays.asList(Option.ATTACH_TO_PARENT)).schedule();
 
             return null;
-        }, new CancellationToken(), scheduler, Arrays.asList(Option.ACCEPT_CHILDREN));
+        }, new CancellationToken(), scheduler, new LinkedList<>());
 
         job.schedule();
         job.getStatus().finishedEvent.await();

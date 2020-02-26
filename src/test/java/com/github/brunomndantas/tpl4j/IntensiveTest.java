@@ -1,12 +1,12 @@
 package com.github.brunomndantas.tpl4j;
 
+import com.github.brunomndantas.tpl4j.core.action.IAction;
+import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.factory.TaskFactory;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.ILinkAction;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
-import com.github.brunomndantas.tpl4j.core.options.Option;
-import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -222,7 +222,7 @@ public class IntensiveTest {
     public void runTest(Collection<Calculation> calculations, Consumer<Runnable> scheduler) throws Exception {
         Collection<Task<Void>> tasks = new LinkedList<>();
         for(Calculation calculation : calculations)
-            tasks.add(new Task<>(() -> { createCalculationTask(calculation, scheduler); }, scheduler, Option.ACCEPT_CHILDREN));
+            tasks.add(new Task<>(() -> { createCalculationTask(calculation, scheduler); }, scheduler));
 
         for(Task<?> task : tasks)
             task.start();

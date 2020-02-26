@@ -102,14 +102,14 @@ public class Job<T> {
         JobManager.INSTANCE.registerJobExecutionOnCurrentThread(this);
 
         try {
-            if(hasCancelRequest()) {
+            if(hasCancelRequest() && !this.options.contains(Option.NOT_CANCELABLE)) {
                 declareCancel();
                 return;
             }
 
             this.status.declareRun();
 
-            if(hasCancelRequest()) {
+            if(hasCancelRequest() && !this.options.contains(Option.NOT_CANCELABLE)) {
                 declareCancel();
                 return;
             }

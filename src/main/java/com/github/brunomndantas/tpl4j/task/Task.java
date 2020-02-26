@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 public class Task<T> {
 
     public static final Consumer<Runnable> DEFAULT_SCHEDULER = (r) -> new Thread(r).start();
-    public static final Option[] DEFAULT_OPTIONS = new Option[]{ Option.ACCEPT_CHILDREN, Option.DETACH_FROM_PARENT };
+    public static final Option[] DEFAULT_OPTIONS = new Option[]{ };
 
 
 

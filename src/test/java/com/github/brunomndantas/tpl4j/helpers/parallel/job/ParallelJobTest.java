@@ -39,7 +39,6 @@ public class ParallelJobTest {
         assertTrue(job.getAction() instanceof ParallelAction);
         assertSame(cancellationToken, job.getCancellationToken());
         assertSame(scheduler, job.getScheduler());
-        assertTrue(job.getOptions().contains(Option.ACCEPT_CHILDREN));
     }
 
 }

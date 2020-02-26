@@ -771,7 +771,7 @@ public class TaskFactoryTest {
         if(options == null)
             assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
         else
-            assertEquals(options.length+1, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
+            assertEquals(options.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
 
         assertTrue(task.getStatus().scheduledEvent.hasFired());
     }
