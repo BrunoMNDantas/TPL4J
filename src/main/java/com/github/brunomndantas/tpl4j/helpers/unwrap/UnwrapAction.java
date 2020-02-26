@@ -16,31 +16,30 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 public class UnwrapAction<T> implements IAction<T> {
 
-    protected volatile Job<Task<T>> job;
-    public Job<Task<T>> getJob() { return this.job; }
+    protected volatile Task<Task<T>> task;
+    public Task<Task<T>> getTask() { return this.task; }
 
 
 
-    public UnwrapAction(Job<Task<T>> job) {
-        this.job = job;
+    public UnwrapAction(Task<Task<T>> task) {
+        this.task = task;
     }
 
 
 
     @Override
     public T run(CancellationToken cancellationToken) throws Exception {
-        if(this.job.getStatus().cancelledEvent.hasFired())
+        if(this.task.getStatus().cancelledEvent.hasFired())
             throw new CancelledException();
 
-        Task<T> task = job.getResult();
+        Task<T> task = this.task.getResult();
 
         if(task.getStatus().cancelledEvent.hasFired())
             throw new CancelledException();

@@ -1,12 +1,11 @@
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.function.Consumer;
 
 import static org.junit.Assert.assertSame;
@@ -20,41 +19,41 @@ public class UnwrapActionTest {
 
 
     @Test
-    public void getJobTest() {
-        Task<String> task = new Task<>(() -> null);
-        Job<Task<String>> job = new Job<>("", (token) -> task, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
+    public void getTaskTest() {
+        Task<String> t = new Task<>(() -> null);
+        Task<Task<String>> task = new Task<>(() -> t);
 
-        UnwrapAction<String> action = new UnwrapAction<>(job);
+        UnwrapAction<String> action = new UnwrapAction<>(task);
 
-        assertSame(job, action.getJob());
+        assertSame(task, action.getTask());
     }
 
     @Test
     public void runSuccessTest() throws Exception {
         String result = "";
-        Task<String> task = new Task<>(() -> result);
-        Job<Task<String>> job = new Job<>("", (token) -> task, new CancellationToken(), SCHEDULER, new LinkedList<>());
+        Task<String> t = new Task<>(() -> result);
+        Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
+
+        t.start();
+        t.getStatus().finishedEvent.await();
 
         task.start();
         task.getStatus().finishedEvent.await();
 
-        job.schedule();
-        job.getStatus().finishedEvent.await();
-
-        UnwrapAction<String> action = new UnwrapAction<>(job);
+        UnwrapAction<String> action = new UnwrapAction<>(task);
 
         assertSame(result, action.run(new CancellationToken()));
     }
 
     @Test
-    public void runFailJobTest() throws InterruptedException {
+    public void runFailTaskTest() throws InterruptedException {
         Exception result = new Exception();
-        Job<Task<String>> job = new Job<>("", (token) -> { throw result; }, new CancellationToken(), SCHEDULER, new LinkedList<>());
+        Task<Task<String>> task = new Task<>("", (IAction<Task<String>>)(token) -> { throw result; }, new CancellationToken(), SCHEDULER);
 
-        job.schedule();
-        job.getStatus().finishedEvent.await();
+        task.start();
+        task.getStatus().finishedEvent.await();
 
-        UnwrapAction<String> action = new UnwrapAction<>(job);
+        UnwrapAction<String> action = new UnwrapAction<>(task);
 
         try {
             action.run(new CancellationToken());
@@ -65,18 +64,18 @@ public class UnwrapActionTest {
     }
 
     @Test
-    public void runFailTaskTest() throws InterruptedException {
+    public void runFailRootTaskTest() throws InterruptedException {
         Exception result = new Exception();
-        Task<String> task = new Task<>(() -> { throw result; });
-        Job<Task<String>> job = new Job<>("", (token) -> task, new CancellationToken(), SCHEDULER, new LinkedList<>());
+        Task<String> t = new Task<>(() -> { throw result; });
+        Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
+
+        t.start();
+        t.getStatus().finishedEvent.await();
 
         task.start();
         task.getStatus().finishedEvent.await();
 
-        job.schedule();
-        job.getStatus().finishedEvent.await();
-
-        UnwrapAction<String> action = new UnwrapAction<>(job);
+        UnwrapAction<String> action = new UnwrapAction<>(task);
 
         try {
             action.run(new CancellationToken());
@@ -87,33 +86,33 @@ public class UnwrapActionTest {
     }
 
     @Test(expected = CancelledException.class)
-    public void runCancelJobTest() throws Exception {
-        Exception result = new Exception();
-        Job<Task<String>> job = new Job<>("", (token) -> { throw result; }, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
-
-        job.cancel();
-        job.schedule();
-        job.getStatus().finishedEvent.await();
-
-        UnwrapAction<String> action = new UnwrapAction<>(job);
-
-        action.run(new CancellationToken());
-    }
-
-    @Test(expected = CancelledException.class)
     public void runCancelTaskTest() throws Exception {
-        String result = "";
-        Task<String> task = new Task<>(() -> result);
-        Job<Task<String>> job = new Job<>("", (token) -> task, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
+        Exception result = new Exception();
+        Task<Task<String>> task = new Task<>("", (IAction<Task<String>>) (token) -> { throw result; }, CANCELLATION_TOKEN, SCHEDULER);
 
         task.cancel();
         task.start();
         task.getStatus().finishedEvent.await();
 
-        job.schedule();
-        job.getStatus().finishedEvent.await();
+        UnwrapAction<String> action = new UnwrapAction<>(task);
 
-        UnwrapAction<String> action = new UnwrapAction<>(job);
+        action.run(new CancellationToken());
+    }
+
+    @Test(expected = CancelledException.class)
+    public void runCancelRootTaskTest() throws Exception {
+        String result = "";
+        Task<String> t = new Task<>(() -> result);
+        Task<Task<String>> task = new Task<>("", (token) -> t, CANCELLATION_TOKEN, SCHEDULER);
+
+        t.cancel();
+        t.start();
+        t.getStatus().finishedEvent.await();
+
+        task.start();
+        task.getStatus().finishedEvent.await();
+
+        UnwrapAction<String> action = new UnwrapAction<>(task);
 
         action.run(new CancellationToken());
     }

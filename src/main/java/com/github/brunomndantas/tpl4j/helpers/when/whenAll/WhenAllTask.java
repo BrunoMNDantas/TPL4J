@@ -23,7 +23,6 @@ import com.github.brunomndantas.tpl4j.task.Task;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class WhenAllTask<T> extends Task<Collection<T>> {
 
@@ -38,7 +37,7 @@ public class WhenAllTask<T> extends Task<Collection<T>> {
                 cancellationToken,
                 scheduler,
                 Arrays.asList(options),
-                tasks.stream().map(Task::getJob).collect(Collectors.toList())
+                tasks
         ));
 
         this.tasks = tasks;

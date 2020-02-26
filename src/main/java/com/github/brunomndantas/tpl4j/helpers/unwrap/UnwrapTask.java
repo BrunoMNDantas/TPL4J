@@ -31,7 +31,7 @@ public class UnwrapTask<T> extends Task<T> {
 
 
     public UnwrapTask(String taskId, Task<Task<T>> task, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
-        super(new UnwrapJob<>(taskId, cancellationToken, scheduler, Arrays.asList(options), task.getJob()));
+        super(new UnwrapJob<>(taskId, cancellationToken, scheduler, Arrays.asList(options), task));
         this.task = task;
     }
 

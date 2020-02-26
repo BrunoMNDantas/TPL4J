@@ -16,40 +16,41 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
 import java.util.function.Consumer;
 
 public class WhenAllJob<T> extends Job<Collection<T>> {
 
-    protected volatile Collection<Job<T>> jobs;
-    public Collection<Job<T>> getJobs() { return this.jobs; }
+    protected volatile Collection<Task<T>> tasks;
+    public Collection<Task<T>> getTasks() { return this.tasks; }
 
     private boolean finished;
 
 
 
-    public WhenAllJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Collection<Job<T>> jobs) {
-        super(taskId, new WhenAllAction<>(jobs), cancellationToken, scheduler, options);
-        this.jobs = jobs;
+    public WhenAllJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Collection<Task<T>> tasks) {
+        super(taskId, new WhenAllAction<>(tasks), cancellationToken, scheduler, options);
+        this.tasks = tasks;
     }
 
 
 
     @Override
     protected void run() {
-        if(this.jobs.isEmpty())
+        if(this.tasks.isEmpty())
             this.finish();
         else
-            for(Job<T> job : this.jobs)
-                job.getStatus().finishedEvent.addListener(() -> super.scheduler.accept(this::finish));
+            for(Task<T> task : this.tasks)
+                task.getStatus().finishedEvent.addListener(() -> super.scheduler.accept(this::finish));
     }
 
     private void finish() {
-        synchronized (this.jobs) {
+        synchronized (this.tasks) {
             if(allJobsFinished() && !finished) {
                 super.run();
                 this.finished = true;
@@ -58,7 +59,7 @@ public class WhenAllJob<T> extends Job<Collection<T>> {
     }
 
     private boolean allJobsFinished() {
-        return this.jobs
+        return this.tasks
                 .stream()
                 .allMatch((job) -> job.getStatus().finishedEvent.hasFired());
     }

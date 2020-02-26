@@ -1,7 +1,8 @@
 package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 
+import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -30,12 +31,12 @@ public class WhenAllJobTest {
 
 
     @Test
-    public void getJobsTest() {
-        Collection<Job<String>> jobs = new LinkedList<>();
+    public void getTasksTest() {
+        Collection<Task<String>> tasks = new LinkedList<>();
 
-        WhenAllJob<String> job = new WhenAllJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), jobs);
+        WhenAllJob<String> job = new WhenAllJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), tasks);
 
-        assertSame(jobs, job.getJobs());
+        assertSame(tasks, job.getTasks());
     }
 
      @Test
@@ -46,35 +47,35 @@ public class WhenAllJobTest {
 
          assertTrue(job.getResult().isEmpty());
 
-         Job<String> jobA = new Job<>("", (t) -> { Thread.sleep(3000); return "A"; }, new CancellationToken(), SCHEDULER, new LinkedList<>());
-         Job<String> jobB = new Job<>("", (t) -> { Thread.sleep(3000); return "B"; }, new CancellationToken(), SCHEDULER, new LinkedList<>());
-         Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
+         Task<String> taskA = new Task<>("", (t) -> { Thread.sleep(3000); return "A"; }, new CancellationToken(), SCHEDULER);
+         Task<String> taskB = new Task<>("", (t) -> { Thread.sleep(3000); return "B"; }, new CancellationToken(), SCHEDULER);
+         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
-         jobA.schedule();
-         jobB.schedule();
+         taskA.start();
+         taskB.start();
 
-         job = new WhenAllJob<>("", new CancellationToken(), SCHEDULER, new LinkedList<>(), jobs);
+         job = new WhenAllJob<>("", new CancellationToken(), SCHEDULER, new LinkedList<>(), tasks);
 
          job.schedule();
 
          Collection<String> results = job.getResult();
 
-         assertEquals(jobs.size(), results.size());
-         assertTrue(results.contains(jobA.getValue()));
-         assertTrue(results.contains(jobB.getValue()));
+         assertEquals(tasks.size(), results.size());
+         assertTrue(results.contains(taskA.getValue()));
+         assertTrue(results.contains(taskB.getValue()));
      }
 
     @Test
     public void runFailTest() {
         Exception exception = new Exception();
-        Job<String> jobA = new Job<>("", (t) -> "A", new CancellationToken(), SCHEDULER, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> { Thread.sleep(3000); throw exception; }, new CancellationToken(), SCHEDULER, new LinkedList<>());
-        Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
+        Task<String> taskA = new Task<>("", (t) -> "A", new CancellationToken(), SCHEDULER);
+        Task<String> taskB = new Task<>("", (IAction<String>) (t) -> { Thread.sleep(3000); throw exception; }, new CancellationToken(), SCHEDULER);
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
-        jobA.schedule();
-        jobB.schedule();
+        taskA.start();
+        taskB.start();
 
-        WhenAllJob<String> job = new WhenAllJob<>("", new CancellationToken(), SCHEDULER, new LinkedList<>(), jobs);
+        WhenAllJob<String> job = new WhenAllJob<>("", new CancellationToken(), SCHEDULER, new LinkedList<>(), tasks);
 
         job.schedule();
 
@@ -88,14 +89,14 @@ public class WhenAllJobTest {
 
     @Test
     public void runCancelTest() throws InterruptedException {
-        Job<String> jobA = new Job<>("", (t) -> { Thread.sleep(3000); return "A"; }, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> { Thread.sleep(3000); return "B"; }, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
-        Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
+        Task<String> taskA = new Task<>("", (t) -> { Thread.sleep(3000); return "A"; }, CANCELLATION_TOKEN, SCHEDULER);
+        Task<String> taskB = new Task<>("", (t) -> { Thread.sleep(3000); return "B"; }, CANCELLATION_TOKEN, SCHEDULER);
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
-        jobA.schedule();
-        jobB.schedule();
+        taskA.start();
+        taskB.start();
 
-        WhenAllJob<String> job = new WhenAllJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), jobs);
+        WhenAllJob<String> job = new WhenAllJob<>("", CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>(), tasks);
         job.cancel();
 
         job.schedule();
@@ -109,14 +110,14 @@ public class WhenAllJobTest {
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Consumer<Runnable> scheduler = (action) -> { counter[0]++; pool.submit(action); };
 
-        Job<String> jobA = new Job<>("", (t) -> { Thread.sleep(3000); return "A"; }, CANCELLATION_TOKEN, scheduler, new LinkedList<>());
-        Job<String> jobB = new Job<>("", (t) -> { Thread.sleep(3000); return "B"; }, CANCELLATION_TOKEN, scheduler, new LinkedList<>());
-        Collection<Job<String>> jobs = Arrays.asList(jobA, jobB);
+        Task<String> taskA = new Task<>("", (t) -> { Thread.sleep(3000); return "A"; }, CANCELLATION_TOKEN, scheduler);
+        Task<String> taskB = new Task<>("", (t) -> { Thread.sleep(3000); return "B"; }, CANCELLATION_TOKEN, scheduler);
+        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
-        jobA.schedule();
-        jobB.schedule();
+        taskA.start();
+        taskB.start();
 
-        WhenAllJob<String> job = new WhenAllJob<>("", CANCELLATION_TOKEN, scheduler, new LinkedList<>(), jobs);
+        WhenAllJob<String> job = new WhenAllJob<>("", CANCELLATION_TOKEN, scheduler, new LinkedList<>(), tasks);
 
         job.schedule();
 

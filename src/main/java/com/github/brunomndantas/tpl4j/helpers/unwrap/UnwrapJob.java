@@ -16,37 +16,37 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.status.State;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
 import java.util.function.Consumer;
 
 public class UnwrapJob<T> extends Job<T> {
 
-    protected volatile Job<Task<T>> job;
-    public Job<Task<T>> getJob() { return this.job; }
+    protected volatile Task<Task<T>> task;
+    public Task<Task<T>> getTask() { return this.task; }
 
 
 
-    public UnwrapJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Job<Task<T>> job) {
-        super(taskId, new UnwrapAction<>(job), cancellationToken, scheduler, options);
-        this.job = job;
+    public UnwrapJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Task<Task<T>> task) {
+        super(taskId, new UnwrapAction<>(task), cancellationToken, scheduler, options);
+        this.task = task;
     }
 
 
 
     @Override
     protected void run() {
-        this.job.getStatus().finishedEvent.addListener(() -> {
+        this.task.getStatus().finishedEvent.addListener(() -> {
             super.scheduler.accept(() -> {
-                if(this.job.getStatus().getState() != State.SUCCEEDED)
+                if(this.task.getStatus().getState() != State.SUCCEEDED)
                     super.scheduler.accept(() -> super.run());
                 else
-                    this.job.getValue().getStatus().finishedEvent.addListener(() -> {
+                    this.task.getValue().getStatus().finishedEvent.addListener(() -> {
                         super.scheduler.accept(() -> super.run());
                     });
             });

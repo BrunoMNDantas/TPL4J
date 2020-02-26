@@ -19,30 +19,30 @@ package com.github.brunomndantas.tpl4j.helpers.when.whenAll;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.job.Job;
+import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
 public class WhenAllAction<T> implements IAction<Collection<T>> {
 
-    protected volatile Collection<Job<T>> jobs;
-    public Collection<Job<T>> getJobs() { return this.jobs; }
+    protected volatile Collection<Task<T>> tasks;
+    public Collection<Task<T>> getTasks() { return this.tasks; }
 
 
 
-    public WhenAllAction(Collection<Job<T>> jobs) {
-        this.jobs = jobs;
+    public WhenAllAction(Collection<Task<T>> tasks) {
+        this.tasks = tasks;
     }
 
 
 
     @Override
     public Collection<T> run(CancellationToken cancellationToken) throws Exception {
-        if(this.jobs.stream().anyMatch((job) -> job.getStatus().failedEvent.hasFired()))
+        if(this.tasks.stream().anyMatch((job) -> job.getStatus().failedEvent.hasFired()))
             throw collectErrors();
 
-        if(this.jobs.stream().anyMatch((job) -> job.getStatus().cancelledEvent.hasFired()))
+        if(this.tasks.stream().anyMatch((job) -> job.getStatus().cancelledEvent.hasFired()))
             throw new CancelledException();
 
         return collectResults(cancellationToken);
@@ -51,12 +51,12 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     private Exception collectErrors() {
         Exception exception = null;
 
-        for(Job<T> job : this.jobs) {
-            if(job.getStatus().failedEvent.hasFired()) {
+        for(Task<T> task : this.tasks) {
+            if(task.getStatus().failedEvent.hasFired()) {
                 if(exception == null)
-                    exception = new Exception(job.getException().getMessage(), job.getException());
+                    exception = new Exception(task.getException().getMessage(), task.getException());
                 else
-                    exception.addSuppressed(job.getException());
+                    exception.addSuppressed(task.getException());
             }
         }
 
@@ -66,9 +66,9 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     private Collection<T> collectResults(CancellationToken token) throws Exception {
         Collection<T> results = new LinkedList<>();
 
-        for(Job<T> job : this.jobs) {
+        for(Task<T> task : this.tasks) {
             token.abortIfCancelRequested();
-            results.add(job.getResult());
+            results.add(task.getResult());
         }
 
         return results;

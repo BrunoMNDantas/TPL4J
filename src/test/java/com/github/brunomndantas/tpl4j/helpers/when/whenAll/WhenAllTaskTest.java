@@ -50,7 +50,7 @@ public class WhenAllTaskTest {
 
         assertSame(id, task.getId());
         assertTrue(task.getJob() instanceof WhenAllJob);
-        assertTrue(((WhenAllJob<String>)task.getJob()).getJobs().containsAll(tasks.stream().map(Task::getJob).collect(Collectors.toList())));
+        assertTrue(((WhenAllJob<String>)task.getJob()).getTasks().containsAll(tasks.stream().map(Task::getJob).collect(Collectors.toList())));
         assertSame(cancellationToken, task.getCancellationToken());
         assertSame(scheduler, task.getScheduler());
         assertEquals(Arrays.asList(options), task.getOptions());
