@@ -32,7 +32,7 @@ public class ParallelWorkerJobTest {
         assertSame(iterator, ((ParallelWorkerAction<Object, String>)job.getAction()).getIterator());
         assertSame(cancellationToken, job.getCancellationToken());
         assertSame(scheduler, job.getScheduler());
-        assertEquals(options.size(), job.getOptions().size());
+        assertEquals(options.size(), job.getOptions().getOptions().size());
     }
 
 }

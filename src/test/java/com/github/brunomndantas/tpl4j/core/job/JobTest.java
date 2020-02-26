@@ -262,7 +262,7 @@ public class JobTest {
 
         Job<?> job = new Job<>("ID", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, options);
 
-        assertSame(options, job.getOptions());
+        assertSame(options, job.getOptions().getOptions());
     }
 
     @Test

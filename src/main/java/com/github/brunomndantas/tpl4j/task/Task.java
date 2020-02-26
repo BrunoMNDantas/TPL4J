@@ -47,7 +47,7 @@ public class Task<T> {
 
     public Consumer<Runnable> getScheduler() { return this.job.getScheduler(); }
 
-    public Collection<Option> getOptions() { return this.job.getOptions(); }
+    public Collection<Option> getOptions() { return this.job.getOptions().getOptions(); }
 
     public T getValue() { return job.getValue(); }
 

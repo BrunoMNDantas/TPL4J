@@ -32,7 +32,7 @@ public class ParallelWorkerTaskTest {
         assertSame(iterator, ((ParallelWorkerAction)((ParallelWorkerJob)task.getJob()).getAction()).getIterator());
         assertSame(cancellationToken, task.getJob().getCancellationToken());
         assertSame(scheduler, task.getJob().getScheduler());
-        assertEquals(options.length, task.getJob().getOptions().size()); //ATTACH_TO_PARENT
+        assertEquals(options.length, task.getJob().getOptions().getOptions().size());
     }
 
 }

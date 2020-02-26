@@ -471,9 +471,9 @@ public class TaskPoolTest {
         assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().size());
+            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
         assertFalse(task.getStatus().scheduledEvent.hasFired());
     }
@@ -573,9 +573,9 @@ public class TaskPoolTest {
         assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().size());
+            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
         assertTrue(task.getStatus().scheduledEvent.hasFired());
     }
@@ -625,9 +625,9 @@ public class TaskPoolTest {
         assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().size());
+            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(tasks, task.getTasks());
@@ -678,9 +678,9 @@ public class TaskPoolTest {
         assertSame(scheduler, task.getJob().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().size());
+            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
         assertTrue(task.getStatus().scheduledEvent.hasFired());
         assertSame(tasks, task.getTasks());
@@ -729,9 +729,9 @@ public class TaskPoolTest {
         assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().size());
+            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
 
         assertTrue(task.getStatus().scheduledEvent.hasFired());
 
@@ -836,9 +836,9 @@ public class TaskPoolTest {
         assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
+            assertEquals(options.length, task.getJob().getOptions().getOptions().size()); //ACCEPT_CHILDREN
 
         assertTrue(task.getStatus().scheduledEvent.hasFired());
     }

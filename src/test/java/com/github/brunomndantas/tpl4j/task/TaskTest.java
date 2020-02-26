@@ -72,7 +72,7 @@ public class TaskTest {
     public void getOptionsTest() {
         Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
 
-        assertSame(task.getJob().getOptions(), task.getOptions());
+        assertSame(task.getJob().getOptions().getOptions(), task.getOptions());
     }
 
     @Test

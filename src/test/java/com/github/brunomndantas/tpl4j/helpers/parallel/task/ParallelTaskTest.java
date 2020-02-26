@@ -47,7 +47,7 @@ public class ParallelTaskTest {
         assertSame(action, ((ParallelAction)task.getJob().getAction()).getAction());
         assertSame(cancellationToken, task.getCancellationToken());
         assertSame(scheduler, task.getJob().getScheduler());
-        assertEquals(options.length, task.getJob().getOptions().size()); //ACCEPT_CHILDREN
+        assertEquals(options.length, task.getJob().getOptions().getOptions().size()); //ACCEPT_CHILDREN
     }
 
     @Test

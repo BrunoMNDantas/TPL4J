@@ -20,6 +20,7 @@ import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.options.Options;
 import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.core.status.Status;
 
@@ -53,8 +54,8 @@ public class Job<T> {
     public Exception getException() { synchronized (lock) { return this.exception; } }
     protected void setException(Exception exception) { synchronized (lock) { this.exception = exception; } }
 
-    protected volatile Collection<Option> options;
-    public Collection<Option> getOptions() { return this.options; }
+    protected volatile Options options;
+    public Options getOptions() { return this.options; }
 
 
 
@@ -64,7 +65,7 @@ public class Job<T> {
         this.cancellationToken = cancellationToken;
         this.scheduler = scheduler;
         this.status = new Status(taskId);
-        this.options = options;
+        this.options = new Options(options);
 
         JobManager.INSTANCE.registerJobCreationOnCurrentThread(this);
     }

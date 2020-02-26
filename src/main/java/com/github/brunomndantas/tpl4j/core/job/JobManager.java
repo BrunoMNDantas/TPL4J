@@ -148,7 +148,7 @@ public class JobManager {
 
     public Collection<JobContext> getAttachedChildrenContexts(Job<?> job) {
         synchronized (LOCK) {
-            Collection<Option> options = job.options;
+            Collection<Option> options = job.options.getOptions();
 
             if(options.contains(Option.REJECT_CHILDREN))
                 return new LinkedList<>();
@@ -160,7 +160,7 @@ public class JobManager {
                     .stream()
                     .filter((childContext) -> {
                         Job<?> childJob = childContext.getJob();
-                        Collection<Option> childOptions = childJob.options;
+                        Collection<Option> childOptions = childJob.options.getOptions();
 
                         return childOptions.contains(Option.ATTACH_TO_PARENT);
                     })
