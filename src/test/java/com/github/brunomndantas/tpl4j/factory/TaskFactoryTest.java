@@ -7,6 +7,7 @@ import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelUninterruptibleVoidAction;
 import com.github.brunomndantas.tpl4j.helpers.parallel.action.IParallelVoidAction;
+import com.github.brunomndantas.tpl4j.helpers.parallel.task.ParallelTask;
 import com.github.brunomndantas.tpl4j.helpers.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.helpers.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.helpers.when.whenAny.WhenAnyTask;
@@ -602,158 +603,160 @@ public class TaskFactoryTest {
         IParallelUninterruptibleAction<String,String> uninterruptibleAction = (e) -> "";
         IParallelUninterruptibleVoidAction<String> uninterruptibleVoidAction = (e) -> { };
         Iterable<String> elements = Arrays.asList("","");
-        Task<?> task;
+        ParallelTask<String,?> task;
 
         task = TaskFactory.forEach(id, elements, action, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(id, elements, voidAction, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
         task = TaskFactory.forEach(id, elements, action, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, null);
         task = TaskFactory.forEach(id, elements, voidAction, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, SCHEDULER, null);
 
         task = TaskFactory.forEach(id, elements, action, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, OPTIONS);
         task = TaskFactory.forEach(id, elements, voidAction, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, OPTIONS);
 
         task = TaskFactory.forEach(id, elements, action, SCHEDULER, OPTIONS);
-        validateForEach(task, id, null, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, null, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(id, elements, voidAction, SCHEDULER, OPTIONS);
-        validateForEach(task, id, null, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, null, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, SCHEDULER, OPTIONS);
-        validateForEach(task, id, null, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, null, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, SCHEDULER, OPTIONS);
-        validateForEach(task, id, null, SCHEDULER, OPTIONS);
+        validateForEach(task, id, elements, null, SCHEDULER, OPTIONS);
 
         task = TaskFactory.forEach(id, elements, action, CANCELLATION_TOKEN);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, null);
         task = TaskFactory.forEach(id, elements, voidAction, CANCELLATION_TOKEN);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, CANCELLATION_TOKEN);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, CANCELLATION_TOKEN);
-        validateForEach(task, id, CANCELLATION_TOKEN, null, null);
+        validateForEach(task, id, elements, CANCELLATION_TOKEN, null, null);
 
         task = TaskFactory.forEach(id, elements, action, SCHEDULER);
-        validateForEach(task, id, null, SCHEDULER, null);
+        validateForEach(task, id, elements, null, SCHEDULER, null);
         task = TaskFactory.forEach(id, elements, voidAction, SCHEDULER);
-        validateForEach(task, id, null, SCHEDULER, null);
+        validateForEach(task, id, elements, null, SCHEDULER, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, SCHEDULER);
-        validateForEach(task, id, null, SCHEDULER, null);
+        validateForEach(task, id, elements, null, SCHEDULER, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, SCHEDULER);
-        validateForEach(task, id, null, SCHEDULER, null);
+        validateForEach(task, id, elements, null, SCHEDULER, null);
 
         task = TaskFactory.forEach(id, elements, action, OPTIONS);
-        validateForEach(task, id, null, null, OPTIONS);
+        validateForEach(task, id, elements, null, null, OPTIONS);
         task = TaskFactory.forEach(id, elements, voidAction, OPTIONS);
-        validateForEach(task, id, null, null, OPTIONS);
+        validateForEach(task, id, elements, null, null, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction, OPTIONS);
-        validateForEach(task, id, null, null, OPTIONS);
+        validateForEach(task, id, elements, null, null, OPTIONS);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction, OPTIONS);
-        validateForEach(task, id, null, null, OPTIONS);
+        validateForEach(task, id, elements, null, null, OPTIONS);
 
         task = TaskFactory.forEach(id, elements, action);
-        validateForEach(task, id, null, null, null);
+        validateForEach(task, id, elements, null, null, null);
         task = TaskFactory.forEach(id, elements, voidAction);
-        validateForEach(task, id, null, null, null);
+        validateForEach(task, id, elements, null, null, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleAction);
-        validateForEach(task, id, null, null, null);
+        validateForEach(task, id, elements, null, null, null);
         task = TaskFactory.forEach(id, elements, uninterruptibleVoidAction);
-        validateForEach(task, id, null, null, null);
+        validateForEach(task, id, elements, null, null, null);
 
         task = TaskFactory.forEach(elements, action, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(elements, voidAction, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleAction, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
         task = TaskFactory.forEach(elements, action, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, null);
         task = TaskFactory.forEach(elements, voidAction, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, null);
         task = TaskFactory.forEach(elements, uninterruptibleAction, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, null);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, SCHEDULER);
-        validateForEach(task, null,  CANCELLATION_TOKEN, SCHEDULER, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, SCHEDULER, null);
 
         task = TaskFactory.forEach(elements, action, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, OPTIONS);
         task = TaskFactory.forEach(elements, voidAction, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleAction, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN, OPTIONS);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, OPTIONS);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, OPTIONS);
 
         task = TaskFactory.forEach(elements, action, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  null, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, null, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(elements, voidAction, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  null, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, null, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleAction, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  null, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, null, SCHEDULER, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, SCHEDULER, OPTIONS);
-        validateForEach(task, null,  null, SCHEDULER, OPTIONS);
+        validateForEach(task, null, elements, null, SCHEDULER, OPTIONS);
 
         task = TaskFactory.forEach(elements, action, CANCELLATION_TOKEN);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, null);
         task = TaskFactory.forEach(elements, voidAction, CANCELLATION_TOKEN);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, null);
         task = TaskFactory.forEach(elements, uninterruptibleAction, CANCELLATION_TOKEN);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, null);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, CANCELLATION_TOKEN);
-        validateForEach(task, null,  CANCELLATION_TOKEN, null, null);
+        validateForEach(task, null, elements, CANCELLATION_TOKEN, null, null);
 
         task = TaskFactory.forEach(elements, action, SCHEDULER);
-        validateForEach(task, null,  null, SCHEDULER, null);
+        validateForEach(task, null, elements, null, SCHEDULER, null);
         task = TaskFactory.forEach(elements, voidAction, SCHEDULER);
-        validateForEach(task, null,  null, SCHEDULER, null);
+        validateForEach(task, null, elements, null, SCHEDULER, null);
         task = TaskFactory.forEach(elements, uninterruptibleAction, SCHEDULER);
-        validateForEach(task, null,  null, SCHEDULER, null);
+        validateForEach(task, null, elements, null, SCHEDULER, null);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, SCHEDULER);
-        validateForEach(task, null,  null, SCHEDULER, null);
+        validateForEach(task, null, elements, null, SCHEDULER, null);
 
         task = TaskFactory.forEach(elements, action, OPTIONS);
-        validateForEach(task, null,  null, null, OPTIONS);
+        validateForEach(task, null, elements, null, null, OPTIONS);
         task = TaskFactory.forEach(elements, voidAction, OPTIONS);
-        validateForEach(task, null,  null, null, OPTIONS);
+        validateForEach(task, null, elements, null, null, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleAction, OPTIONS);
-        validateForEach(task, null,  null, null, OPTIONS);
+        validateForEach(task, null, elements, null, null, OPTIONS);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction, OPTIONS);
-        validateForEach(task, null,  null, null, OPTIONS);
+        validateForEach(task, null, elements, null, null, OPTIONS);
 
         task = TaskFactory.forEach(elements, action);
-        validateForEach(task, null,  null, null, null);
+        validateForEach(task, null, elements, null, null, null);
         task = TaskFactory.forEach(elements, voidAction);
-        validateForEach(task, null,  null, null, null);
+        validateForEach(task, null, elements, null, null, null);
         task = TaskFactory.forEach(elements, uninterruptibleAction);
-        validateForEach(task, null,  null, null, null);
+        validateForEach(task, null, elements, null, null, null);
         task = TaskFactory.forEach(elements, uninterruptibleVoidAction);
-        validateForEach(task, null,  null, null, null);
+        validateForEach(task, null, elements, null, null, null);
     }
 
-    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateForEach(ParallelTask<String,?> task, String id, Iterable<String> elements, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
+
+        assertSame(elements, task.getElements());
 
         if(cancellationToken == null)
             assertNotNull(task.getCancellationToken());

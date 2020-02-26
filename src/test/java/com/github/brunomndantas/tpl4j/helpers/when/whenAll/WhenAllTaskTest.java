@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -50,7 +49,9 @@ public class WhenAllTaskTest {
 
         assertSame(id, task.getId());
         assertTrue(task.getJob() instanceof WhenAllJob);
-        assertTrue(((WhenAllJob<String>)task.getJob()).getTasks().containsAll(tasks.stream().map(Task::getJob).collect(Collectors.toList())));
+        assertSame(tasks, task.getTasks());
+        assertSame(tasks, task.getTasks());
+        assertSame(tasks, ((WhenAllJob)task.getJob()).getTasks());
         assertSame(cancellationToken, task.getCancellationToken());
         assertSame(scheduler, task.getScheduler());
         assertEquals(Arrays.asList(options), task.getOptions());
