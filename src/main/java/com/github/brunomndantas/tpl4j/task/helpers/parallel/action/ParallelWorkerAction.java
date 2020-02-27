@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.task.helpers.parallel.action;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public class ParallelWorkerAction<T,K> implements IAction<Collection<K>> {
 
 
     @Override
-    public Collection<K> run(CancellationToken cancellationToken) throws Exception {
+    public Collection<K> run(ICancellationToken cancellationToken) throws Exception {
         Collection<K> results = new LinkedList<>();
         T element;
         K result;

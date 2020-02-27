@@ -19,6 +19,7 @@ package com.github.brunomndantas.tpl4j.context.job;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.options.Options;
 import com.github.brunomndantas.tpl4j.core.status.State;
@@ -43,8 +44,8 @@ public class Job<T> {
     protected volatile Status status;
     public Status getStatus() { return this.status; }
 
-    protected volatile CancellationToken cancellationToken;
-    public CancellationToken getCancellationToken() { return this.cancellationToken; }
+    protected volatile ICancellationToken cancellationToken;
+    public ICancellationToken getCancellationToken() { return this.cancellationToken; }
 
     protected T value;
     public T getValue() { synchronized (lock) { return this.value; } }
@@ -59,7 +60,7 @@ public class Job<T> {
 
 
 
-    public Job(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
+    public Job(String taskId, IAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
         this.taskId = taskId;
         this.action = action;
         this.cancellationToken = cancellationToken;

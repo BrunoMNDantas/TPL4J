@@ -1,10 +1,10 @@
 package com.github.brunomndantas.tpl4j.task.helpers.parallel.action;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
-import com.github.brunomndantas.tpl4j.task.helpers.parallel.task.ParallelWorkerTask;
 import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.helpers.parallel.task.ParallelWorkerTask;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,8 +33,8 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
     private Iterable<T> elements;
     public Iterable<T> getElements() { return this.elements; }
 
-    private CancellationToken cancellationToken;
-    public CancellationToken getCancellationToken() { return this.cancellationToken; }
+    private ICancellationToken cancellationToken;
+    public ICancellationToken getCancellationToken() { return this.cancellationToken; }
 
     private Consumer<Runnable> scheduler;
     public Consumer<Runnable> getScheduler(){ return this.scheduler; }
@@ -44,7 +44,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
 
 
-    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterable<T> elements, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
+    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterable<T> elements, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
         this.taskId = taskId;
         this.elements = elements;
         this.action = action;
@@ -56,7 +56,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
 
     @Override
-    public Collection<K> run(CancellationToken cancellationToken) throws Exception {
+    public Collection<K> run(ICancellationToken cancellationToken) throws Exception {
         Collection<K> results = new LinkedList<>();
         createWorkTasks(results);
         return results;

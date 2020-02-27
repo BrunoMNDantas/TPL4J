@@ -16,6 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.action.retry;
 
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.LinkAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
@@ -61,7 +62,7 @@ public class RetryAction<T> extends LinkAction<T,T> {
 
 
     @Override
-    public T run(CancellationToken cancellationToken) throws Exception {
+    public T run(ICancellationToken cancellationToken) throws Exception {
         if(super.previousTask.getStatus().getState() == State.SUCCEEDED) {
             return super.previousTask.getValue();
         } else {

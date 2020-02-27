@@ -17,6 +17,7 @@
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.task.Task;
 
@@ -31,7 +32,7 @@ public class WhenAllTask<T> extends Task<Collection<T>> {
 
 
 
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         super(new WhenAllJob<>(
                 taskId,
                 cancellationToken,

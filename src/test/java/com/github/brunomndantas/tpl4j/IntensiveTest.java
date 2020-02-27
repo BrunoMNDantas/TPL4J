@@ -1,12 +1,12 @@
 package com.github.brunomndantas.tpl4j;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
-import com.github.brunomndantas.tpl4j.task.factory.TaskFactory;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.ILinkAction;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
+import com.github.brunomndantas.tpl4j.task.factory.TaskFactory;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -80,7 +80,7 @@ public class IntensiveTest {
 
 
         @Override
-        public Integer run(CancellationToken cancellationToken) throws Exception {
+        public Integer run(ICancellationToken cancellationToken) throws Exception {
             cancellationToken.abortIfCancelRequested();
 
             if(new Random().nextBoolean())
@@ -104,7 +104,7 @@ public class IntensiveTest {
 
 
         @Override
-        public Calculation run(Task<Integer> previousTask, CancellationToken cancellationToken) throws Exception {
+        public Calculation run(Task<Integer> previousTask, ICancellationToken cancellationToken) throws Exception {
             cancellationToken.abortIfCancelRequested();
 
             this.calculation.setResult(previousTask.getResult());
@@ -117,7 +117,7 @@ public class IntensiveTest {
     private static class VerifyResultAction implements ILinkAction<Boolean, Calculation> {
 
         @Override
-        public Boolean run(Task<Calculation> previousTask, CancellationToken cancellationToken) throws Exception {
+        public Boolean run(Task<Calculation> previousTask, ICancellationToken cancellationToken) throws Exception {
             cancellationToken.abortIfCancelRequested();
 
             int result = CalculationAction.calc(previousTask.getResult());

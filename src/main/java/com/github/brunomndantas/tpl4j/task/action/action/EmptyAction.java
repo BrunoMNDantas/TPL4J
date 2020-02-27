@@ -17,7 +17,7 @@
 package com.github.brunomndantas.tpl4j.task.action.action;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class EmptyAction<T> implements IAction<T> {
 
@@ -33,7 +33,7 @@ public class EmptyAction<T> implements IAction<T> {
 
 
     @Override
-    public T run(CancellationToken cancellationToken) throws Exception {
+    public T run(ICancellationToken cancellationToken) throws Exception {
         return this.action.run();
     }
 

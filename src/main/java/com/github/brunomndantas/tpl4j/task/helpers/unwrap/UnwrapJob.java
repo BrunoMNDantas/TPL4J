@@ -16,8 +16,8 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.context.job.Job;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.Task;
@@ -32,7 +32,7 @@ public class UnwrapJob<T> extends Job<T> {
 
 
 
-    public UnwrapJob(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Task<Task<T>> task) {
+    public UnwrapJob(String taskId, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options, Task<Task<T>> task) {
         super(taskId, new UnwrapAction<>(task), cancellationToken, scheduler, options);
         this.task = task;
     }

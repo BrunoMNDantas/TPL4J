@@ -16,11 +16,11 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.action.action;
 
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 @FunctionalInterface
 public interface IVoidAction {
 
-    void run(CancellationToken cancellationToken) throws Exception;
+    void run(ICancellationToken cancellationToken) throws Exception;
 
 }

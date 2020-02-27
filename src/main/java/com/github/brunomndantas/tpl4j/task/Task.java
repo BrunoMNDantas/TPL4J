@@ -16,9 +16,10 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task;
 
+import com.github.brunomndantas.tpl4j.context.job.Job;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.context.job.Job;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.status.Status;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
@@ -53,7 +54,7 @@ public class Task<T> {
 
     public Exception getException() { return job.getException(); }
 
-    public CancellationToken getCancellationToken() { return job.getCancellationToken(); }
+    public ICancellationToken getCancellationToken() { return job.getCancellationToken(); }
 
     public Status getStatus() { return job.getStatus(); }
 
@@ -64,53 +65,53 @@ public class Task<T> {
     }
 
 
-    public Task(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(String taskId, IAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(new Job<>(taskId, action, cancellationToken, scheduler, Arrays.asList(options)));
     }
 
-    public Task(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(String taskId, IEmptyAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, new EmptyAction<>(action), cancellationToken, scheduler, options);
     }
 
-    public Task(String taskId, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(String taskId, IVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, (IAction<T>)(new VoidAction(action)), cancellationToken, scheduler, options);
     }
 
-    public Task(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(String taskId, IEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(taskId, (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, scheduler, options);
     }
 
 
-    public Task(String taskId, IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(String taskId, IAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(taskId, action, cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
-    public Task(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(String taskId, IEmptyAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(taskId, new EmptyAction<>(action), cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
-    public Task(String taskId, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(String taskId, IVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(taskId, (IAction<T>)(new VoidAction(action)), cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
-    public Task(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(String taskId, IEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(taskId, (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
 
-    public Task(String taskId, IAction<T> action, CancellationToken cancellationToken, Option... options) {
+    public Task(String taskId, IAction<T> action, ICancellationToken cancellationToken, Option... options) {
         this(taskId, action, cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
-    public Task(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
+    public Task(String taskId, IEmptyAction<T> action, ICancellationToken cancellationToken, Option... options) {
         this(taskId, new EmptyAction<>(action), cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
-    public Task(String taskId, IVoidAction action, CancellationToken cancellationToken, Option... options) {
+    public Task(String taskId, IVoidAction action, ICancellationToken cancellationToken, Option... options) {
         this(taskId, (IAction<T>)(new VoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
-    public Task(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+    public Task(String taskId, IEmptyVoidAction action, ICancellationToken cancellationToken, Option... options) {
         this(taskId, (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
@@ -132,19 +133,19 @@ public class Task<T> {
     }
 
 
-    public Task(String taskId, IAction<T> action, CancellationToken cancellationToken) {
+    public Task(String taskId, IAction<T> action, ICancellationToken cancellationToken) {
         this(taskId, action, cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
-    public Task(String taskId, IEmptyAction<T> action, CancellationToken cancellationToken) {
+    public Task(String taskId, IEmptyAction<T> action, ICancellationToken cancellationToken) {
         this(taskId, new EmptyAction<>(action), cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
-    public Task(String taskId, IVoidAction action, CancellationToken cancellationToken) {
+    public Task(String taskId, IVoidAction action, ICancellationToken cancellationToken) {
         this(taskId, (IAction<T>)(new VoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
-    public Task(String taskId, IEmptyVoidAction action, CancellationToken cancellationToken) {
+    public Task(String taskId, IEmptyVoidAction action, ICancellationToken cancellationToken) {
         this(taskId, (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
@@ -200,53 +201,53 @@ public class Task<T> {
     }
 
 
-    public Task(IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(IAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), action, cancellationToken, scheduler, options);
     }
 
-    public Task(IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(IEmptyAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), new EmptyAction<>(action), cancellationToken, scheduler, options);
     }
 
-    public Task(IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(IVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), (IAction<T>)(new VoidAction(action)), cancellationToken, scheduler, options);
     }
 
-    public Task(IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task(IEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         this(UUID.randomUUID().toString(), (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, scheduler, options);
     }
 
 
-    public Task(IAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(IAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(UUID.randomUUID().toString(), action, cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
-    public Task(IEmptyAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(IEmptyAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(UUID.randomUUID().toString(), new EmptyAction<>(action), cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
-    public Task(IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(IVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(UUID.randomUUID().toString(), (IAction<T>)(new VoidAction(action)), cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
-    public Task(IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task(IEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         this(UUID.randomUUID().toString(), (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, scheduler, DEFAULT_OPTIONS);
     }
 
 
-    public Task(IAction<T> action, CancellationToken cancellationToken, Option... options) {
+    public Task(IAction<T> action, ICancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), action, cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
-    public Task(IEmptyAction<T> action, CancellationToken cancellationToken, Option... options) {
+    public Task(IEmptyAction<T> action, ICancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), new EmptyAction<>(action), cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
-    public Task(IVoidAction action, CancellationToken cancellationToken, Option... options) {
+    public Task(IVoidAction action, ICancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), (IAction<T>)(new VoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
-    public Task(IEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+    public Task(IEmptyVoidAction action, ICancellationToken cancellationToken, Option... options) {
         this(UUID.randomUUID().toString(), (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, options);
     }
 
@@ -268,19 +269,19 @@ public class Task<T> {
     }
 
 
-    public Task(IAction<T> action, CancellationToken cancellationToken) {
+    public Task(IAction<T> action, ICancellationToken cancellationToken) {
         this(UUID.randomUUID().toString(), action, cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
-    public Task(IEmptyAction<T> action, CancellationToken cancellationToken) {
+    public Task(IEmptyAction<T> action, ICancellationToken cancellationToken) {
         this(UUID.randomUUID().toString(), new EmptyAction<>(action), cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
-    public Task(IVoidAction action, CancellationToken cancellationToken) {
+    public Task(IVoidAction action, ICancellationToken cancellationToken) {
         this(UUID.randomUUID().toString(), (IAction<T>)(new VoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
-    public Task(IEmptyVoidAction action, CancellationToken cancellationToken) {
+    public Task(IEmptyVoidAction action, ICancellationToken cancellationToken) {
         this(UUID.randomUUID().toString(), (IAction<T>) (new EmptyVoidAction(action)), cancellationToken, DEFAULT_SCHEDULER, DEFAULT_OPTIONS);
     }
 
@@ -360,58 +361,58 @@ public class Task<T> {
     }
 
 
-    private <K> Task<K> then(String taskId, IAction<K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private <K> Task<K> then(String taskId, IAction<K> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         Task<K> task = new Task<>(taskId, action, cancellationToken, scheduler, options);
         return this.then(task);
     }
 
-    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(taskId, new LinkAction<>(this, action), cancellationToken, scheduler, options);
     }
 
-    public Task<Void> then(String taskId, ILinkVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(taskId, new LinkVoidAction<>(this, action), cancellationToken, scheduler, options);
     }
 
-    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(taskId, new LinkEmptyAction<>(this, action), cancellationToken, scheduler, options);
     }
 
-    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(taskId, new LinkEmptyVoidAction<>(this, action), cancellationToken, scheduler, options);
     }
 
 
-    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(taskId, new LinkAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(String taskId, ILinkVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(taskId, new LinkVoidAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(taskId, new LinkEmptyAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(taskId, new LinkEmptyVoidAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
 
-    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, CancellationToken cancellationToken, Option... options) {
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, ICancellationToken cancellationToken, Option... options) {
         return this.then(taskId, new LinkAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<Void> then(String taskId, ILinkVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, ICancellationToken cancellationToken, Option... options) {
         return this.then(taskId, new LinkVoidAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
-    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, CancellationToken cancellationToken, Option... options) {
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, ICancellationToken cancellationToken, Option... options) {
         return this.then(taskId, new LinkEmptyAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, ICancellationToken cancellationToken, Option... options) {
         return this.then(taskId, new LinkEmptyVoidAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
@@ -433,19 +434,19 @@ public class Task<T> {
     }
 
 
-    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, CancellationToken cancellationToken) {
+    public <K> Task<K> then(String taskId, ILinkAction<K, T> action, ICancellationToken cancellationToken) {
         return this.then(taskId, new LinkAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(String taskId, ILinkVoidAction<T> action, CancellationToken cancellationToken) {
+    public Task<Void> then(String taskId, ILinkVoidAction<T> action, ICancellationToken cancellationToken) {
         return this.then(taskId, new LinkVoidAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, CancellationToken cancellationToken) {
+    public <K> Task<K> then(String taskId, ILinkEmptyAction<K> action, ICancellationToken cancellationToken) {
         return this.then(taskId, new LinkEmptyAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, CancellationToken cancellationToken) {
+    public Task<Void> then(String taskId, ILinkEmptyVoidAction action, ICancellationToken cancellationToken) {
         return this.then(taskId, new LinkEmptyVoidAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
@@ -501,53 +502,53 @@ public class Task<T> {
     }
 
 
-    public <K> Task<K> then(ILinkAction<K, T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public <K> Task<K> then(ILinkAction<K, T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkAction<>(this, action), cancellationToken, scheduler, options);
     }
 
-    public Task<Void> then(ILinkVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<Void> then(ILinkVoidAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkVoidAction<>(this, action), cancellationToken, scheduler, options);
     }
 
-    public <K> Task<K> then(ILinkEmptyAction<K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public <K> Task<K> then(ILinkEmptyAction<K> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyAction<>(this, action), cancellationToken, scheduler, options);
     }
 
-    public Task<Void> then(ILinkEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<Void> then(ILinkEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyVoidAction<>(this, action), cancellationToken, scheduler, options);
     }
 
 
-    public <K> Task<K> then(ILinkAction<K, T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public <K> Task<K> then(ILinkAction<K, T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(UUID.randomUUID().toString(), new LinkAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(ILinkVoidAction<T> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<Void> then(ILinkVoidAction<T> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(UUID.randomUUID().toString(), new LinkVoidAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public <K> Task<K> then(ILinkEmptyAction<K> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public <K> Task<K> then(ILinkEmptyAction<K> action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(ILinkEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<Void> then(ILinkEmptyVoidAction action, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyVoidAction<>(this, action), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
 
-    public <K> Task<K> then(ILinkAction<K, T> action, CancellationToken cancellationToken, Option... options) {
+    public <K> Task<K> then(ILinkAction<K, T> action, ICancellationToken cancellationToken, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<Void> then(ILinkVoidAction<T> action, CancellationToken cancellationToken, Option... options) {
+    public Task<Void> then(ILinkVoidAction<T> action, ICancellationToken cancellationToken, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkVoidAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
-    public <K> Task<K> then(ILinkEmptyAction<K> action, CancellationToken cancellationToken, Option... options) {
+    public <K> Task<K> then(ILinkEmptyAction<K> action, ICancellationToken cancellationToken, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<Void> then(ILinkEmptyVoidAction action, CancellationToken cancellationToken, Option... options) {
+    public Task<Void> then(ILinkEmptyVoidAction action, ICancellationToken cancellationToken, Option... options) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyVoidAction<>(this, action), cancellationToken, this.getScheduler(), options);
     }
 
@@ -569,19 +570,19 @@ public class Task<T> {
     }
 
 
-    public <K> Task<K> then(ILinkAction<K, T> action, CancellationToken cancellationToken) {
+    public <K> Task<K> then(ILinkAction<K, T> action, ICancellationToken cancellationToken) {
         return this.then(UUID.randomUUID().toString(), new LinkAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(ILinkVoidAction<T> action, CancellationToken cancellationToken) {
+    public Task<Void> then(ILinkVoidAction<T> action, ICancellationToken cancellationToken) {
         return this.then(UUID.randomUUID().toString(), new LinkVoidAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public <K> Task<K> then(ILinkEmptyAction<K> action, CancellationToken cancellationToken) {
+    public <K> Task<K> then(ILinkEmptyAction<K> action, ICancellationToken cancellationToken) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<Void> then(ILinkEmptyVoidAction action, CancellationToken cancellationToken) {
+    public Task<Void> then(ILinkEmptyVoidAction action, ICancellationToken cancellationToken) {
         return this.then(UUID.randomUUID().toString(), new LinkEmptyVoidAction<>(this, action), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
@@ -637,21 +638,21 @@ public class Task<T> {
     }
 
 
-    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         IAction<T> taskAction = new RetryAction<>(this, retrySupplier);
         Task<T> task = new Task<>(taskId, taskAction, cancellationToken, scheduler, options);
 
         return this.then(task);
     }
 
-    public Task<T> retry(String taskId, int numberOfTries, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<T> retry(String taskId, int numberOfTries, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         IAction<T> taskAction = new RetryAction<>(this, numberOfTries);
         Task<T> task = new Task<>(taskId, taskAction, cancellationToken, scheduler, options);
 
         return this.then(task);
     }
 
-    public Task<T> retry(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<T> retry(String taskId, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         IAction<T> taskAction = new RetryAction<>(this);
         Task<T> task = new Task<>(taskId, taskAction, cancellationToken, scheduler, options);
 
@@ -659,28 +660,28 @@ public class Task<T> {
     }
 
 
-    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.retry(taskId, retrySupplier, cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(String taskId, int numberOfTries, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<T> retry(String taskId, int numberOfTries, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.retry(taskId, numberOfTries, cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(String taskId, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<T> retry(String taskId, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.retry(taskId, cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
 
-    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, CancellationToken cancellationToken, Option... options) {
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken, Option... options) {
         return this.retry(taskId, retrySupplier, cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<T> retry(String taskId, int numberOfTries, CancellationToken cancellationToken, Option... options) {
+    public Task<T> retry(String taskId, int numberOfTries, ICancellationToken cancellationToken, Option... options) {
         return this.retry(taskId, numberOfTries, cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<T> retry(String taskId, CancellationToken cancellationToken, Option... options) {
+    public Task<T> retry(String taskId, ICancellationToken cancellationToken, Option... options) {
         return this.retry(taskId, cancellationToken, this.getScheduler(), options);
     }
 
@@ -698,15 +699,15 @@ public class Task<T> {
     }
 
 
-    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, CancellationToken cancellationToken) {
+    public Task<T> retry(String taskId, Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken) {
         return this.retry(taskId, retrySupplier, cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(String taskId, int numberOfTries, CancellationToken cancellationToken) {
+    public Task<T> retry(String taskId, int numberOfTries, ICancellationToken cancellationToken) {
         return this.retry(taskId, numberOfTries, cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(String taskId, CancellationToken cancellationToken) {
+    public Task<T> retry(String taskId, ICancellationToken cancellationToken) {
         return this.retry(taskId, cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
@@ -750,41 +751,41 @@ public class Task<T> {
     }
 
 
-    public Task<T> retry(Supplier<Boolean> retrySupplier, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<T> retry(Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.retry(UUID.randomUUID().toString(), retrySupplier, cancellationToken, scheduler, options);
     }
 
-    public Task<T> retry(int numberOfTries, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<T> retry(int numberOfTries, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.retry(UUID.randomUUID().toString(), numberOfTries, cancellationToken, scheduler, options);
     }
 
-    public Task<T> retry(CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    public Task<T> retry(ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
         return this.retry(UUID.randomUUID().toString(), cancellationToken, scheduler, options);
     }
 
 
-    public Task<T> retry(Supplier<Boolean> retrySupplier, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<T> retry(Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.retry(UUID.randomUUID().toString(), retrySupplier, cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(int numberOfTries, CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<T> retry(int numberOfTries, ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.retry(UUID.randomUUID().toString(), numberOfTries, cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(CancellationToken cancellationToken, Consumer<Runnable> scheduler) {
+    public Task<T> retry(ICancellationToken cancellationToken, Consumer<Runnable> scheduler) {
         return this.retry(UUID.randomUUID().toString(), cancellationToken, scheduler, this.getOptions().toArray(new Option[0]));
     }
 
 
-    public Task<T> retry(Supplier<Boolean> retrySupplier, CancellationToken cancellationToken, Option... options) {
+    public Task<T> retry(Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken, Option... options) {
         return this.retry(UUID.randomUUID().toString(), retrySupplier, cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<T> retry(int numberOfTries, CancellationToken cancellationToken, Option... options) {
+    public Task<T> retry(int numberOfTries, ICancellationToken cancellationToken, Option... options) {
         return this.retry(UUID.randomUUID().toString(), numberOfTries, cancellationToken, this.getScheduler(), options);
     }
 
-    public Task<T> retry(CancellationToken cancellationToken, Option... options) {
+    public Task<T> retry(ICancellationToken cancellationToken, Option... options) {
         return this.retry(UUID.randomUUID().toString(), cancellationToken, this.getScheduler(), options);
     }
 
@@ -802,15 +803,15 @@ public class Task<T> {
     }
 
 
-    public Task<T> retry(Supplier<Boolean> retrySupplier, CancellationToken cancellationToken) {
+    public Task<T> retry(Supplier<Boolean> retrySupplier, ICancellationToken cancellationToken) {
         return this.retry(UUID.randomUUID().toString(), retrySupplier, cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(int numberOfTries, CancellationToken cancellationToken) {
+    public Task<T> retry(int numberOfTries, ICancellationToken cancellationToken) {
         return this.retry(UUID.randomUUID().toString(), numberOfTries, cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 
-    public Task<T> retry(CancellationToken cancellationToken) {
+    public Task<T> retry(ICancellationToken cancellationToken) {
         return this.retry(UUID.randomUUID().toString(), cancellationToken, this.getScheduler(), this.getOptions().toArray(new Option[0]));
     }
 

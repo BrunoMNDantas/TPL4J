@@ -1,6 +1,7 @@
 package com.github.brunomndantas.tpl4j.task.helpers.parallel.action;
 
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class ParallelUninterruptibleAction<T,K> implements IParallelAction<T,K> {
 
@@ -16,7 +17,7 @@ public class ParallelUninterruptibleAction<T,K> implements IParallelAction<T,K> 
 
 
     @Override
-    public K run(T value, CancellationToken token) throws Exception {
+    public K run(T value, ICancellationToken token) throws Exception {
         return this.action.run(value);
     }
 

@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.task.helpers.parallel.action;
 
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class ParallelVoidAction<T> implements IParallelAction<T,Void> {
 
@@ -16,7 +16,7 @@ public class ParallelVoidAction<T> implements IParallelAction<T,Void> {
 
 
     @Override
-    public Void run(T value, CancellationToken cancellationToken) throws Exception {
+    public Void run(T value, ICancellationToken cancellationToken) throws Exception {
         this.action.run(value, cancellationToken);
         return null;
     }
