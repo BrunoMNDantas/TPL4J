@@ -19,7 +19,7 @@ public class PoolSchedulerTest {
 
         scheduler = new PoolScheduler(id);
         assertEquals(id, scheduler.getId());
-        assertEquals(numberOfThreads, Runtime.getRuntime().availableProcessors());
+        assertEquals(Runtime.getRuntime().availableProcessors(), scheduler.getNumberOfThreads());
         scheduler.close();
 
         scheduler = new PoolScheduler(numberOfThreads);
@@ -29,7 +29,7 @@ public class PoolSchedulerTest {
 
         scheduler = new PoolScheduler();
         assertNotNull(scheduler.getId());
-        assertEquals(numberOfThreads, Runtime.getRuntime().availableProcessors());
+        assertEquals(Runtime.getRuntime().availableProcessors(), scheduler.getNumberOfThreads());
         scheduler.close();
     }
 
@@ -44,7 +44,7 @@ public class PoolSchedulerTest {
     @Test
     public void getIdTest() {
         String id = "ID";
-        PoolScheduler scheduler = new PoolScheduler(id, 0);
+        PoolScheduler scheduler = new PoolScheduler(id, 1);
         assertSame(id, scheduler.getId());
         scheduler.close();
     }
