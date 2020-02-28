@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 public class PoolScheduler implements IScheduler {
 
     protected volatile ExecutorService pool;
-    private volatile String id;
+    protected volatile String id;
 
     protected volatile int numberOfThreads;
     public int getNumberOfThreads() { return this.numberOfThreads; }
