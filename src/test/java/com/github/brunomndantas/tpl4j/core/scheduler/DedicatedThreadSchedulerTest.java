@@ -28,7 +28,7 @@ public class DedicatedThreadSchedulerTest {
     }
 
     @Test
-    public void schedule() {
+    public void schedule() throws Exception {
         boolean[] passedA = new boolean[1];
         boolean[] passedB = new boolean[1];
         long[] threadA = new long[1];
@@ -45,6 +45,8 @@ public class DedicatedThreadSchedulerTest {
             passedB[0] = true;
             threadB[0] = Thread.currentThread().getId();
         });
+
+        Thread.sleep(1000);
 
         assertTrue(passedA[0]);
         assertTrue(passedB[0]);
