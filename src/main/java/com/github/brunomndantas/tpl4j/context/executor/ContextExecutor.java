@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.context.executor;
 
 import com.github.brunomndantas.tpl4j.context.Context;
-import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
+import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.status.State;
 
@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 public class ContextExecutor implements IContextExecutor {
 
-    protected volatile ContextManager contextManager;
-    public ContextManager getContextManager() { return this.contextManager; }
+    protected volatile IContextManager contextManager;
+    public IContextManager getContextManager() { return this.contextManager; }
 
 
 
-    public ContextExecutor(ContextManager contextManager) {
+    public ContextExecutor(IContextManager contextManager) {
         this.contextManager = contextManager;
     }
 

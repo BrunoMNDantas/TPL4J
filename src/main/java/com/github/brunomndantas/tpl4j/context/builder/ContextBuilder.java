@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.context.builder;
 
 import com.github.brunomndantas.tpl4j.context.Context;
-import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
+import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.IOptions;
@@ -19,12 +19,12 @@ public class ContextBuilder implements IContextBuilder {
 
 
 
-    protected volatile ContextManager contextManager;
-    public ContextManager getContextManager() { return this.contextManager; }
+    protected volatile IContextManager contextManager;
+    public IContextManager getContextManager() { return this.contextManager; }
 
 
 
-    public ContextBuilder(ContextManager contextManager) {
+    public ContextBuilder(IContextManager contextManager) {
         this.contextManager = contextManager;
     }
 
