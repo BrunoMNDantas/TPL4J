@@ -25,16 +25,16 @@ public class Status implements IStatus {
 
 
 
-    private volatile IEvent scheduledEvent = new Event();
-    private volatile IEvent runningEvent = new Event();
-    private volatile IEvent waitingForChildrenEvent = new Event();
-    private volatile IEvent cancelledEvent = new Event();
-    private volatile IEvent failedEvent = new Event();
-    private volatile IEvent succeededEvent = new Event();
-    private volatile IEvent finishedEvent = new Event();
-    private State state = State.CREATED;
+    protected volatile IEvent scheduledEvent = new Event();
+    protected volatile IEvent runningEvent = new Event();
+    protected volatile IEvent waitingForChildrenEvent = new Event();
+    protected volatile IEvent cancelledEvent = new Event();
+    protected volatile IEvent failedEvent = new Event();
+    protected volatile IEvent succeededEvent = new Event();
+    protected volatile IEvent finishedEvent = new Event();
+    protected State state = State.CREATED;
 
-    private volatile String taskId;
+    protected volatile String taskId;
     public String getTaskId() { return this.taskId; }
 
 
@@ -100,25 +100,25 @@ public class Status implements IStatus {
         return this.finishedEvent;
     }
 
-    private void declareSchedule() {
+    protected void declareSchedule() {
         this.state = State.SCHEDULED;
         this.scheduledEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Schedule state!");
     }
 
-    private void declareRun() {
+    protected void declareRun() {
         this.state = State.RUNNING;
         this.runningEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Run state!");
     }
 
-    private void declareWaitChildren() {
+    protected void declareWaitChildren() {
         this.state = State.WAITING_CHILDREN;
         this.waitingForChildrenEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Wait Children state!");
     }
 
-    private void declareCancel() {
+    protected void declareCancel() {
         this.state = State.CANCELED;
         this.cancelledEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Cancel state!");
@@ -126,7 +126,7 @@ public class Status implements IStatus {
         this.declareFinish();
     }
 
-    private void declareFail() {
+    protected void declareFail() {
         this.state = State.FAILED;
         this.failedEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Fail state!");
@@ -134,7 +134,7 @@ public class Status implements IStatus {
         this.declareFinish();
     }
 
-    private void declareSuccess() {
+    protected void declareSuccess() {
         this.state = State.SUCCEEDED;
         this.succeededEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Success state!");
@@ -142,7 +142,7 @@ public class Status implements IStatus {
         this.declareFinish();
     }
 
-    private void declareFinish() {
+    protected void declareFinish() {
         this.finishedEvent.fire();
         LOGGER.info("Task with id:" + this.taskId + " declared Finish state!");
     }

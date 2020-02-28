@@ -28,8 +28,8 @@ public class CancellationToken implements ICancellationToken {
 
 
 
-    private volatile String id;
-    private volatile AtomicBoolean cancelRequested = new AtomicBoolean();
+    protected volatile String id;
+    protected volatile AtomicBoolean cancelRequested = new AtomicBoolean();
 
 
 

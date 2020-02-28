@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public class Options implements IOptions {
 
-    private volatile Collection<Option> options;
+    protected volatile Collection<Option> options;
 
 
 

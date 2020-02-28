@@ -31,8 +31,8 @@ public class Event implements IEvent {
 
 
 
-    private final Collection<Runnable> listeners = new LinkedList<>();
-    private boolean fired;
+    protected final Collection<Runnable> listeners = new LinkedList<>();
+    protected boolean fired;
 
 
 

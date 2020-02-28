@@ -9,7 +9,7 @@ public class PoolScheduler implements IScheduler {
     protected volatile ExecutorService pool;
     private volatile String id;
 
-    private volatile int numberOfThreads;
+    protected volatile int numberOfThreads;
     public int getNumberOfThreads() { return this.numberOfThreads; }
 
 
