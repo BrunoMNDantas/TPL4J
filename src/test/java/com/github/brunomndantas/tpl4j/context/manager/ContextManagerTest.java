@@ -18,7 +18,7 @@ public class ContextManagerTest {
 
         contextManager.registerContext(context);
 
-        assertSame(context, contextManager.getContext(context.getTaskId()));
+        assertTrue(contextManager.contexts.contains(context));
     }
 
     @Test
@@ -43,12 +43,11 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
 
         contextManager.registerContext(context);
-        contextManager.registerCurrentThreadAsCreatorOfContext(context.getTaskId());
-        contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
-        contextManager.unregisterContext(context.getTaskId());
+        contextManager.registerCurrentThreadAsCreatorOfContext(context);
+        contextManager.registerCurrentThreadAsExecutorOfContext(context);
+        contextManager.unregisterContext(context);
 
-        assertNull(contextManager.getContext(context.getTaskId()));
-        assertNull(contextManager.getIdOfTaskRunningOnCurrentThread());
+        assertFalse(contextManager.contexts.contains(context));
     }
 
     @Test
@@ -57,49 +56,13 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
 
         try {
-            contextManager.unregisterContext(context.getTaskId());
+            contextManager.unregisterContext(context);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("There is no Context"));
+            assertTrue(e.getMessage().contains("Context not registered"));
             assertTrue(e.getMessage().contains(context.getTaskId()));
         }
-    }
-
-    @Test
-    public void unregisterContextWithInvalidExecutorThreadTest() {
-        ContextManager contextManager = new ContextManager();
-        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
-
-        contextManager.registerContext(context);
-        contextManager.registerCurrentThreadAsCreatorOfContext(context.getTaskId());
-        contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
-
-        context.setExecutorThreadId(1);
-
-        try {
-            contextManager.unregisterContext(context.getTaskId());
-            fail("Exception should be thrown!");
-        } catch (Exception e) {
-            assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("not executing on the specified thread"));
-        }
-    }
-
-    @Test
-    public void getContextTest() {
-        ContextManager contextManager = new ContextManager();
-        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
-
-        contextManager.registerContext(context);
-
-        assertSame(context, contextManager.getContext(context.getTaskId()));
-    }
-
-    @Test
-    public void getContextWithNonExistentIdReturnsNullTest() {
-        ContextManager contextManager = new ContextManager();
-        assertNull(contextManager.getContext("non existent id"));
     }
 
     @Test
@@ -108,7 +71,7 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
         contextManager.registerContext(context);
 
-        contextManager.registerCurrentThreadAsCreatorOfContext(context.getTaskId());
+        contextManager.registerCurrentThreadAsCreatorOfContext(context);
 
         assertEquals(Thread.currentThread().getId(), context.getCreatorThreadId());
     }
@@ -119,11 +82,11 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
 
         try {
-            contextManager.registerCurrentThreadAsCreatorOfContext(context.getTaskId());
+            contextManager.registerCurrentThreadAsCreatorOfContext(context);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("There is no Context"));
+            assertTrue(e.getMessage().contains("Context not registered"));
         }
     }
 
@@ -132,10 +95,10 @@ public class ContextManagerTest {
         ContextManager contextManager = new ContextManager();
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
         contextManager.registerContext(context);
-        contextManager.registerCurrentThreadAsCreatorOfContext(context.getTaskId());
+        contextManager.registerCurrentThreadAsCreatorOfContext(context);
 
         try {
-            contextManager.registerCurrentThreadAsCreatorOfContext(context.getTaskId());
+            contextManager.registerCurrentThreadAsCreatorOfContext(context);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());
@@ -150,7 +113,7 @@ public class ContextManagerTest {
 
         contextManager.registerContext(context);
 
-        contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
+        contextManager.registerCurrentThreadAsExecutorOfContext(context);
 
         assertEquals(Thread.currentThread().getId(), context.getExecutorThreadId());
     }
@@ -161,11 +124,11 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
 
         try {
-            contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
+            contextManager.registerCurrentThreadAsExecutorOfContext(context);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("There is no Context"));
+            assertTrue(e.getMessage().contains("Context not registered"));
         }
     }
 
@@ -174,14 +137,57 @@ public class ContextManagerTest {
         ContextManager contextManager = new ContextManager();
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
         contextManager.registerContext(context);
-        contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
+        contextManager.registerCurrentThreadAsExecutorOfContext(context);
 
         try {
-            contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
+            contextManager.registerCurrentThreadAsExecutorOfContext(context);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());
             assertTrue(e.getMessage().contains("has already a executor"));
+        }
+    }
+
+    @Test
+    public void registerCurrentEndExecutionOfContextTest() {
+        ContextManager contextManager = new ContextManager();
+        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
+
+        contextManager.registerContext(context);
+        contextManager.registerCurrentThreadAsExecutorOfContext(context);
+
+        contextManager.registerCurrentThreadEndExecutionOfContext(context);
+
+        assertNull(contextManager.contextByExecutorThread.get(Thread.currentThread().getId()));
+    }
+
+    @Test
+    public void registerCurrentEndExecutionOfContextWithoutRegisterContextTest() {
+        ContextManager contextManager = new ContextManager();
+        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
+
+        try {
+            contextManager.registerCurrentThreadEndExecutionOfContext(context);
+            fail("Exception should be thrown!");
+        } catch (Exception e) {
+            assertNotNull(e.getMessage());
+            assertTrue(e.getMessage().contains("Context not registered"));
+        }
+    }
+
+    @Test
+    public void registerCurrentEndExecutionOfContextOnDifferentThreadTest() {
+        ContextManager contextManager = new ContextManager();
+        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
+
+        contextManager.registerContext(context);
+
+        try {
+            contextManager.registerCurrentThreadEndExecutionOfContext(context);
+            fail("Exception should be thrown!");
+        } catch (Exception e) {
+            assertNotNull(e.getMessage());
+            assertTrue(e.getMessage().contains("different Thread"));
         }
     }
 
@@ -196,10 +202,10 @@ public class ContextManagerTest {
         contextManager.registerContext(childContext);
         contextManager.registerContext(parentContext);
 
-        contextManager.registerTaskParenting(parentTaskId, childTaskId);
+        contextManager.registerTaskParenting(parentContext, childContext);
 
-        assertSame(parentTaskId, childContext.getParentTaskId());
-        assertTrue(parentContext.hasChild(childTaskId));
+        assertSame(parentContext, childContext.getParentContext());
+        assertTrue(parentContext.hasChild(childContext));
     }
 
     @Test
@@ -213,11 +219,11 @@ public class ContextManagerTest {
         contextManager.registerContext(childContext);
 
         try {
-            contextManager.registerTaskParenting(childTaskId, parentTaskId);
+            contextManager.registerTaskParenting(parentContext, childContext);
             fail("Exception should be thrown!");
         } catch(Exception e) {
             assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("There is no Context"));
+            assertTrue(e.getMessage().contains("Context not registered"));
             assertTrue(e.getMessage().contains(parentTaskId));
         }
     }
@@ -233,11 +239,11 @@ public class ContextManagerTest {
         contextManager.registerContext(parentContext);
 
         try {
-            contextManager.registerTaskParenting(childTaskId, parentTaskId);
+            contextManager.registerTaskParenting(parentContext, childContext);
             fail("Exception should be thrown!");
         } catch(Exception e) {
             assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("There is no Context"));
+            assertTrue(e.getMessage().contains("Context not registered"));
             assertTrue(e.getMessage().contains(childTaskId));
         }
     }
@@ -252,10 +258,10 @@ public class ContextManagerTest {
 
         contextManager.registerContext(childContext);
         contextManager.registerContext(parentContext);
-        contextManager.registerTaskParenting(childTaskId, parentTaskId);
+        contextManager.registerTaskParenting(parentContext, childContext);
 
         try {
-            contextManager.registerTaskParenting(childTaskId, parentTaskId);
+            contextManager.registerTaskParenting(parentContext, childContext);
             fail("Exception should be thrown!");
         } catch(Exception e) {
             assertNotNull(e.getMessage());
@@ -277,10 +283,10 @@ public class ContextManagerTest {
         contextManager.registerContext(parentAContext);
         contextManager.registerContext(parentBContext);
 
-        contextManager.registerTaskParenting(parentTaskAId, childTaskId);
+        contextManager.registerTaskParenting(parentAContext, childContext);
 
         try {
-            contextManager.registerTaskParenting(parentTaskBId, childTaskId);
+            contextManager.registerTaskParenting(parentBContext, childContext);
             fail("Exception should be thrown!");
         } catch(Exception e) {
             assertNotNull(e.getMessage());
@@ -289,7 +295,7 @@ public class ContextManagerTest {
     }
 
     @Test
-    public void getTaskRunningOnCurrentThreadTest() {
+    public void getContextRunningOnCurrentThreadTest() {
         ContextManager contextManager = new ContextManager();
         String taskAId = "A";
         String taskBId = "B";
@@ -302,14 +308,14 @@ public class ContextManagerTest {
         contextManager.registerContext(taskBContext);
         contextManager.registerContext(taskCContext);
 
-        contextManager.registerCurrentThreadAsExecutorOfContext(taskAId);
-        contextManager.registerCurrentThreadAsExecutorOfContext(taskBId);
-        contextManager.registerCurrentThreadAsExecutorOfContext(taskCId);
+        contextManager.registerCurrentThreadAsExecutorOfContext(taskAContext);
+        contextManager.registerCurrentThreadAsExecutorOfContext(taskBContext);
+        contextManager.registerCurrentThreadAsExecutorOfContext(taskCContext);
 
         taskAContext.getStatus().setState(State.SUCCEEDED);
         taskBContext.getStatus().setState(State.SUCCEEDED);
 
-        assertEquals(taskCId, contextManager.getIdOfTaskRunningOnCurrentThread());
+        assertEquals(taskCContext, contextManager.getContextRunningOnCurrentThread());
     }
 
     @Test
@@ -318,11 +324,11 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
 
         try {
-            contextManager.setContextResult(context.getTaskId(), null, null);
+            contextManager.setContextResult(context, null, null);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("There is no Context"));
+            assertTrue(e.getMessage().contains("Context not registered"));
             assertTrue(e.getMessage().contains(context.getTaskId()));
         }
     }
@@ -336,7 +342,7 @@ public class ContextManagerTest {
 
         contextManager.registerContext(taskContext);
 
-        contextManager.setContextResult(taskContext.getTaskId(), result, null);
+        contextManager.setContextResult(taskContext, result, null);
 
         assertSame(result, taskContext.getResultValue());
     }
@@ -350,7 +356,7 @@ public class ContextManagerTest {
 
         contextManager.registerContext(taskContext);
 
-        contextManager.setContextResult(taskContext.getTaskId(), null, result);
+        contextManager.setContextResult(taskContext, null, result);
 
         assertSame(result, taskContext.getResultException());
     }
@@ -364,10 +370,10 @@ public class ContextManagerTest {
 
         contextManager.registerContext(taskContext);
 
-        contextManager.setContextResult(taskContext.getTaskId(), result, null);
+        contextManager.setContextResult(taskContext, result, null);
 
         try {
-            contextManager.setContextResult(taskContext.getTaskId(), result, null);
+            contextManager.setContextResult(taskContext, result, null);
             fail("Exception should be thrown!");
         } catch (Exception e) {
             assertNotNull(e.getMessage());

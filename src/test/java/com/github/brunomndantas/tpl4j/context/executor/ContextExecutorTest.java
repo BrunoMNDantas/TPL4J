@@ -106,9 +106,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWaitsForAttachedChildrenTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -129,9 +127,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentSuccessAndChildSuccessTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -146,18 +142,18 @@ public class ContextExecutorTest {
 
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getSucceededEvent().hasFired());
         assertSame(SUCCESS_RESULT, parentContext.getResultValue());
         assertNull(parentContext.getResultException());
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getSucceededEvent().hasFired());
         assertSame(SUCCESS_RESULT, childContext.getResultValue());
@@ -166,9 +162,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentSuccessAndChildCancelTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -182,18 +176,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getSucceededEvent().hasFired());
         assertSame(SUCCESS_RESULT, parentContext.getResultValue());
         assertNull(parentContext.getResultException());
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getCancelledEvent().hasFired());
         assertNull(childContext.getResultValue());
@@ -202,9 +196,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentSuccessAndChildFailTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -218,18 +210,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
         assertSame(FAIL_RESULT, parentContext.getResultException());
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getFailedEvent().hasFired());
         assertNull(childContext.getResultValue());
@@ -238,9 +230,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentSuccessAndChildrenFailTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -258,13 +248,13 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childAContext = contextManager.getContext("childA");
-        Context<?> childBContext = contextManager.getContext("childB");
+        Context<?> parentContext = context;
+        Context<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
+        Context<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childAContext.getTaskId()));
-        assertTrue(parentContext.getChildrenTasksIds().contains(childBContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childAContext));
+        assertTrue(parentContext.getChildrenContexts().contains(childBContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
@@ -272,14 +262,14 @@ public class ContextExecutorTest {
         assertEquals(0, parentContext.getResultException().getSuppressed().length);//Both end with same exception so child exception is not suppressed
 
         assertNotNull(childAContext);
-        assertEquals(parentContext.getTaskId(), childAContext.getParentTaskId());
+        assertEquals(parentContext, childAContext.getParentContext());
         assertTrue(childAContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childAContext.getStatus().getFailedEvent().hasFired());
         assertNull(childAContext.getResultValue());
         assertSame(FAIL_RESULT, childAContext.getResultException());
 
         assertNotNull(childBContext);
-        assertEquals(parentContext.getTaskId(), childBContext.getParentTaskId());
+        assertEquals(parentContext, childBContext.getParentContext());
         assertTrue(childBContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childBContext.getStatus().getFailedEvent().hasFired());
         assertNull(childBContext.getResultValue());
@@ -288,9 +278,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentCancelAndChildSuccessTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -306,18 +294,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getCancelledEvent().hasFired());
         assertNull(parentContext.getResultValue());
         assertTrue(parentContext.getResultException() instanceof CancelledException);
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getSucceededEvent().hasFired());
         assertSame(SUCCESS_RESULT, childContext.getResultValue());
@@ -326,9 +314,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentCancelAndChildCancelTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -344,18 +330,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getCancelledEvent().hasFired());
         assertNull(parentContext.getResultValue());
         assertTrue(parentContext.getResultException() instanceof CancelledException);
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getCancelledEvent().hasFired());
         assertNull(childContext.getResultValue());
@@ -364,9 +350,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentCancelAndChildFailTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -382,18 +366,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
         assertSame(FAIL_RESULT, parentContext.getResultException());
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getFailedEvent().hasFired());
         assertNull(childContext.getResultValue());
@@ -402,9 +386,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentCancelAndChildrenFailTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -425,13 +407,13 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childAContext = contextManager.getContext("childA");
-        Context<?> childBContext = contextManager.getContext("childB");
+        Context<?> parentContext = context;
+        Context<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
+        Context<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childAContext.getTaskId()));
-        assertTrue(parentContext.getChildrenTasksIds().contains(childBContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childAContext));
+        assertTrue(parentContext.getChildrenContexts().contains(childBContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
@@ -439,14 +421,14 @@ public class ContextExecutorTest {
         assertEquals(0, parentContext.getResultException().getSuppressed().length);//Both end with same exception so child exception is not suppressed
 
         assertNotNull(childAContext);
-        assertEquals(parentContext.getTaskId(), childAContext.getParentTaskId());
+        assertEquals(parentContext, childAContext.getParentContext());
         assertTrue(childAContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childAContext.getStatus().getFailedEvent().hasFired());
         assertNull(childAContext.getResultValue());
         assertSame(FAIL_RESULT, childAContext.getResultException());
 
         assertNotNull(childBContext);
-        assertEquals(parentContext.getTaskId(), childBContext.getParentTaskId());
+        assertEquals(parentContext, childBContext.getParentContext());
         assertTrue(childBContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childBContext.getStatus().getFailedEvent().hasFired());
         assertNull(childBContext.getResultValue());
@@ -455,9 +437,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentFailAndChildSuccessTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -471,18 +451,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
         assertSame(FAIL_RESULT, parentContext.getResultException());
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getSucceededEvent().hasFired());
         assertSame(SUCCESS_RESULT, childContext.getResultValue());
@@ -491,9 +471,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentFailAndChildCancelTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -507,18 +485,18 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
         assertSame(FAIL_RESULT, parentContext.getResultException());
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getCancelledEvent().hasFired());
         assertNull(childContext.getResultValue());
@@ -527,9 +505,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentFailAndChildFailTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -543,11 +519,11 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childContext = contextManager.getContext("child");
+        Context<?> parentContext = context;
+        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
@@ -555,7 +531,7 @@ public class ContextExecutorTest {
         assertEquals(0, parentContext.getResultException().getSuppressed().length); //Both end with same exception so child exception is not suppressed
 
         assertNotNull(childContext);
-        assertEquals(parentContext.getTaskId(), childContext.getParentTaskId());
+        assertEquals(parentContext, childContext.getParentContext());
         assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childContext.getStatus().getFailedEvent().hasFired());
         assertNull(childContext.getResultValue());
@@ -564,9 +540,7 @@ public class ContextExecutorTest {
 
     @Test
     public void executeWithParentFailAndChildrenFailTest() throws Exception {
-        ContextManager contextManager = new ContextManager(){
-            @Override public synchronized void unregisterContext(String taskId) { }
-        };
+        ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
@@ -585,13 +559,13 @@ public class ContextExecutorTest {
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = contextManager.getContext("parent");
-        Context<?> childAContext = contextManager.getContext("childA");
-        Context<?> childBContext = contextManager.getContext("childB");
+        Context<?> parentContext = context;
+        Context<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
+        Context<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
 
         assertNotNull(parentContext);
-        assertTrue(parentContext.getChildrenTasksIds().contains(childAContext.getTaskId()));
-        assertTrue(parentContext.getChildrenTasksIds().contains(childBContext.getTaskId()));
+        assertTrue(parentContext.getChildrenContexts().contains(childAContext));
+        assertTrue(parentContext.getChildrenContexts().contains(childBContext));
         assertTrue(parentContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(parentContext.getStatus().getFailedEvent().hasFired());
         assertNull(parentContext.getResultValue());
@@ -600,14 +574,14 @@ public class ContextExecutorTest {
         assertSame(FAIL_RESULT, parentContext.getResultException().getSuppressed()[1]);
 
         assertNotNull(childAContext);
-        assertEquals(parentContext.getTaskId(), childAContext.getParentTaskId());
+        assertEquals(parentContext, childAContext.getParentContext());
         assertTrue(childAContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childAContext.getStatus().getFailedEvent().hasFired());
         assertNull(childAContext.getResultValue());
         assertSame(FAIL_RESULT, childAContext.getResultException());
 
         assertNotNull(childBContext);
-        assertEquals(parentContext.getTaskId(), childBContext.getParentTaskId());
+        assertEquals(parentContext, childBContext.getParentContext());
         assertTrue(childBContext.getStatus().getFinishedEvent().hasFired());
         assertTrue(childBContext.getStatus().getFailedEvent().hasFired());
         assertNull(childBContext.getResultValue());

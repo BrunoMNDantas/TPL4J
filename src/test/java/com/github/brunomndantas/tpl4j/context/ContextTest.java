@@ -68,37 +68,37 @@ public class ContextTest {
     }
 
     @Test
-    public void getParentTaskIdTest() {
-        String parentTaskId = "";
-        Context<String> context = new Context<>(null, null, null, null, null, null, parentTaskId, null, 0, 0, null, null);
-        assertSame(parentTaskId, context.getParentTaskId());
+    public void getParentContextTest() {
+        Context<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);
+        Context<String> context = new Context<>(null, null, null, null, null, null, parentContext, null, 0, 0, null, null);
+        assertSame(parentContext, context.getParentContext());
     }
 
     @Test
-    public void setParentTaskIdTest() {
-        String parentTaskId = "";
+    public void setParentContextTest() {
+        Context<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);
         Context<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
 
-        context.setParentTaskId(parentTaskId);
+        context.setParentContext(parentContext);
 
-        assertSame(parentTaskId, context.getParentTaskId());
+        assertSame(parentContext, context.getParentContext());
     }
 
     @Test
-    public void getChildrenTasksIdsTest() {
-        Collection<String> childrenTasksIds = new LinkedList<>();
-        Context<String> context = new Context<>(null, null, null, null, null, null, null, childrenTasksIds, 0, 0, null, null);
-        assertSame(childrenTasksIds, context.getChildrenTasksIds());
+    public void getChildrenContextsTest() {
+        Collection<Context<?>> childrenContexts = new LinkedList<>();
+        Context<String> context = new Context<>(null, null, null, null, null, null, null, childrenContexts, 0, 0, null, null);
+        assertSame(childrenContexts, context.getChildrenContexts());
     }
 
     @Test
-    public void setChildrenTasksIdsTest() {
-        Collection<String> childrenTasksIds = new LinkedList<>();
+    public void setChildrenContextsTest() {
+        Collection<Context<?>> childrenContexts = new LinkedList<>();
         Context<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
 
-        context.setChildrenTasksIds(childrenTasksIds);
+        context.setChildrenContexts(childrenContexts);
 
-        assertSame(childrenTasksIds, context.getChildrenTasksIds());
+        assertSame(childrenContexts, context.getChildrenContexts());
     }
 
     @Test
@@ -187,14 +187,14 @@ public class ContextTest {
             @Override public boolean notCancelable() { return false; }
         };
         Status status = new Status("");
-        String parentTaskId = "";
-        Collection<String> childrenTasksIds = new LinkedList<>();
+        Context<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);
+        Collection<Context<?>> childrenContexts = new LinkedList<>();
         long creatorThreadId = 1;
         long executorThreadId = 2;
         String resultValue = "";
         Exception resultException = new Exception();
 
-        Context<String> context = new Context<>(taskId, action, cancellationToken, scheduler, options, status, parentTaskId, childrenTasksIds, creatorThreadId, executorThreadId, resultValue, resultException);
+        Context<String> context = new Context<>(taskId, action, cancellationToken, scheduler, options, status, parentContext, childrenContexts, creatorThreadId, executorThreadId, resultValue, resultException);
 
         assertSame(taskId, context.getTaskId());
         assertSame(action, context.getAction());
@@ -202,8 +202,8 @@ public class ContextTest {
         assertSame(scheduler, context.getScheduler());
         assertSame(options, context.getOptions());
         assertSame(status, context.getStatus());
-        assertSame(parentTaskId, context.getParentTaskId());
-        assertSame(childrenTasksIds, context.getChildrenTasksIds());
+        assertSame(parentContext, context.getParentContext());
+        assertSame(childrenContexts, context.getChildrenContexts());
         assertEquals(creatorThreadId, context.getCreatorThreadId());
         assertEquals(executorThreadId, context.getExecutorThreadId());
         assertSame(resultValue, context.getResultValue());
@@ -212,26 +212,26 @@ public class ContextTest {
 
     @Test
     public void hasChildTest() {
-        String childTaskId = "";
+        Context<?> childContext = new Context<>(null, (t)->null, null, null, null, null, null, null, 0, 0, null, null);
         Context<String> context = new Context<>(null, null, null, null, null, null, null, new LinkedList<>(), 0, 0, null, null);
 
-        assertFalse(context.hasChild(childTaskId));
+        assertFalse(context.hasChild(childContext));
 
-        context.getChildrenTasksIds().add(childTaskId);
+        context.getChildrenContexts().add(childContext);
 
-        assertTrue(context.hasChild(childTaskId));
+        assertTrue(context.hasChild(childContext));
     }
 
     @Test
     public void addChildTest() {
-        String childTaskId = "";
+        Context<?> childContext = new Context<>(null, (t)->null, null, null, null, null, null, null, 0, 0, null, null);
         Context<String> context = new Context<>(null, null, null, null, null, null, null, new LinkedList<>(), 0, 0, null, null);
 
-        assertFalse(context.hasChild(childTaskId));
+        assertFalse(context.hasChild(childContext));
 
-        context.addChild(childTaskId);
+        context.addChild(childContext);
 
-        assertTrue(context.hasChild(childTaskId));
+        assertTrue(context.hasChild(childContext));
     }
 
 }

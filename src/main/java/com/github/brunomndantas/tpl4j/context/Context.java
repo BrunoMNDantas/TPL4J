@@ -28,13 +28,13 @@ public class Context<T> implements IContext<T> {
     protected IStatus status;
     @Override public synchronized IStatus getStatus() { return this.status; }
 
-    protected String parentTaskId;
-    @Override public synchronized String getParentTaskId() { return this.parentTaskId; }
-    @Override public synchronized void setParentTaskId(String parentTaskId) { this.parentTaskId = parentTaskId; }
+    protected Context<?> parentContext;
+    @Override public synchronized Context<?> getParentContext() { return this.parentContext; }
+    @Override public synchronized void setParentContext(Context<?> parentContext) { this.parentContext = parentContext; }
 
-    protected Collection<String> childrenTasksIds;
-    @Override public synchronized Collection<String> getChildrenTasksIds() { return this.childrenTasksIds; }
-    @Override public synchronized void setChildrenTasksIds(Collection<String> childrenTasksIds) { this.childrenTasksIds = childrenTasksIds; }
+    protected Collection<Context<?>> childrenContexts;
+    @Override public synchronized Collection<Context<?>> getChildrenContexts() { return this.childrenContexts; }
+    @Override public synchronized void setChildrenContexts(Collection<Context<?>> childrenContexts) { this.childrenContexts = childrenContexts; }
 
     protected long creatorThreadId;
     @Override public synchronized long getCreatorThreadId() { return this.creatorThreadId; }
@@ -56,7 +56,7 @@ public class Context<T> implements IContext<T> {
 
     public Context(String taskId,
                    IAction<T> action, ICancellationToken cancellationToken, IScheduler scheduler, IOptions options, IStatus status,
-                   String parentTaskId, Collection<String> childrenTasksIds, long creatorThreadId, long executorThreadId,
+                   Context<?> parentContext, Collection<Context<?>> childrenContexts, long creatorThreadId, long executorThreadId,
                    T resultValue, Exception resultException) {
         this.taskId = taskId;
         this.action = action;
@@ -64,8 +64,8 @@ public class Context<T> implements IContext<T> {
         this.scheduler = scheduler;
         this.options = options;
         this.status = status;
-        this.parentTaskId = parentTaskId;
-        this.childrenTasksIds = childrenTasksIds;
+        this.parentContext = parentContext;
+        this.childrenContexts = childrenContexts;
         this.creatorThreadId = creatorThreadId;
         this.executorThreadId = executorThreadId;
         this.resultValue = resultValue;
@@ -74,12 +74,12 @@ public class Context<T> implements IContext<T> {
 
 
 
-    @Override public synchronized boolean hasChild(String childTaskId) {
-        return this.childrenTasksIds.contains(childTaskId);
+    @Override public synchronized boolean hasChild(Context<?> context) {
+        return this.childrenContexts.contains(context);
     }
 
-    @Override public synchronized void addChild(String childTaskId) {
-        this.childrenTasksIds.add(childTaskId);
+    @Override public synchronized void addChild(Context<?> context) {
+        this.childrenContexts.add(context);
     }
 
 }

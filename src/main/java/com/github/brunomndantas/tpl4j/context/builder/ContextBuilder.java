@@ -35,11 +35,11 @@ public class ContextBuilder implements IContextBuilder {
 
         this.contextManager.registerContext(context);
 
-        this.contextManager.registerCurrentThreadAsCreatorOfContext(taskId);
+        this.contextManager.registerCurrentThreadAsCreatorOfContext(context);
 
-        String parentId = this.contextManager.getIdOfTaskRunningOnCurrentThread();
-        if(parentId != null)
-            this.contextManager.registerTaskParenting(parentId, taskId);
+        Context<?> parentContext = this.contextManager.getContextRunningOnCurrentThread();
+        if(parentContext != null)
+            this.contextManager.registerTaskParenting(parentContext, context);
 
         LOGGER.info("Context for Task with id:" + taskId + " built!");
         LOGGER.info("Task with id:" + taskId + " monitoring CancellationToken with id:" + cancellationToken.getId() + "!");

@@ -6,22 +6,22 @@ public interface IContextManager {
 
     void registerContext(Context<?> context);
 
-    void unregisterContext(String taskId);
-
-    Context<?> getContext(String taskId);
+    void unregisterContext(Context<?> context);
 
 
-    void registerCurrentThreadAsCreatorOfContext(String taskId);
+    void registerCurrentThreadAsCreatorOfContext(Context<?> context);
 
-    void registerCurrentThreadAsExecutorOfContext(String taskId);
+    void registerCurrentThreadAsExecutorOfContext(Context<?> context);
 
-
-    void registerTaskParenting(String parentTaskId, String childTaskId);
-
-
-    String getIdOfTaskRunningOnCurrentThread();
+    void registerCurrentThreadEndExecutionOfContext(Context<?> context);
 
 
-    <T> void setContextResult(String taskId, T value, Exception exception);
+    void registerTaskParenting(Context<?> parentContext, Context<?> childContext);
+
+
+    Context<?> getContextRunningOnCurrentThread();
+
+
+    <T> void setContextResult(Context<T> context, T value, Exception exception);
     
 }

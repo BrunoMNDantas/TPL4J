@@ -32,7 +32,7 @@ public class ContextExecutor implements IContextExecutor {
     }
 
     protected <T> void run(Context<T> context) {
-        this.contextManager.registerCurrentThreadAsExecutorOfContext(context.getTaskId());
+        this.contextManager.registerCurrentThreadAsExecutorOfContext(context);
 
         try {
             if(!context.getOptions().notCancelable())
@@ -49,6 +49,8 @@ public class ContextExecutor implements IContextExecutor {
             else
                 declareFail(context, e);
         }
+
+        this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
     }
 
     protected <T> void declareSuccess(Context<T> context, T value) {
@@ -82,18 +84,9 @@ public class ContextExecutor implements IContextExecutor {
         if(context.getOptions().rejectChildren())
             return new LinkedList<>();
 
-        Collection<String> childrenIds = context.getChildrenTasksIds();
-
-        return getContexts(childrenIds)
+        return context.getChildrenContexts()
                 .stream()
                 .filter(ctx -> ctx.getOptions().attachToParent())
-                .collect(Collectors.toList());
-    }
-
-    protected Collection<Context<?>> getContexts(Collection<String> tasksIds) {
-        return tasksIds
-                .stream()
-                .map(this.contextManager::getContext)
                 .collect(Collectors.toList());
     }
 
@@ -136,17 +129,17 @@ public class ContextExecutor implements IContextExecutor {
 
     protected <T> void endExecution(Context<T> context, T value, Exception exception) {
         if(exception != null && exception instanceof CancelledException) {
-            this.contextManager.setContextResult(context.getTaskId(), null, exception);
+            this.contextManager.setContextResult(context, null, exception);
             context.getStatus().setState(State.CANCELED);
         } else if(exception != null) {
-            this.contextManager.setContextResult(context.getTaskId(), null, exception);
+            this.contextManager.setContextResult(context, null, exception);
             context.getStatus().setState(State.FAILED);
         } else {
-            this.contextManager.setContextResult(context.getTaskId(), value, null);
+            this.contextManager.setContextResult(context, value, null);
             context.getStatus().setState(State.SUCCEEDED);
         }
 
-        this.contextManager.unregisterContext(context.getTaskId());
+        this.contextManager.unregisterContext(context);
     }
 
 }

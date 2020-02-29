@@ -23,14 +23,14 @@ public interface IContext<T> {
     IStatus getStatus();
 
 
-    String getParentTaskId();
+    Context<?> getParentContext();
 
-    void setParentTaskId(String parentTaskId);
+    void setParentContext(Context<?> parentContext);
 
 
-    Collection<String> getChildrenTasksIds();
+    Collection<Context<?>> getChildrenContexts();
 
-    void setChildrenTasksIds(Collection<String> childrenTasksIds);
+    void setChildrenContexts(Collection<Context<?>> childrenContexts);
 
 
     long getCreatorThreadId();
@@ -53,9 +53,8 @@ public interface IContext<T> {
     void setResultException(Exception resultException);
 
 
-    boolean hasChild(String childTaskId);
+    boolean hasChild(Context<?> context);
 
-
-    void addChild(String childTaskId);
+    void addChild(Context<?> context);
 
 }

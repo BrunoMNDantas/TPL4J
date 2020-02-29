@@ -58,9 +58,8 @@ public class ContextBuilderTest {
         assertSame(scheduler, context.getScheduler());
         assertSame(options, context.getOptions());
         assertNotNull(context.getStatus());
-        assertNotNull(context.getChildrenTasksIds());
+        assertNotNull(context.getChildrenContexts());
 
-        assertSame(context, contextManager.getContext(taskId));
         assertSame(Thread.currentThread().getId(), context.getCreatorThreadId());
     }
 
@@ -87,12 +86,12 @@ public class ContextBuilderTest {
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         Context<String> parentContext = contextBuilder.build(parentTaskId, action, cancellationToken, scheduler, options);
 
-        contextManager.registerCurrentThreadAsExecutorOfContext(parentTaskId);
+        contextManager.registerCurrentThreadAsExecutorOfContext(parentContext);
 
         Context<String> childContext = contextBuilder.build(childTaskId, action, cancellationToken, scheduler, options);
 
-        assertSame(parentTaskId, childContext.getParentTaskId());
-        assertTrue(parentContext.getChildrenTasksIds().contains(childTaskId));
+        assertSame(parentContext, childContext.getParentContext());
+        assertTrue(parentContext.getChildrenContexts().contains(childContext));
     }
 
 }
