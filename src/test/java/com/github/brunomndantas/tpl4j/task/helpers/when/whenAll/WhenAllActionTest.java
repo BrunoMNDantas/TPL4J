@@ -3,20 +3,21 @@ package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 
 public class WhenAllActionTest {
 
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
+    private static final IScheduler SCHEDULER = new DedicatedThreadScheduler();
 
 
 
@@ -31,40 +32,40 @@ public class WhenAllActionTest {
 
     @Test
     public void runSuccessTest() throws Exception {
-        Task<String> taskA = new Task<>("", (t) -> "A", new CancellationToken(), SCHEDULER);
-        Task<String> taskB = new Task<>("", (t) -> "B", new CancellationToken(), SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), SCHEDULER);
+        Task<String> taskB = new Task<>((t) -> "B", new CancellationToken(), SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().getFinishedEvent().await();
-        taskB.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
+        taskB.getContext().getStatus().getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
         Collection<String> results = action.run(new CancellationToken());
 
         assertEquals(tasks.size(), results.size());
-        assertTrue(results.contains(taskA.getValue()));
-        assertTrue(results.contains(taskB.getValue()));
+        assertTrue(results.contains(taskA.getContext().getResultValue()));
+        assertTrue(results.contains(taskB.getContext().getResultValue()));
     }
 
     @Test
     public void runFailTest() throws Exception {
         Exception exceptionB = new Exception();
         Exception exceptionC = new Exception();
-        Task<String> taskA = new Task<>("", (t) -> "A", new CancellationToken(), SCHEDULER);
-        Task<String> taskB = new Task<>("", (IAction<String>) (t) -> { throw exceptionB; }, new CancellationToken(), SCHEDULER);
-        Task<String> taskC = new Task<>("", (IAction<String>) (t) -> { throw exceptionC; }, new CancellationToken(), SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), SCHEDULER);
+        Task<String> taskB = new Task<>((IAction<String>) (t) -> { throw exceptionB; }, new CancellationToken(), SCHEDULER);
+        Task<String> taskC = new Task<>((IAction<String>) (t) -> { throw exceptionC; }, new CancellationToken(), SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB, taskC);
 
         taskA.start();
         taskB.start();
         taskC.start();
 
-        taskA.getStatus().getFinishedEvent().await();
-        taskB.getStatus().getFinishedEvent().await();
-        taskC.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
+        taskB.getContext().getStatus().getFinishedEvent().await();
+        taskC.getContext().getStatus().getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
         try{
@@ -79,15 +80,15 @@ public class WhenAllActionTest {
 
     @Test(expected = CancelledException.class)
     public void runCancelTest() throws Exception {
-        Task<String> taskA = new Task<>("", (t) -> "A", CANCELLATION_TOKEN, SCHEDULER);
-        Task<String> taskB = new Task<>("", (t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, CANCELLATION_TOKEN, SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", CANCELLATION_TOKEN, SCHEDULER);
+        Task<String> taskB = new Task<>((t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, CANCELLATION_TOKEN, SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().getFinishedEvent().await();
-        taskB.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
+        taskB.getContext().getStatus().getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
 
@@ -96,12 +97,12 @@ public class WhenAllActionTest {
 
     @Test(expected = CancelledException.class)
     public void runCancelTokenTest() throws Exception {
-        Task<String> taskA = new Task<>("", (t) -> "A", CANCELLATION_TOKEN, SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", CANCELLATION_TOKEN, SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA);
 
         taskA.start();
 
-        taskA.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
 
         CancellationToken cancellationToken = new CancellationToken();
 

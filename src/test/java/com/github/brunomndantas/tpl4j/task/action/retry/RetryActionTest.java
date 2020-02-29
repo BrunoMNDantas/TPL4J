@@ -1,9 +1,9 @@
 package com.github.brunomndantas.tpl4j.task.action.retry;
 
-import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;
 
 import java.util.Random;
@@ -51,7 +51,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, RetryAction.RETRY_UNTIL_SUCCESS);
 
@@ -68,7 +68,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, 3);
 
@@ -97,7 +97,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, 3);
 
@@ -113,7 +113,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, RetryAction.RETRY_UNTIL_SUCCESS);
 

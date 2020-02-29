@@ -3,13 +3,13 @@ package com.github.brunomndantas.tpl4j.task.helpers.parallel.action;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.task.ParallelWorkerTask;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.function.Consumer;
 
 public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
@@ -36,15 +36,15 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
     private ICancellationToken cancellationToken;
     public ICancellationToken getCancellationToken() { return this.cancellationToken; }
 
-    private Consumer<Runnable> scheduler;
-    public Consumer<Runnable> getScheduler(){ return this.scheduler; }
+    private IScheduler scheduler;
+    public IScheduler getScheduler(){ return this.scheduler; }
 
     private Option[] options;
     public Option[] getOptions() { return this.options; }
 
 
 
-    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterable<T> elements, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Collection<Option> options) {
+    public ParallelAction(String taskId, IParallelAction<T, K> action, Iterable<T> elements, ICancellationToken cancellationToken, IScheduler scheduler, Collection<Option> options) {
         this.taskId = taskId;
         this.elements = elements;
         this.action = action;
@@ -77,7 +77,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
                 synchronized (results) {
                     results.addAll(previous.getResult());
                 }
-            }, this.scheduler, this.options);
+            }, this.cancellationToken, this.scheduler, this.options);
 
             task.start();
         }

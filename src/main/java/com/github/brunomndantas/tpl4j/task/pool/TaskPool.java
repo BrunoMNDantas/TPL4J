@@ -19,19 +19,18 @@ package com.github.brunomndantas.tpl4j.task.pool;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.PoolScheduler;
+import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.*;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.task.ParallelTask;
 import com.github.brunomndantas.tpl4j.task.helpers.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.task.helpers.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.task.helpers.when.whenAny.WhenAnyTask;
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.action.action.*;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 public class TaskPool {
 
@@ -39,7 +38,7 @@ public class TaskPool {
 
 
 
-    public static Consumer<Runnable> getTaskScheduler() {
+    public static IScheduler getTaskScheduler() {
         return INSTANCE.getScheduler();
     }
 
@@ -561,16 +560,13 @@ public class TaskPool {
 
 
 
-    protected volatile ExecutorService pool;
-
-    protected volatile Consumer<Runnable> scheduler;
-    public Consumer<Runnable> getScheduler() { return this.scheduler; }
+    protected volatile IScheduler scheduler;
+    public IScheduler getScheduler() { return this.scheduler; }
 
 
 
     public TaskPool(int nThreads) {
-       this.pool = Executors.newFixedThreadPool(nThreads);
-       this.scheduler = pool::submit;
+       this.scheduler = new PoolScheduler(nThreads);
     }
 
     public TaskPool() {
@@ -1100,7 +1096,7 @@ public class TaskPool {
 
 
     public void close() {
-        pool.shutdown();
+        this.scheduler.close();
     }
 
 }

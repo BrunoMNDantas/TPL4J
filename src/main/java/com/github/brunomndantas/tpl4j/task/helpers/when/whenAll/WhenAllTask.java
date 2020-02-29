@@ -16,14 +16,14 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.options.Options;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Consumer;
 
 public class WhenAllTask<T> extends Task<Collection<T>> {
 
@@ -32,14 +32,13 @@ public class WhenAllTask<T> extends Task<Collection<T>> {
 
 
 
-    public WhenAllTask(String taskId, Collection<Task<T>> tasks, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
-        super(new WhenAllJob<>(
-                taskId,
-                cancellationToken,
-                scheduler,
-                Arrays.asList(options),
-                tasks
-        ));
+    public WhenAllTask(String taskId, Collection<Task<T>> tasks, ICancellationToken cancellationToken, IScheduler scheduler, Option... options) {
+        super(
+                Task.DEFAULT_CONTEXT_BUILDER.build(taskId, new WhenAllAction<>(tasks), cancellationToken, scheduler, new Options(Arrays.asList(options))),
+                Task.DEFAULT_CONTEXT_MANAGER,
+                Task.DEFAULT_CONTEXT_BUILDER,
+                new WhenAllContextExecutor<>(Task.DEFAULT_CONTEXT_MANAGER, tasks)
+        );
 
         this.tasks = tasks;
     }

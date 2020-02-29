@@ -1,17 +1,23 @@
 package com.github.brunomndantas.tpl4j.task;
 
+import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
+import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
+import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.context.job.Job;
+import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.options.Options;
+import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.*;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.function.Consumer;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -27,110 +33,43 @@ public class TaskTest {
     private static final ILinkEmptyVoidAction LINK_EMPTY_VOID_ACTION = () -> {};
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Option[] OPTIONS = {};
-    private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
+    private static final IScheduler SCHEDULER = new DedicatedThreadScheduler();
     private static final String SUCCESS_RESULT = "";
     private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(3000); return SUCCESS_RESULT; };
     private static final Exception FAIL_RESULT = new Exception();
     private static final IAction<String> FAIL_ACTION = (token) -> { Thread.sleep(3000); throw FAIL_RESULT; };
-    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); token.abortIfCancelRequested(); return SUCCESS_RESULT; };
+    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); token.cancel(); token.abortIfCancelRequested(); return SUCCESS_RESULT; };
 
 
 
     @Test
-    public void getJobTest() {
-        Job<?> job = new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>());
-        Task<?> task = new Task<>(job);
-
-        assertNotNull(task.getJob());
-        assertSame(SUCCESS_ACTION, task.getJob().getAction());
+    public void getContextTest() {
+        Context<String> context = new Context<>("", (ct)->null, CANCELLATION_TOKEN, SCHEDULER, new Options(Arrays.asList(OPTIONS)), null, null, null, 0, 0, null, null);
+        Task<String> task = new Task<>(context, null, null, null);
+        assertSame(context, task.getContext());
     }
 
     @Test
-    public void getIdTest() {
-        String id = "";
-        Task<?> task = new Task<>(new Job<>(id, SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertSame(id, task.getId());
+    public void getContextManagerTest() {
+        ContextManager contextManager = new ContextManager();
+        Task<String> task = new Task<>(null, contextManager, null, null);
+        assertSame(contextManager, task.getContextManager());
     }
 
     @Test
-    public void getActionTest() {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertNotNull(task.getAction());
-        assertSame(SUCCESS_ACTION, task.getAction());
+    public void getContextBuilderTest() {
+        ContextBuilder contextBuilder = new ContextBuilder(null);
+        Task<String> task = new Task<>(null, null, contextBuilder, null);
+        assertSame(contextBuilder, task.getContextBuilder());
     }
 
     @Test
-    public void getSchedulerTest() {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertSame(task.getJob().getScheduler(), task.getScheduler());
+    public void getContextExecutorTest() {
+        ContextExecutor contextExecutor = new ContextExecutor(null);
+        Task<String> task = new Task<>(null, null, null, contextExecutor);
+        assertSame(contextExecutor, task.getContextExecutor());
     }
-
-    @Test
-    public void getOptionsTest() {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertSame(task.getJob().getOptions().getOptions(), task.getOptions());
-    }
-
-    @Test
-    public void getValueTest() throws InterruptedException {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        task.start();
-
-        task.getStatus().getFinishedEvent().await();
-
-        assertSame(SUCCESS_RESULT, task.getValue());
-    }
-
-    @Test
-    public void getExceptionTest() throws InterruptedException {
-        Task<?> task = new Task<>(new Job<>("", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        task.start();
-
-        task.getStatus().getFinishedEvent().await();
-
-        assertSame(FAIL_RESULT, task.getException());
-    }
-
-    @Test
-    public void getCancellationTokenTest() {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertSame(CANCELLATION_TOKEN, task.getCancellationToken());
-        assertSame(task.getJob().getCancellationToken(), task.getCancellationToken());
-    }
-
-    @Test
-    public void getStatusTest() {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertNotNull(task.getStatus());
-        assertSame(task.getJob().getStatus(), task.getStatus());
-    }
-
-    @Test
-    public void getTokenIdTest() {
-        Task<?> taskA = new Task<>(ACTION);
-        Task<?> taskB = new Task<>(ACTION);
-        String id = "";
-        Task<?> taskC = new Task<>(id, ACTION);
-
-        assertNotNull(taskA.getId());
-        assertFalse(taskA.getId().isEmpty());
-
-        assertNotNull(taskB.getId());
-        assertFalse(taskB.getId().isEmpty());
-
-        assertNotEquals(taskA.getId(), taskB.getId());
-
-        assertSame(id, taskC.getId());
-    }
-
+    
     @Test
     public void constructorsTest() {
         String id = "";
@@ -281,188 +220,137 @@ public class TaskTest {
         validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, null, null);
     }
 
-    private void validateAction(Task<?> task, String id, IAction<?> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateAction(Task<?> task, String id, IAction<?> action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
-        assertSame(action, task.getAction());
+        assertSame(action, task.context.getAction());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.context.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
         else
-            assertSame(scheduler, task.getScheduler());
+            assertSame(scheduler, task.context.getScheduler());
 
         if(options == null) {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
+            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
         } else {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
+            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
         }
     }
 
-    private void validateVoidAction(Task<?> task, String id, IVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateVoidAction(Task<?> task, String id, IVoidAction action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
-        assertSame(action, ((VoidAction)task.getAction()).getAction());
+        assertSame(action, ((VoidAction)task.context.getAction()).getAction());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.context.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
         else
-            assertSame(scheduler, task.getScheduler());
+            assertSame(scheduler, task.context.getScheduler());
 
         if(options == null) {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
+            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
         } else {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
+            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
         }
     }
 
-    private void validateEmptyAction(Task<?> task, String id, IEmptyAction<?> action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateEmptyAction(Task<?> task, String id, IEmptyAction<?> action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
-        assertSame(action, ((EmptyAction)task.getAction()).getAction());
+        assertSame(action, ((EmptyAction)task.context.getAction()).getAction());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.context.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
         else
-            assertSame(scheduler, task.getScheduler());
+            assertSame(scheduler, task.context.getScheduler());
 
         if(options == null) {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
+            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
         } else {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
+            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
         }
     }
 
-    private void validateEmptyVoidAction(Task<?> task, String id, IEmptyVoidAction action, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateEmptyVoidAction(Task<?> task, String id, IEmptyVoidAction action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
-        assertSame(action, ((EmptyVoidAction)task.getAction()).getAction());
+        assertSame(action, ((EmptyVoidAction)task.context.getAction()).getAction());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.context.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.getScheduler());
+            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
         else
-            assertSame(scheduler, task.getScheduler());
+            assertSame(scheduler, task.context.getScheduler());
 
         if(options == null) {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
+            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
         } else {
-            assertTrue(task.getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.getOptions()));
+            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
+            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
         }
     }
 
+    @Test
+    public void getIdTest() {
+        String id = UUID.randomUUID().toString();
+        Task<String> task = new Task(id, SUCCESS_ACTION);
+        assertSame(id, task.getId());
+    }
+    
     @Test
     public void startTest() throws InterruptedException {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
+        Task<String> task = new Task<>(SUCCESS_ACTION);
 
         task.start();
 
-        assertTrue(task.getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.context.getStatus().getScheduledEvent().hasFired());
 
-        task.getStatus().getSucceededEvent().await();
+        task.context.getStatus().getSucceededEvent().await();
 
-        assertSame(SUCCESS_RESULT, task.getValue());
-    }
-
-    @Test
-    public void cancelTest() throws InterruptedException {
-        Task<?> task = new Task<>(new Job<>("", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        task.start();
-
-        task.cancel();
-
-        assertTrue(task.hasCancelRequest());
-
-        task.getStatus().getCancelledEvent().await();
-    }
-
-    @Test
-    public void getSuccessResultTest() throws Exception {
-        Task<?> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        task.start();
-
-        assertSame(SUCCESS_RESULT, task.getResult());
-    }
-
-    @Test
-    public void getFailResultTest() {
-        Task<?> task = new Task<>(new Job<>("", FAIL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        task.start();
-
-        try {
-            task.getResult();
-            fail("Exception should be thrown!");
-        } catch (Exception e) {
-            assertSame(FAIL_RESULT, e);
-        }
-    }
-
-    @Test
-    public void getCancelResultTest() throws Exception {
-        Task<?> task = new Task<>(new Job<>("", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        task.start();
-
-        task.cancel();
-
-        assertNull(task.getResult());
-    }
-
-    @Test
-    public void hasCancelRequestTest() {
-        Task<?> task = new Task<>(new Job<>("", CANCEL_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
-
-        assertFalse(task.hasCancelRequest());
-
-        task.cancel();
-
-        assertTrue(task.hasCancelRequest());
+        assertSame(SUCCESS_RESULT, task.context.getResultValue());
     }
 
     @Test
     public void startTwiceTest() {
-        Task<String> task = new Task<>(new Job<>("", SUCCESS_ACTION, CANCELLATION_TOKEN, SCHEDULER, new LinkedList<>()));
+        Task<String> task = new Task<>(SUCCESS_ACTION);
 
         task.start();
 
@@ -475,22 +363,72 @@ public class TaskTest {
     }
 
     @Test
+    public void cancelTest() throws InterruptedException {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+
+        task.cancel();
+
+        task.start();
+
+        assertTrue(task.context.getCancellationToken().hasCancelRequest());
+
+        task.context.getStatus().getCancelledEvent().await();
+    }
+
+    @Test
+    public void getSuccessResultTest() throws Exception {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+
+        task.start();
+
+        assertSame(SUCCESS_RESULT, task.getResult());
+    }
+
+    @Test
+    public void getFailResultTest() {
+        Task<String> task = new Task<>(FAIL_ACTION);
+
+        task.start();
+
+        try {
+            task.getResult();
+            fail("Exception should be thrown!");
+        } catch (Exception e) {
+            assertSame(FAIL_RESULT, e);
+        }
+    }
+
+    @Test
+    public void getCancelResultTest() {
+        Task<String> task = new Task<>(CANCEL_ACTION);
+
+        task.start();
+
+        try {
+            task.getResult();
+            fail("Exception should be thrown!");
+        } catch (Exception e) {
+            assertTrue(e instanceof CancelledException);
+        }
+    }
+
+    @Test
     public void thenTaskTest() throws InterruptedException {
         Task<?> task = new Task<>(ACTION);
-        Task<Boolean> thenTask = new Task<>(() -> task.getStatus().getFinishedEvent().hasFired());
+        Task<Boolean> thenTask = new Task<>(() -> task.context.getStatus().getFinishedEvent().hasFired());
 
         assertSame(thenTask, task.then(thenTask));
 
         task.start();
 
-        thenTask.getStatus().getSucceededEvent().await();
-        assertTrue(thenTask.getValue());
+        thenTask.context.getStatus().getSucceededEvent().await();
+        assertTrue(thenTask.context.getResultValue());
     }
 
     @Test
     public void thenTest() {
         String id = "";
-        Consumer<Runnable> scheduler = (action) -> new Thread(action).start();
+        IScheduler scheduler = new DedicatedThreadScheduler();
         Option[] options = new Option[0];
         Task<String> task = new Task<>(ACTION, scheduler, options);
         Task<?> thenTask;
@@ -640,106 +578,106 @@ public class TaskTest {
         validateThenLinkEmptyVoidAction(thenTask, task, null, null, null, null);
     }
 
-    private void validateThenLinkAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateThenLinkAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
             assertSame(id, thenTask.getId());
 
-        assertTrue(thenTask.getAction() instanceof LinkAction);
+        assertTrue(thenTask.context.getAction() instanceof LinkAction);
 
         if(cancellationToken == null)
-            assertNotNull(thenTask.getCancellationToken());
+            assertNotNull(thenTask.context.getCancellationToken());
         else
-            assertSame(cancellationToken, thenTask.getCancellationToken());
+            assertSame(cancellationToken, thenTask.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(task.getScheduler(), thenTask.getScheduler());
+            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
         else
-            assertSame(scheduler, thenTask.getScheduler());
+            assertSame(scheduler, thenTask.context.getScheduler());
 
         if(options == null)
-            assertEquals(task.getOptions(), thenTask.getOptions());
+            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
         else
-            assertEquals(Arrays.asList(options), thenTask.getOptions());
+            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
     }
 
-    private void validateThenLinkVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateThenLinkVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
             assertSame(id, thenTask.getId());
 
-        assertTrue(thenTask.getAction() instanceof LinkVoidAction);
+        assertTrue(thenTask.context.getAction() instanceof LinkVoidAction);
 
         if(cancellationToken == null)
-            assertNotNull(thenTask.getCancellationToken());
+            assertNotNull(thenTask.context.getCancellationToken());
         else
-            assertSame(cancellationToken, thenTask.getCancellationToken());
+            assertSame(cancellationToken, thenTask.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(task.getScheduler(), thenTask.getScheduler());
+            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
         else
-            assertSame(scheduler, thenTask.getScheduler());
+            assertSame(scheduler, thenTask.context.getScheduler());
 
         if(options == null)
-            assertEquals(task.getOptions(), thenTask.getOptions());
+            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
         else
-            assertEquals(Arrays.asList(options), thenTask.getOptions());
+            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
     }
 
-    private void validateThenLinkEmptyAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateThenLinkEmptyAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
             assertSame(id, thenTask.getId());
 
-        assertTrue(thenTask.getAction() instanceof LinkEmptyAction);
+        assertTrue(thenTask.context.getAction() instanceof LinkEmptyAction);
 
         if(cancellationToken == null)
-            assertNotNull(thenTask.getCancellationToken());
+            assertNotNull(thenTask.context.getCancellationToken());
         else
-            assertSame(cancellationToken, thenTask.getCancellationToken());
+            assertSame(cancellationToken, thenTask.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(task.getScheduler(), thenTask.getScheduler());
+            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
         else
-            assertSame(scheduler, thenTask.getScheduler());
+            assertSame(scheduler, thenTask.context.getScheduler());
 
         if(options == null)
-            assertEquals(task.getOptions(), thenTask.getOptions());
+            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
         else
-            assertEquals(Arrays.asList(options), thenTask.getOptions());
+            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
     }
 
-    private void validateThenLinkEmptyVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateThenLinkEmptyVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(thenTask.getId());
         else
             assertSame(id, thenTask.getId());
 
-        assertTrue(thenTask.getAction() instanceof LinkEmptyVoidAction);
+        assertTrue(thenTask.context.getAction() instanceof LinkEmptyVoidAction);
 
         if(cancellationToken == null)
-            assertNotNull(thenTask.getCancellationToken());
+            assertNotNull(thenTask.context.getCancellationToken());
         else
-            assertSame(cancellationToken, thenTask.getCancellationToken());
+            assertSame(cancellationToken, thenTask.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(task.getScheduler(), thenTask.getScheduler());
+            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
         else
-            assertSame(scheduler, thenTask.getScheduler());
+            assertSame(scheduler, thenTask.context.getScheduler());
 
         if(options == null)
-            assertEquals(task.getOptions(), thenTask.getOptions());
+            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
         else
-            assertEquals(Arrays.asList(options), thenTask.getOptions());
+            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
     }
 
     @Test
     public void retryTest() {
         String id = "";
-        Consumer<Runnable> scheduler = (action) -> new Thread(action).start();
+        IScheduler scheduler = new DedicatedThreadScheduler();
         Option[] options = new Option[0];
         Task<String> task = new Task<>(ACTION, scheduler, options);
         Task<String> retryTask;
@@ -857,28 +795,28 @@ public class TaskTest {
         validateRetry(retryTask, task, null, null, null, null);
     }
 
-    private void validateRetry(Task<String> retryTask, Task<String> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateRetry(Task<String> retryTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(retryTask.getId());
         else
             assertSame(id, retryTask.getId());
 
         if(cancellationToken == null)
-            assertNotNull(retryTask.getCancellationToken());
+            assertNotNull(retryTask.context.getCancellationToken());
         else
-            assertSame(cancellationToken, retryTask.getCancellationToken());
+            assertSame(cancellationToken, retryTask.context.getCancellationToken());
 
         if(scheduler == null)
-            assertSame(task.getScheduler(), retryTask.getScheduler());
+            assertSame(task.context.getScheduler(), retryTask.context.getScheduler());
         else
-            assertSame(scheduler, retryTask.getScheduler());
+            assertSame(scheduler, retryTask.context.getScheduler());
 
         if(options == null)
-            assertEquals(task.getOptions(), retryTask.getOptions());
+            assertEquals(task.context.getOptions().getOptions(), retryTask.context.getOptions().getOptions());
         else
-            assertEquals(Arrays.asList(options), retryTask.getOptions());
+            assertEquals(Arrays.asList(options), retryTask.context.getOptions().getOptions());
 
-        assertTrue(retryTask.getAction() instanceof RetryAction);
+        assertTrue(retryTask.context.getAction() instanceof RetryAction);
     }
 
 }

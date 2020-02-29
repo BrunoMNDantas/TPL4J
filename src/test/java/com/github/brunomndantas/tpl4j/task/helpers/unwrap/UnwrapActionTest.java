@@ -3,10 +3,10 @@ package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
+import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;
-
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 public class UnwrapActionTest {
 
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final Consumer<Runnable> SCHEDULER = (job) -> new Thread(job).start();
+    private static final IScheduler SCHEDULER = new DedicatedThreadScheduler();
 
 
 
@@ -35,10 +35,10 @@ public class UnwrapActionTest {
         Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
 
         t.start();
-        t.getStatus().getFinishedEvent().await();
+        t.getContext().getStatus().getFinishedEvent().await();
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -51,7 +51,7 @@ public class UnwrapActionTest {
         Task<Task<String>> task = new Task<>("", (IAction<Task<String>>)(token) -> { throw result; }, new CancellationToken(), SCHEDULER);
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -70,10 +70,10 @@ public class UnwrapActionTest {
         Task<Task<String>> task = new Task<>("", (token) -> t, new CancellationToken(), SCHEDULER);
 
         t.start();
-        t.getStatus().getFinishedEvent().await();
+        t.getContext().getStatus().getFinishedEvent().await();
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -92,7 +92,7 @@ public class UnwrapActionTest {
 
         task.cancel();
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 
@@ -107,10 +107,10 @@ public class UnwrapActionTest {
 
         t.cancel();
         t.start();
-        t.getStatus().getFinishedEvent().await();
+        t.getContext().getStatus().getFinishedEvent().await();
 
         task.start();
-        task.getStatus().getFinishedEvent().await();
+        task.getContext().getStatus().getFinishedEvent().await();
 
         UnwrapAction<String> action = new UnwrapAction<>(task);
 

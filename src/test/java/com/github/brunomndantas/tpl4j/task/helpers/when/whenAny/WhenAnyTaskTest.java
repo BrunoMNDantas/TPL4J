@@ -2,13 +2,14 @@ package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +22,7 @@ public class WhenAnyTaskTest {
         Task<String> t2 = new Task<>(() -> "");
         Collection<Task<String>> tasks = Arrays.asList(t1, t2);
         CancellationToken cancellationToken = new CancellationToken();
-        Consumer<Runnable> scheduler = (r) -> new Thread(r).start();
+        IScheduler scheduler = new DedicatedThreadScheduler();
         Option[] options = new Option[0];
 
         WhenAnyTask<String> task = new WhenAnyTask<>(id, tasks, cancellationToken, scheduler, options);
@@ -36,17 +37,17 @@ public class WhenAnyTaskTest {
         Task<String> t2 = new Task<>(() -> "");
         Collection<Task<String>> tasks = Arrays.asList(t1, t2);
         CancellationToken cancellationToken = new CancellationToken();
-        Consumer<Runnable> scheduler = (r) -> new Thread(r).start();
+        IScheduler scheduler = new DedicatedThreadScheduler();
         Option[] options = new Option[0];
 
         WhenAnyTask<String> task = new WhenAnyTask<>(id, tasks, cancellationToken, scheduler, options);
 
         assertSame(id, task.getId());
-        assertTrue(task.getJob() instanceof WhenAnyJob);
-        assertEquals(tasks, ((WhenAnyJob<String>)task.getJob()).getTasks());
-        assertSame(cancellationToken, task.getCancellationToken());
-        assertSame(scheduler, task.getScheduler());
-        assertEquals(Arrays.asList(options), task.getOptions());
+        assertTrue(task.getContextExecutor() instanceof WhenAnyContextExecutor);
+        assertEquals(tasks, ((WhenAnyContextExecutor<?>)task.getContextExecutor()).getTasks());
+        assertSame(cancellationToken, task.getContext().getCancellationToken());
+        assertSame(scheduler, task.getContext().getScheduler());
+        assertEquals(Arrays.asList(options), task.getContext().getOptions().getOptions());
         assertSame(tasks, task.getTasks());
     }
 

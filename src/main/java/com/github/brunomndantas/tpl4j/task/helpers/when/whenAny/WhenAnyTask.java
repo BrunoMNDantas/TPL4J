@@ -18,11 +18,12 @@ package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.options.Options;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Consumer;
 
 public class WhenAnyTask<T> extends Task<Task<T>> {
 
@@ -31,14 +32,13 @@ public class WhenAnyTask<T> extends Task<Task<T>> {
 
 
 
-    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
-        super(new WhenAnyJob<>(
-                taskId,
-                cancellationToken,
-                scheduler,
-                Arrays.asList(options),
-                tasks
-        ));
+    public WhenAnyTask(String taskId, Collection<Task<T>> tasks, ICancellationToken cancellationToken, IScheduler scheduler, Option... options) {
+        super(
+                Task.DEFAULT_CONTEXT_BUILDER.build(taskId, new WhenAnyAction<>(tasks), cancellationToken, scheduler, new Options(Arrays.asList(options))),
+                Task.DEFAULT_CONTEXT_MANAGER,
+                Task.DEFAULT_CONTEXT_BUILDER,
+                new WhenAnyContextExecutor<>(Task.DEFAULT_CONTEXT_MANAGER, tasks)
+        );
 
         this.tasks = tasks;
     }

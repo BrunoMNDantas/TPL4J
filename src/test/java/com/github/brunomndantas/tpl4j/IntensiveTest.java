@@ -3,6 +3,9 @@ package com.github.brunomndantas.tpl4j;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.PoolScheduler;
+import com.github.brunomndantas.tpl4j.core.scheduler.SingleThreadScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.ILinkAction;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
@@ -12,9 +15,6 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -133,7 +133,7 @@ public class IntensiveTest {
 
 
 
-    private static Task<Boolean> createCalculationTask(Calculation calculation, Consumer<Runnable> scheduler) {
+    private static Task<Boolean> createCalculationTask(Calculation calculation, IScheduler scheduler) {
         return TaskFactory.createAndStart(new CalculationAction(calculation), scheduler)
             .retry(RetryAction.RETRY_UNTIL_SUCCESS, scheduler)
             .then(new SetResultAction(calculation), scheduler)
@@ -194,13 +194,13 @@ public class IntensiveTest {
         Collection<Calculation> calculationsB = clone(calculations);
         Collection<Calculation> calculationsC = clone(calculations);
 
-        ExecutorService singleThreadPool = Executors.newSingleThreadExecutor();
-        ExecutorService multipleThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        SingleThreadScheduler singleThreadScheduler= new SingleThreadScheduler();
+        PoolScheduler multipleThreadScheduler = new PoolScheduler();
 
         try {
             runTest(calculationsA);
-            runTest(calculationsB, singleThreadPool::submit);
-            runTest(calculationsC, multipleThreadPool::submit);
+            runTest(calculationsB, singleThreadScheduler);
+            runTest(calculationsC, multipleThreadScheduler);
 
             long calcA = calculationsA.stream().mapToInt(Calculation::getResult).sum();
             long calcB = calculationsB.stream().mapToInt(Calculation::getResult).sum();
@@ -209,8 +209,8 @@ public class IntensiveTest {
             assertEquals(calcA, calcB);
             assertEquals(calcA, calcC);
         } finally {
-            singleThreadPool.shutdown();
-            multipleThreadPool.shutdown();
+            singleThreadScheduler.close();
+            multipleThreadScheduler.close();
         }
     }
 
@@ -219,7 +219,7 @@ public class IntensiveTest {
             calculation.setResult(CalculationAction.calc(calculation));
     }
 
-    public void runTest(Collection<Calculation> calculations, Consumer<Runnable> scheduler) throws Exception {
+    public void runTest(Collection<Calculation> calculations, IScheduler scheduler) throws Exception {
         Collection<Task<Void>> tasks = new LinkedList<>();
         for(Calculation calculation : calculations)
             tasks.add(new Task<>(() -> { createCalculationTask(calculation, scheduler); }, scheduler));

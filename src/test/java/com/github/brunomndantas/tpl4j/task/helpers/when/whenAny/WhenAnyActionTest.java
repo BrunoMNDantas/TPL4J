@@ -1,7 +1,7 @@
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
-import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
+import com.github.brunomndantas.tpl4j.task.Task;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -38,13 +38,13 @@ public class WhenAnyActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
         Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
+        assertFalse(taskB.getContext().getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -56,13 +56,13 @@ public class WhenAnyActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
         Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
+        assertFalse(taskB.getContext().getStatus().getFinishedEvent().hasFired());
     }
 
     @Test
@@ -75,13 +75,13 @@ public class WhenAnyActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getStatus().getFinishedEvent().await();
+        taskA.getContext().getStatus().getFinishedEvent().await();
 
         WhenAnyAction<String> action = new WhenAnyAction<>(tasks);
         Task<?> result = action.run(new CancellationToken());
 
         assertSame(taskA, result);
-        assertFalse(taskB.getStatus().getFinishedEvent().hasFired());
+        assertFalse(taskB.getContext().getStatus().getFinishedEvent().hasFired());
     }
 
 }

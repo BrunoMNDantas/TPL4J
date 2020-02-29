@@ -16,12 +16,11 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.action.retry;
 
+import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
+import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.link.LinkAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.status.State;
 
 import java.util.function.Supplier;
 
@@ -63,14 +62,14 @@ public class RetryAction<T> extends LinkAction<T,T> {
 
     @Override
     public T run(ICancellationToken cancellationToken) throws Exception {
-        if(super.previousTask.getStatus().getState() == State.SUCCEEDED) {
-            return super.previousTask.getValue();
+        if(super.previousTask.getContext().getStatus().getState() == State.SUCCEEDED) {
+            return super.previousTask.getContext().getResultValue();
         } else {
             Exception exception = null;
 
             while(this.retrySupplier.get()) {
                 try {
-                    return super.getPreviousTask().getAction().run(cancellationToken);
+                    return super.getPreviousTask().getContext().getAction().run(cancellationToken);
                 } catch (Exception e) {
                     if(e instanceof CancelledException)
                         throw e;

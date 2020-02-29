@@ -3,6 +3,11 @@ package com.github.brunomndantas.tpl4j.task.pool;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
+import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
+import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.IParallelUninterruptibleAction;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.IParallelUninterruptibleVoidAction;
@@ -10,16 +15,11 @@ import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.IParallelVoid
 import com.github.brunomndantas.tpl4j.task.helpers.unwrap.UnwrapTask;
 import com.github.brunomndantas.tpl4j.task.helpers.when.whenAll.WhenAllTask;
 import com.github.brunomndantas.tpl4j.task.helpers.when.whenAny.WhenAnyTask;
-import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IVoidAction;
 import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 
@@ -457,25 +457,25 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateCreate(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateCreate(Task<?> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.getContext().getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.getContext().getCancellationToken());
 
-        assertSame(scheduler, task.getScheduler());
+        assertSame(scheduler, task.getContext().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
 
-        assertFalse(task.getStatus().getScheduledEvent().hasFired());
+        assertFalse(task.getContext().getStatus().getScheduledEvent().hasFired());
     }
 
     @Test
@@ -559,25 +559,25 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateCreateAndStart(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateCreateAndStart(Task<?> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.getContext().getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.getContext().getCancellationToken());
 
-        assertSame(scheduler, task.getScheduler());
+        assertSame(scheduler, task.getContext().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
     }
 
     @Test
@@ -611,25 +611,25 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateWhenAll(WhenAllTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateWhenAll(WhenAllTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.getContext().getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.getContext().getCancellationToken());
 
-        assertSame(scheduler, task.getScheduler());
+        assertSame(scheduler, task.getContext().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
         assertSame(tasks, task.getTasks());
     }
 
@@ -664,25 +664,25 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateWhenAny(WhenAnyTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateWhenAny(WhenAnyTask<?> task, String id, Collection<Task<String>> tasks, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.getContext().getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.getContext().getCancellationToken());
 
-        assertSame(scheduler, task.getJob().getScheduler());
+        assertSame(scheduler, task.getContext().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
         assertSame(tasks, task.getTasks());
     }
 
@@ -715,25 +715,25 @@ public class TaskPoolTest {
         pool.close();
     }
 
-    private void validateUnwrap(UnwrapTask<?> task, Task<?> taskToUnwrap, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateUnwrap(UnwrapTask<?> task, Task<?> taskToUnwrap, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.getContext().getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.getContext().getCancellationToken());
 
-        assertSame(scheduler, task.getScheduler());
+        assertSame(scheduler, task.getContext().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
 
-        assertTrue(task.getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
 
         assertSame(taskToUnwrap, task.getTask());
     }
@@ -822,25 +822,25 @@ public class TaskPoolTest {
         validateForEach(task, null, null, pool.getScheduler(), null);
     }
 
-    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
+    private void validateForEach(Task<?> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         if(id == null)
             assertNotNull(task.getId());
         else
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getCancellationToken());
+            assertNotNull(task.getContext().getCancellationToken());
         else
-            assertSame(cancellationToken, task.getCancellationToken());
+            assertSame(cancellationToken, task.getContext().getCancellationToken());
 
-        assertSame(scheduler, task.getScheduler());
+        assertSame(scheduler, task.getContext().getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getJob().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getJob().getOptions().getOptions().size()); //ACCEPT_CHILDREN
+            assertEquals(options.length, task.getContext().getOptions().getOptions().size()); //ACCEPT_CHILDREN
 
-        assertTrue(task.getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
     }
 
 }

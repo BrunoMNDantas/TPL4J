@@ -18,10 +18,11 @@ package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Option;
+import com.github.brunomndantas.tpl4j.core.options.Options;
+import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 public class UnwrapTask<T> extends Task<T> {
 
@@ -30,8 +31,14 @@ public class UnwrapTask<T> extends Task<T> {
 
 
 
-    public UnwrapTask(String taskId, Task<Task<T>> task, ICancellationToken cancellationToken, Consumer<Runnable> scheduler, Option... options) {
-        super(new UnwrapJob<>(taskId, cancellationToken, scheduler, Arrays.asList(options), task));
+    public UnwrapTask(String taskId, Task<Task<T>> task, ICancellationToken cancellationToken, IScheduler scheduler, Option... options) {
+        super(
+                Task.DEFAULT_CONTEXT_BUILDER.build(taskId, new UnwrapAction<>(task), cancellationToken, scheduler, new Options(Arrays.asList(options))),
+                Task.DEFAULT_CONTEXT_MANAGER,
+                Task.DEFAULT_CONTEXT_BUILDER,
+                new UnwrapContextExecutor<>(Task.DEFAULT_CONTEXT_MANAGER, task)
+        );
+
         this.task = task;
     }
 
