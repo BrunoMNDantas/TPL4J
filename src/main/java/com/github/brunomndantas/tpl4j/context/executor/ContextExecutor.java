@@ -28,7 +28,15 @@ public class ContextExecutor implements IContextExecutor {
             throw new RuntimeException("Task:" + context.getTaskId() + " already scheduled!");
 
         context.getStatus().setState(State.SCHEDULED);
-        context.getScheduler().schedule(() -> run(context));
+
+        try {
+            if(!context.getOptions().notCancelable())
+                context.getCancellationToken().abortIfCancelRequested();
+
+            context.getScheduler().schedule(() -> run(context));
+        } catch (CancelledException e) {
+            this.endExecution(context, null, e);
+        }
     }
 
     protected <T> void run(Context<T> context) {

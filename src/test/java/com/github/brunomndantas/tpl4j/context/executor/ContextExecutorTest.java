@@ -65,6 +65,20 @@ public class ContextExecutorTest {
     }
 
     @Test
+    public void executeVerifyIfCancelledRequestedTest() {
+        ContextManager contextManager = new ContextManager();
+        ContextBuilder contextBuilder = new ContextBuilder(contextManager);
+        Context<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
+        ContextExecutor executor = new ContextExecutor(contextManager);
+
+        context.getCancellationToken().cancel();
+
+        executor.execute(context);
+        assertTrue(context.getStatus().getScheduledEvent().hasFired());
+        assertTrue(context.getStatus().getCancelledEvent().hasFired());
+    }
+
+    @Test
     public void executeTwiceResultsInExceptionTest() {
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
