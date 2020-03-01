@@ -400,3 +400,10 @@ public static void main(String[] args) throws Exception {
 ```
 
 On a `TaskPool` instance you have all methods we saw on [`TaskFactory`](#taskfactory).
+
+
+
+## Architecture
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Architecture.jpg" width="500" height="600">
+
