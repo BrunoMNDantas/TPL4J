@@ -29,14 +29,24 @@ public class ContextExecutor implements IContextExecutor {
 
         context.getStatus().setState(State.SCHEDULED);
 
+        if(!this.verifyCancel(context))
+            this.schedule(context);
+    }
+
+    protected <T> boolean verifyCancel(Context<T> context) {
         try {
             if(!context.getOptions().notCancelable())
                 context.getCancellationToken().abortIfCancelRequested();
-
-            context.getScheduler().schedule(() -> run(context));
         } catch (CancelledException e) {
             this.endExecution(context, null, e);
+            return true;
         }
+
+        return false;
+    }
+
+    protected <T> void schedule(Context<T> context) {
+        context.getScheduler().schedule(() -> run(context));
     }
 
     protected <T> void run(Context<T> context) {
