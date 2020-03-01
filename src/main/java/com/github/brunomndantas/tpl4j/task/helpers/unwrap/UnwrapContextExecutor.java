@@ -37,7 +37,7 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
 
 
     @Override
-    public synchronized <T> void execute(Context<T> context) {
+    protected <T> void schedule(Context<T> context) {
         this.task.getContext().getStatus().getFinishedEvent().addListener(() -> {
             if(this.task.getContext().getStatus().getState().equals(State.SUCCEEDED)) {
                 if(this.task.getContext().getResultValue() == null)
