@@ -26,10 +26,13 @@ import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
+import com.github.brunomndantas.tpl4j.core.options.IOptions;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.options.Options;
 import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
 import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
+import com.github.brunomndantas.tpl4j.core.status.IEvent;
+import com.github.brunomndantas.tpl4j.core.status.IStatus;
 import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.*;
@@ -351,6 +354,66 @@ public class Task<T> {
 
     public String getId() {
         return this.context.getTaskId();
+    }
+
+    public IAction<T> getAction() {
+        return this.context.getAction();
+    }
+
+    public ICancellationToken getCancellationToken() {
+        return this.context.getCancellationToken();
+    }
+
+    public IScheduler getScheduler() {
+        return this.context.getScheduler();
+    }
+
+    public IOptions getOptions() {
+        return this.context.getOptions();
+    }
+
+    public IStatus getStatus() {
+        return this.context.getStatus();
+    }
+
+    public T getResultValue() {
+        return this.context.getResultValue();
+    }
+
+    public Exception getResultException() {
+        return this.context.getResultException();
+    }
+
+    public State getState() {
+        return this.context.getStatus().getState();
+    }
+
+    public IEvent getScheduledEvent() {
+        return this.context.getStatus().getScheduledEvent();
+    }
+
+    public IEvent getRunningEvent() {
+        return this.context.getStatus().getRunningEvent();
+    }
+
+    public IEvent getWaitingForChildrenEvent() {
+        return this.context.getStatus().getWaitingForChildrenEvent();
+    }
+
+    public IEvent getCancelledEvent() {
+        return this.context.getStatus().getCancelledEvent();
+    }
+
+    public IEvent getFailedEvent() {
+        return this.context.getStatus().getFailedEvent();
+    }
+
+    public IEvent getSucceededEvent() {
+        return this.context.getStatus().getSucceededEvent();
+    }
+
+    public IEvent getFinishedEvent() {
+        return this.context.getStatus().getFinishedEvent();
     }
 
     public void start() {

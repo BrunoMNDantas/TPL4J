@@ -334,6 +334,103 @@ public class TaskTest {
         Task<String> task = new Task(id, SUCCESS_ACTION);
         assertSame(id, task.getId());
     }
+
+    @Test
+    public void getActionTest() {
+        IAction<String> action = SUCCESS_ACTION;
+        Task<String> task = new Task<>(action);
+        assertSame(action, task.getAction());
+    }
+
+    @Test
+    public void getCancellationTokenTest() {
+        CancellationToken cancellationToken = new CancellationToken();
+        Task<String> task = new Task<>(SUCCESS_ACTION, cancellationToken);
+        assertSame(cancellationToken, task.getCancellationToken());
+    }
+
+    @Test
+    public void getSchedulerTest() {
+        IScheduler scheduler = SCHEDULER;
+        Task<String> task = new Task<>(SUCCESS_ACTION, scheduler);
+        assertSame(scheduler, task.getScheduler());
+    }
+
+    @Test
+    public void getOptionsTest() { ;
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getOptions(), task.getOptions());
+    }
+
+    @Test
+    public void getStatusTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus(), task.getStatus());
+    }
+
+    @Test
+    public void getResultValueTest() throws Exception {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        task.start();
+        task.getContext().getStatus().getFinishedEvent().await();
+        assertSame(task.getContext().getResultValue(), task.getResultValue());
+    }
+
+    @Test
+    public void getResultExceptionTest() throws Exception {
+        Task<String> task = new Task<>(FAIL_ACTION);
+        task.start();
+        task.getContext().getStatus().getFinishedEvent().await();
+        assertSame(task.getContext().getResultException(), task.getResultException());
+    }
+
+    @Test
+    public void getStateTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getState(), task.getState());
+    }
+
+    @Test
+    public void getScheduledEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getScheduledEvent(), task.getScheduledEvent());
+    }
+
+    @Test
+    public void getRunningEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getRunningEvent(), task.getRunningEvent());
+    }
+
+    @Test
+    public void getWaitingForChildrenEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getWaitingForChildrenEvent(), task.getWaitingForChildrenEvent());
+    }
+
+    @Test
+    public void getCancelledEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getCancelledEvent(), task.getCancelledEvent());
+    }
+
+    @Test
+    public void getFailedEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getFailedEvent(), task.getFailedEvent());
+    }
+
+    @Test
+    public void getSucceededEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getSucceededEvent(), task.getSucceededEvent());
+    }
+
+    @Test
+    public void getFinishedEventTest() {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        assertSame(task.getContext().getStatus().getFinishedEvent(), task.getFinishedEvent());
+    }
     
     @Test
     public void startTest() throws InterruptedException {
