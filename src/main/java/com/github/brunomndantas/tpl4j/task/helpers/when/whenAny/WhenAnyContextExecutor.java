@@ -19,7 +19,6 @@ package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 import com.github.brunomndantas.tpl4j.context.Context;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
-import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
@@ -41,15 +40,7 @@ public class WhenAnyContextExecutor<K> extends ContextExecutor {
 
 
     @Override
-    public synchronized <T> void execute(Context<T> context) {
-        if(context.getStatus().getScheduledEvent().hasFired())
-            throw new RuntimeException("Task:" + context.getTaskId() + " already scheduled!");
-
-        context.getStatus().setState(State.SCHEDULED);
-        scheduleExecutionAfterTaskFinished(context);
-    }
-
-    protected <T> void scheduleExecutionAfterTaskFinished(Context<T> context) {
+    protected <T> void schedule(Context<T> context) {
         if(this.tasks.isEmpty()) {
             context.getScheduler().schedule(() -> run(context));
             this.finished = true;

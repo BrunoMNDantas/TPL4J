@@ -38,14 +38,6 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
 
     @Override
     public synchronized <T> void execute(Context<T> context) {
-        if(context.getStatus().getScheduledEvent().hasFired())
-            throw new RuntimeException("Task:" + context.getTaskId() + " already scheduled!");
-
-        context.getStatus().setState(State.SCHEDULED);
-        scheduleExecutionAfterTaskFinished(context);
-    }
-
-    protected <T> void scheduleExecutionAfterTaskFinished(Context<T> context) {
         this.task.getContext().getStatus().getFinishedEvent().addListener(() -> {
             if(this.task.getContext().getStatus().getState().equals(State.SUCCEEDED)) {
                 if(this.task.getContext().getResultValue() == null)
