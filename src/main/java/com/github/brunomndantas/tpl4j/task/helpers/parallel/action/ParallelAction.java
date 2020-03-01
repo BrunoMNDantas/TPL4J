@@ -13,7 +13,7 @@ import java.util.LinkedList;
 
 public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
-    private static Option[] attachAttachToParentOption(Collection<Option> options) {
+    protected static Option[] attachAttachToParentOption(Collection<Option> options) {
         Collection<Option> ops = new LinkedList<>(options);
 
         if(!ops.contains(Option.ATTACH_TO_PARENT))
@@ -24,22 +24,22 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
 
 
-    private String taskId;
+    protected String taskId;
     public String getTaskId() { return this.taskId; }
 
-    private IParallelAction<T,K> action;
+    protected IParallelAction<T,K> action;
     public IParallelAction<T,K> getAction() { return this.action; }
 
-    private Iterable<T> elements;
+    protected Iterable<T> elements;
     public Iterable<T> getElements() { return this.elements; }
 
-    private ICancellationToken cancellationToken;
+    protected ICancellationToken cancellationToken;
     public ICancellationToken getCancellationToken() { return this.cancellationToken; }
 
-    private IScheduler scheduler;
+    protected IScheduler scheduler;
     public IScheduler getScheduler(){ return this.scheduler; }
 
-    private Option[] options;
+    protected Option[] options;
     public Option[] getOptions() { return this.options; }
 
 
@@ -62,7 +62,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
         return results;
     }
 
-    private void createWorkTasks(Collection<K> results) {
+    protected void createWorkTasks(Collection<K> results) {
         String id;
         Task<Collection<K>> task;
         Iterator<T> iterator = this.elements.iterator();

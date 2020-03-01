@@ -4,7 +4,7 @@ import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class ParallelUninterruptibleVoidAction<T> implements IParallelAction<T,Void> {
 
-    private IParallelUninterruptibleVoidAction<T> action;
+    protected IParallelUninterruptibleVoidAction<T> action;
     public IParallelUninterruptibleVoidAction<T> getAction() { return this.action; }
 
 

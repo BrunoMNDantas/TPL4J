@@ -21,7 +21,7 @@ import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class VoidAction implements IAction<Void> {
 
-    private volatile IVoidAction action;
+    protected volatile IVoidAction action;
     public IVoidAction getAction() { return this.action; }
 
 

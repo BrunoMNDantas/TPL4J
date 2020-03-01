@@ -34,7 +34,7 @@ import java.util.UUID;
 
 public class TaskPool {
 
-    private static final TaskPool INSTANCE = new TaskPool();
+    protected static final TaskPool INSTANCE = new TaskPool();
 
 
 

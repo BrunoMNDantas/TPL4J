@@ -379,7 +379,7 @@ public class Task<T> {
     }
 
 
-    private <K> Task<K> then(String taskId, IAction<K> action, ICancellationToken cancellationToken, IScheduler scheduler, Option... options) {
+    protected <K> Task<K> then(String taskId, IAction<K> action, ICancellationToken cancellationToken, IScheduler scheduler, Option... options) {
         Task<K> task = new Task<>(taskId, action, cancellationToken, scheduler, options);
         return this.then(task);
     }

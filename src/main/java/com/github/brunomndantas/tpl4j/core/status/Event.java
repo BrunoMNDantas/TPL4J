@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 
 public class Event implements IEvent {
 
-    private static final ExecutorService LISTENERS_RUNNER = Executors.newFixedThreadPool(1, (r) -> {
+    protected static final ExecutorService LISTENERS_RUNNER = Executors.newFixedThreadPool(1, (r) -> {
                 Thread t = Executors.defaultThreadFactory().newThread(r);
                 t.setDaemon(true);
                 return t;

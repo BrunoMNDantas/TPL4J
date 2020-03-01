@@ -21,7 +21,7 @@ import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class EmptyVoidAction implements IAction<Void> {
 
-    private volatile IEmptyVoidAction action;
+    protected volatile IEmptyVoidAction action;
     public IEmptyVoidAction getAction() { return this.action; }
 
 

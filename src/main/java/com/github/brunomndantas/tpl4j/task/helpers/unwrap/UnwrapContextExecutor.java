@@ -24,7 +24,7 @@ import com.github.brunomndantas.tpl4j.task.Task;
 
 public class UnwrapContextExecutor<K> extends ContextExecutor {
 
-    private Task<Task<K>> task;
+    protected Task<Task<K>> task;
     public Task<Task<K>> getTask() { return this.task; }
 
 
@@ -45,7 +45,7 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
         scheduleExecutionAfterTaskFinished(context);
     }
 
-    private <T> void scheduleExecutionAfterTaskFinished(Context<T> context) {
+    protected <T> void scheduleExecutionAfterTaskFinished(Context<T> context) {
         this.task.getContext().getStatus().getFinishedEvent().addListener(() -> {
             if(this.task.getContext().getStatus().getState().equals(State.SUCCEEDED)) {
                 if(this.task.getContext().getResultValue() == null)

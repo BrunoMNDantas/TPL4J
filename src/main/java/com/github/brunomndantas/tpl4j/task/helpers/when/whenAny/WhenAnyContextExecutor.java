@@ -29,7 +29,7 @@ public class WhenAnyContextExecutor<K> extends ContextExecutor {
     protected volatile Collection<Task<K>> tasks;
     public Collection<Task<K>> getTasks() { return this.tasks; }
 
-    private boolean finished;
+    protected boolean finished;
 
 
 
@@ -49,7 +49,7 @@ public class WhenAnyContextExecutor<K> extends ContextExecutor {
         scheduleExecutionAfterTaskFinished(context);
     }
 
-    private <T> void scheduleExecutionAfterTaskFinished(Context<T> context) {
+    protected <T> void scheduleExecutionAfterTaskFinished(Context<T> context) {
         if(this.tasks.isEmpty()) {
             context.getScheduler().schedule(() -> run(context));
             this.finished = true;

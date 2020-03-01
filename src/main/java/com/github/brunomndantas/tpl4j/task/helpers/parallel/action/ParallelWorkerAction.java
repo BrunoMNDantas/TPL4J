@@ -9,10 +9,10 @@ import java.util.LinkedList;
 
 public class ParallelWorkerAction<T,K> implements IAction<Collection<K>> {
 
-    private IParallelAction<T,K> action;
+    protected IParallelAction<T,K> action;
     public IParallelAction<T,K> getAction() { return this.action; }
 
-    private Iterator<T> iterator;
+    protected Iterator<T> iterator;
     public Iterator<T> getIterator() { return this.iterator; }
 
 

@@ -13,7 +13,7 @@ import java.util.Collection;
 
 public class ParallelTask<T,K> extends Task<Collection<K>> {
 
-    private volatile Iterable<T> elements;
+    protected volatile Iterable<T> elements;
     public Iterable<T> getElements() { return this.elements; }
 
 

@@ -48,7 +48,7 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
         return collectResults(cancellationToken);
     }
 
-    private Exception collectErrors() {
+    protected Exception collectErrors() {
         Exception exception = null;
 
         for(Task<T> task : this.tasks) {
@@ -63,7 +63,7 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
         return exception;
     }
 
-    private Collection<T> collectResults(ICancellationToken token) throws Exception {
+    protected Collection<T> collectResults(ICancellationToken token) throws Exception {
         Collection<T> results = new LinkedList<>();
 
         for(Task<T> task : this.tasks) {
