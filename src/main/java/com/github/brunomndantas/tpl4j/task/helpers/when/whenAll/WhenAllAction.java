@@ -17,7 +17,6 @@
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.task.Task;
 
@@ -39,13 +38,19 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
 
     @Override
     public Collection<T> run(ICancellationToken cancellationToken) throws Exception {
-        if(this.tasks.stream().anyMatch((task) -> task.getContext().getStatus().getFailedEvent().hasFired()))
-            throw collectErrors();
+        if(this.anyFailed())
+            throw this.collectErrors();
 
-        if(this.tasks.stream().anyMatch((task) -> task.getContext().getStatus().getCancelledEvent().hasFired()))
-            throw new CancelledException(cancellationToken.getId());
+        if(this.anyCancelled())
+            throw this.collectCancellations();
 
-        return collectResults(cancellationToken);
+        return this.collectResults(cancellationToken);
+    }
+
+    protected boolean anyFailed() {
+        return this.tasks
+                .stream()
+                .anyMatch((task) -> task.getContext().getStatus().getFailedEvent().hasFired());
     }
 
     protected Exception collectErrors() {
@@ -54,7 +59,28 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
         for(Task<T> task : this.tasks) {
             if(task.getContext().getStatus().getFailedEvent().hasFired()) {
                 if(exception == null)
-                    exception = new Exception(task.getContext().getResultException().getMessage(), task.getContext().getResultException());
+                    exception = task.getContext().getResultException();
+                else
+                    exception.addSuppressed(task.getContext().getResultException());
+            }
+        }
+
+        return exception;
+    }
+
+    protected boolean anyCancelled() {
+        return this.tasks
+                .stream()
+                .anyMatch((task) -> task.getContext().getStatus().getCancelledEvent().hasFired());
+    }
+
+    protected Exception collectCancellations() {
+        Exception exception = null;
+
+        for(Task<T> task : this.tasks) {
+            if(task.getContext().getStatus().getCancelledEvent().hasFired()) {
+                if(exception == null)
+                    exception = task.getContext().getResultException();
                 else
                     exception.addSuppressed(task.getContext().getResultException());
             }
@@ -66,10 +92,8 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     protected Collection<T> collectResults(ICancellationToken token) throws Exception {
         Collection<T> results = new LinkedList<>();
 
-        for(Task<T> task : this.tasks) {
-            token.abortIfCancelRequested();
+        for(Task<T> task : this.tasks)
             results.add(task.getResult());
-        }
 
         return results;
     }

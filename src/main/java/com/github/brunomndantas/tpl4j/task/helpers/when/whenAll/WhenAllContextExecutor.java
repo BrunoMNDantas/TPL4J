@@ -41,25 +41,34 @@ public class WhenAllContextExecutor<K> extends ContextExecutor {
 
     @Override
     protected <T> void schedule(Context<T> context) {
-        if(this.tasks.isEmpty()) {
-            context.getScheduler().schedule(() -> run(context));
-            this.finished = true;
-            return;
-        }
+        if(this.tasks.isEmpty())
+            this.scheduleExecution(context);
+         else
+            this.tasks.forEach(task -> scheduleExecutionOnFinished(context, task));
+    }
 
-        this.tasks.forEach(task -> {
-            task.getContext().getStatus().getFinishedEvent().addListener(() -> {
-                synchronized (context) {
-                    if(this.finished)
-                        return;
-
-                    if(this.tasks.stream().allMatch(t->t.getContext().getStatus().getFinishedEvent().hasFired())) {
-                        context.getScheduler().schedule(() -> run(context));
+    protected <T> void scheduleExecutionOnFinished(Context<T> context, Task<?> task) {
+        task.getContext().getStatus().getFinishedEvent().addListener(() -> {
+            synchronized (context) {
+                if(!this.finished) {
+                    if(super.verifyCancel(context))
                         this.finished = true;
-                    }
+                    else if(allFinished())
+                        this.scheduleExecution(context);
                 }
-            });
+            }
         });
+    }
+
+    protected boolean allFinished() {
+        return this.tasks
+                .stream()
+                .allMatch(t->t.getContext().getStatus().getFinishedEvent().hasFired());
+    }
+
+    protected <T> void scheduleExecution(Context<T> context) {
+        context.getScheduler().schedule(() -> super.run(context));
+        this.finished = true;
     }
 
 }

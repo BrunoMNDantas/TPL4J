@@ -17,7 +17,6 @@
 package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
-import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 import com.github.brunomndantas.tpl4j.task.Task;
 
@@ -36,14 +35,7 @@ public class UnwrapAction<T> implements IAction<T> {
 
     @Override
     public T run(ICancellationToken cancellationToken) throws Exception {
-        if(this.task.getContext().getStatus().getCancelledEvent().hasFired())
-            throw new CancelledException(cancellationToken.getId());
-
         Task<T> task = this.task.getResult();
-
-        if(task.getContext().getStatus().getCancelledEvent().hasFired())
-            throw new CancelledException(cancellationToken.getId());
-
         return task.getResult();
     }
 

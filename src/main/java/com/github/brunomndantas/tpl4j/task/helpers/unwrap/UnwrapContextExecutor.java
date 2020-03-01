@@ -39,17 +39,30 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
     @Override
     protected <T> void schedule(Context<T> context) {
         this.task.getContext().getStatus().getFinishedEvent().addListener(() -> {
+            if(super.verifyCancel(context))
+                return;
+
             if(this.task.getContext().getStatus().getState().equals(State.SUCCEEDED)) {
-                if(this.task.getContext().getResultValue() == null)
-                    context.getScheduler().schedule(() -> run(context));
-                else
-                    this.task.getContext().getResultValue().getContext().getStatus().getFinishedEvent().addListener(() -> {
-                        context.getScheduler().schedule(() -> run(context));
-                    });
+                Task<K> task = this.task.getContext().getResultValue();
+                this.scheduleExecutionOnFinished(context, task);
             } else {
-                context.getScheduler().schedule(() -> run(context));
+                this.scheduleExecution(context);
             }
         });
+    }
+
+    protected <T> void scheduleExecutionOnFinished(Context<T> context, Task<?> task) {
+        if(task == null)
+            this.scheduleExecution(context);
+        else
+            task.getContext().getStatus().getFinishedEvent().addListener(() -> {
+                if(!super.verifyCancel(context))
+                    this.scheduleExecution(context);
+            });
+    }
+
+    protected <T> void scheduleExecution(Context<T> context) {
+        context.getScheduler().schedule(() -> super.run(context));
     }
 
 }

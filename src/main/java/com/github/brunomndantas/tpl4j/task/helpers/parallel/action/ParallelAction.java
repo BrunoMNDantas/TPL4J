@@ -66,6 +66,7 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
         String id;
         Task<Collection<K>> task;
         Iterator<T> iterator = this.elements.iterator();
+
         for(int i=0; i<Runtime.getRuntime().availableProcessors(); ++i) {
             id = this.taskId + "#"+i;
 
