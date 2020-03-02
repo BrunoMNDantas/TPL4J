@@ -42,10 +42,10 @@ public class ParallelTaskTest {
 
         assertSame(id, task.getId());
         assertSame(elements, task.getElements());
-        assertTrue(task.getContext().getAction() instanceof ParallelAction);
-        assertSame(elements, ((ParallelAction<String,String>)(task.getContext().getAction())).getElements());
-        assertSame(cancellationToken, task.getContext().getCancellationToken());
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertTrue(task.getAction() instanceof ParallelAction);
+        assertSame(elements, ((ParallelAction<String,String>)(task.getAction())).getElements());
+        assertSame(cancellationToken, task.getCancellationToken());
+        assertSame(scheduler, task.getScheduler());
     }
 
     @Test

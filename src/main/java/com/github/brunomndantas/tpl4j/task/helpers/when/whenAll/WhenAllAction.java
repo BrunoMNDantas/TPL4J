@@ -50,18 +50,18 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     protected boolean anyFailed() {
         return this.tasks
                 .stream()
-                .anyMatch((task) -> task.getContext().getStatus().getFailedEvent().hasFired());
+                .anyMatch((task) -> task.getFailedEvent().hasFired());
     }
 
     protected Exception collectErrors() {
         Exception exception = null;
 
         for(Task<T> task : this.tasks) {
-            if(task.getContext().getStatus().getFailedEvent().hasFired()) {
+            if(task.getFailedEvent().hasFired()) {
                 if(exception == null)
-                    exception = task.getContext().getResultException();
+                    exception = task.getResultException();
                 else
-                    exception.addSuppressed(task.getContext().getResultException());
+                    exception.addSuppressed(task.getResultException());
             }
         }
 
@@ -71,18 +71,18 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     protected boolean anyCancelled() {
         return this.tasks
                 .stream()
-                .anyMatch((task) -> task.getContext().getStatus().getCancelledEvent().hasFired());
+                .anyMatch((task) -> task.getCancelledEvent().hasFired());
     }
 
     protected Exception collectCancellations() {
         Exception exception = null;
 
         for(Task<T> task : this.tasks) {
-            if(task.getContext().getStatus().getCancelledEvent().hasFired()) {
+            if(task.getCancelledEvent().hasFired()) {
                 if(exception == null)
-                    exception = task.getContext().getResultException();
+                    exception = task.getResultException();
                 else
-                    exception.addSuppressed(task.getContext().getResultException());
+                    exception.addSuppressed(task.getResultException());
             }
         }
 

@@ -464,18 +464,18 @@ public class TaskPoolTest {
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getContext().getCancellationToken());
+            assertNotNull(task.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getContext().getCancellationToken());
+            assertSame(cancellationToken, task.getCancellationToken());
 
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(options.length, task.getOptions().getOptions().size());
 
-        assertFalse(task.getContext().getStatus().getScheduledEvent().hasFired());
+        assertFalse(task.getScheduledEvent().hasFired());
     }
 
     @Test
@@ -566,18 +566,18 @@ public class TaskPoolTest {
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getContext().getCancellationToken());
+            assertNotNull(task.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getContext().getCancellationToken());
+            assertSame(cancellationToken, task.getCancellationToken());
 
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(options.length, task.getOptions().getOptions().size());
 
-        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getScheduledEvent().hasFired());
     }
 
     @Test
@@ -618,18 +618,18 @@ public class TaskPoolTest {
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getContext().getCancellationToken());
+            assertNotNull(task.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getContext().getCancellationToken());
+            assertSame(cancellationToken, task.getCancellationToken());
 
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(options.length, task.getOptions().getOptions().size());
 
-        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getScheduledEvent().hasFired());
         assertSame(tasks, task.getTasks());
     }
 
@@ -671,18 +671,18 @@ public class TaskPoolTest {
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getContext().getCancellationToken());
+            assertNotNull(task.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getContext().getCancellationToken());
+            assertSame(cancellationToken, task.getCancellationToken());
 
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(options.length, task.getOptions().getOptions().size());
 
-        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getScheduledEvent().hasFired());
         assertSame(tasks, task.getTasks());
     }
 
@@ -722,18 +722,18 @@ public class TaskPoolTest {
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getContext().getCancellationToken());
+            assertNotNull(task.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getContext().getCancellationToken());
+            assertSame(cancellationToken, task.getCancellationToken());
 
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(options.length, task.getOptions().getOptions().size());
 
-        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getScheduledEvent().hasFired());
 
         assertSame(taskToUnwrap, task.getTask());
     }
@@ -829,18 +829,18 @@ public class TaskPoolTest {
             assertSame(id, task.getId());
 
         if(cancellationToken == null)
-            assertNotNull(task.getContext().getCancellationToken());
+            assertNotNull(task.getCancellationToken());
         else
-            assertSame(cancellationToken, task.getContext().getCancellationToken());
+            assertSame(cancellationToken, task.getCancellationToken());
 
-        assertSame(scheduler, task.getContext().getScheduler());
+        assertSame(scheduler, task.getScheduler());
 
         if(options == null)
-            assertEquals(Task.DEFAULT_OPTIONS.length, task.getContext().getOptions().getOptions().size());
+            assertEquals(Task.DEFAULT_OPTIONS.length, task.getOptions().getOptions().size());
         else
-            assertEquals(options.length, task.getContext().getOptions().getOptions().size()); //ACCEPT_CHILDREN
+            assertEquals(options.length, task.getOptions().getOptions().size()); //ACCEPT_CHILDREN
 
-        assertTrue(task.getContext().getStatus().getScheduledEvent().hasFired());
+        assertTrue(task.getScheduledEvent().hasFired());
     }
 
 }

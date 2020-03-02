@@ -39,15 +39,15 @@ public class WhenAllActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getContext().getStatus().getFinishedEvent().await();
-        taskB.getContext().getStatus().getFinishedEvent().await();
+        taskA.getFinishedEvent().await();
+        taskB.getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
         Collection<String> results = action.run(new CancellationToken());
 
         assertEquals(tasks.size(), results.size());
-        assertTrue(results.contains(taskA.getContext().getResultValue()));
-        assertTrue(results.contains(taskB.getContext().getResultValue()));
+        assertTrue(results.contains(taskA.getResultValue()));
+        assertTrue(results.contains(taskB.getResultValue()));
     }
 
     @Test
@@ -63,16 +63,16 @@ public class WhenAllActionTest {
         taskB.start();
         taskC.start();
 
-        taskA.getContext().getStatus().getFinishedEvent().await();
-        taskB.getContext().getStatus().getFinishedEvent().await();
-        taskC.getContext().getStatus().getFinishedEvent().await();
+        taskA.getFinishedEvent().await();
+        taskB.getFinishedEvent().await();
+        taskC.getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
         try{
             action.run(new CancellationToken());
             fail("Exception should be thrown!");
         } catch (Exception e) {
-            assertSame(exceptionB, e.getCause());
+            assertSame(exceptionB, e);
             assertEquals(1, e.getSuppressed().length);
             assertEquals(exceptionC, e.getSuppressed()[0]);
         }
@@ -87,8 +87,8 @@ public class WhenAllActionTest {
         taskA.start();
         taskB.start();
 
-        taskA.getContext().getStatus().getFinishedEvent().await();
-        taskB.getContext().getStatus().getFinishedEvent().await();
+        taskA.getFinishedEvent().await();
+        taskB.getFinishedEvent().await();
 
         WhenAllAction<String> action = new WhenAllAction<>(tasks);
 
@@ -102,7 +102,7 @@ public class WhenAllActionTest {
 
         taskA.start();
 
-        taskA.getContext().getStatus().getFinishedEvent().await();
+        taskA.getFinishedEvent().await();
 
         CancellationToken cancellationToken = new CancellationToken();
 

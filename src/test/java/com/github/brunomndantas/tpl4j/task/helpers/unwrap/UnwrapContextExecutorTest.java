@@ -62,7 +62,7 @@ public class UnwrapContextExecutorTest {
 
         Context<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
-                (ct) -> taskB.getContext().getStatus().getFinishedEvent().hasFired() && taskA.getContext().getStatus().getFinishedEvent().hasFired(),
+                (ct) -> taskB.getFinishedEvent().hasFired() && taskA.getFinishedEvent().hasFired(),
                 new CancellationToken(),
                 SCHEDULER,
                 new Options(new LinkedList<>()));
@@ -80,7 +80,7 @@ public class UnwrapContextExecutorTest {
 
         context = contextBuilder.build(
                 UUID.randomUUID().toString(),
-                (ct) -> taskC.getContext().getStatus().getFinishedEvent().hasFired(),
+                (ct) -> taskC.getFinishedEvent().hasFired(),
                 new CancellationToken(),
                 SCHEDULER,
                 new Options(new LinkedList<>()));

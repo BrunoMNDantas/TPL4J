@@ -38,12 +38,12 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
 
     @Override
     protected <T> void schedule(Context<T> context) {
-        this.task.getContext().getStatus().getFinishedEvent().addListener(() -> {
+        this.task.getFinishedEvent().addListener(() -> {
             if(super.verifyCancel(context))
                 return;
 
-            if(this.task.getContext().getStatus().getState().equals(State.SUCCEEDED)) {
-                Task<K> task = this.task.getContext().getResultValue();
+            if(this.task.getState().equals(State.SUCCEEDED)) {
+                Task<K> task = this.task.getResultValue();
                 this.scheduleExecutionOnFinished(context, task);
             } else {
                 this.scheduleExecution(context);
@@ -55,7 +55,7 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
         if(task == null)
             this.scheduleExecution(context);
         else
-            task.getContext().getStatus().getFinishedEvent().addListener(() -> {
+            task.getFinishedEvent().addListener(() -> {
                 if(!super.verifyCancel(context))
                     this.scheduleExecution(context);
             });

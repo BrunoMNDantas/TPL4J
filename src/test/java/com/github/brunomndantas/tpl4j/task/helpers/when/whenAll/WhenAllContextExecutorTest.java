@@ -62,7 +62,7 @@ public class WhenAllContextExecutorTest {
 
         Context<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
-                (ct) -> tasks.stream().allMatch(t->t.getContext().getStatus().getFinishedEvent().hasFired()),
+                (ct) -> tasks.stream().allMatch(t->t.getFinishedEvent().hasFired()),
                 new CancellationToken(),
                 SCHEDULER,
                 new Options(new LinkedList<>()));
@@ -86,7 +86,7 @@ public class WhenAllContextExecutorTest {
 
         Context<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
-                (ct) -> tasks.stream().allMatch(t->t.getContext().getStatus().getFinishedEvent().hasFired()),
+                (ct) -> tasks.stream().allMatch(t->t.getFinishedEvent().hasFired()),
                 new CancellationToken(),
                 SCHEDULER,
                 new Options(new LinkedList<>()));

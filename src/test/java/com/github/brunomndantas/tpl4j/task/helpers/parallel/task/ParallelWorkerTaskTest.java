@@ -27,11 +27,11 @@ public class ParallelWorkerTaskTest {
         ParallelWorkerTask<String,String> task = new ParallelWorkerTask<>(id, action, iterator, cancellationToken, scheduler, options);
 
         assertSame(id, task.getId());
-        assertTrue(task.getContext().getAction() instanceof ParallelWorkerAction);
-        assertSame(iterator, ((ParallelWorkerAction<Object, String>)(task.getContext().getAction())).getIterator());
-        assertSame(cancellationToken, task.getContext().getCancellationToken());
-        assertSame(scheduler, task.getContext().getScheduler());
-        assertEquals(options.length, task.getContext().getOptions().getOptions().size());
+        assertTrue(task.getAction() instanceof ParallelWorkerAction);
+        assertSame(iterator, ((ParallelWorkerAction<Object, String>)(task.getAction())).getIterator());
+        assertSame(cancellationToken, task.getCancellationToken());
+        assertSame(scheduler, task.getScheduler());
+        assertEquals(options.length, task.getOptions().getOptions().size());
     }
 
 }

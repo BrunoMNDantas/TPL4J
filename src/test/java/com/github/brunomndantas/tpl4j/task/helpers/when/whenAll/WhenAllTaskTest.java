@@ -46,9 +46,9 @@ public class WhenAllTaskTest {
         assertSame(tasks, task.getTasks());
         assertTrue(task.getContextExecutor() instanceof WhenAllContextExecutor);
         assertSame(tasks, ((WhenAllContextExecutor<?>)task.getContextExecutor()).getTasks());
-        assertSame(cancellationToken, task.getContext().getCancellationToken());
-        assertSame(scheduler, task.getContext().getScheduler());
-        assertEquals(Arrays.asList(options), task.getContext().getOptions().getOptions());
+        assertSame(cancellationToken, task.getCancellationToken());
+        assertSame(scheduler, task.getScheduler());
+        assertEquals(Arrays.asList(options), task.getOptions().getOptions());
         assertSame(tasks, task.getTasks());
     }
 

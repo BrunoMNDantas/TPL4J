@@ -48,7 +48,7 @@ public class WhenAllContextExecutor<K> extends ContextExecutor {
     }
 
     protected <T> void scheduleExecutionOnFinished(Context<T> context, Task<?> task) {
-        task.getContext().getStatus().getFinishedEvent().addListener(() -> {
+        task.getFinishedEvent().addListener(() -> {
             synchronized (context) {
                 if(!this.finished) {
                     if(super.verifyCancel(context))
@@ -63,7 +63,7 @@ public class WhenAllContextExecutor<K> extends ContextExecutor {
     protected boolean allFinished() {
         return this.tasks
                 .stream()
-                .allMatch(t->t.getContext().getStatus().getFinishedEvent().hasFired());
+                .allMatch(t->t.getFinishedEvent().hasFired());
     }
 
     protected <T> void scheduleExecution(Context<T> context) {

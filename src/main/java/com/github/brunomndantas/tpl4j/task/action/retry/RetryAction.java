@@ -62,14 +62,14 @@ public class RetryAction<T> extends LinkAction<T,T> {
 
     @Override
     public T run(ICancellationToken cancellationToken) throws Exception {
-        if(super.previousTask.getContext().getStatus().getState() == State.SUCCEEDED) {
-            return super.previousTask.getContext().getResultValue();
+        if(super.previousTask.getState() == State.SUCCEEDED) {
+            return super.previousTask.getResultValue();
         } else {
             Exception exception = null;
 
             while(this.retrySupplier.get()) {
                 try {
-                    return super.getPreviousTask().getContext().getAction().run(cancellationToken);
+                    return super.getPreviousTask().getAction().run(cancellationToken);
                 } catch (Exception e) {
                     if(e instanceof CancelledException)
                         throw e;

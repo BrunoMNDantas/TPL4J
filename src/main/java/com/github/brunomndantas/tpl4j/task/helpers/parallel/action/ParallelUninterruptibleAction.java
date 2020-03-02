@@ -1,6 +1,5 @@
 package com.github.brunomndantas.tpl4j.task.helpers.parallel.action;
 
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
 
 public class ParallelUninterruptibleAction<T,K> implements IParallelAction<T,K> {

@@ -41,9 +41,9 @@ public class UnwrapTaskTest {
         assertSame(task, unwrapTask.getTask());
         assertTrue(unwrapTask.getContextExecutor() instanceof UnwrapContextExecutor);
         assertSame(task, ((UnwrapContextExecutor<?>)(unwrapTask.getContextExecutor())).getTask());
-        assertSame(cancellationToken, unwrapTask.getContext().getCancellationToken());
-        assertSame(scheduler, unwrapTask.getContext().getScheduler());
-        assertEquals(Arrays.asList(options), unwrapTask.getContext().getOptions().getOptions());
+        assertSame(cancellationToken, unwrapTask.getCancellationToken());
+        assertSame(scheduler, unwrapTask.getScheduler());
+        assertEquals(Arrays.asList(options), unwrapTask.getOptions().getOptions());
         assertSame(task, unwrapTask.getTask());
     }
 

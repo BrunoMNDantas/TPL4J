@@ -62,7 +62,7 @@ public class WhenAnyContextExecutorTest {
 
         Context<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
-                (ct) -> taskA.getContext().getStatus().getFinishedEvent().hasFired() && !taskB.getContext().getStatus().getFinishedEvent().hasFired(),
+                (ct) -> taskA.getFinishedEvent().hasFired() && !taskB.getFinishedEvent().hasFired(),
                 new CancellationToken(),
                 SCHEDULER,
                 new Options(new LinkedList<>()));

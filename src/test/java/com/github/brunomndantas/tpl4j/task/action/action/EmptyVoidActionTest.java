@@ -1,7 +1,5 @@
 package com.github.brunomndantas.tpl4j.task.action.action;
 
-import com.github.brunomndantas.tpl4j.task.action.action.EmptyVoidAction;
-import com.github.brunomndantas.tpl4j.task.action.action.IEmptyVoidAction;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

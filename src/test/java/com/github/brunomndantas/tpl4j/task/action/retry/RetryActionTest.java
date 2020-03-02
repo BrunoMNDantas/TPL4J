@@ -51,7 +51,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getContext().getStatus().getFinishedEvent().await();
+        task.getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, RetryAction.RETRY_UNTIL_SUCCESS);
 
@@ -68,7 +68,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getContext().getStatus().getFinishedEvent().await();
+        task.getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, 3);
 
@@ -97,7 +97,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getContext().getStatus().getFinishedEvent().await();
+        task.getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, 3);
 
@@ -113,7 +113,7 @@ public class RetryActionTest {
         });
 
         task.start();
-        task.getContext().getStatus().getFinishedEvent().await();
+        task.getFinishedEvent().await();
 
         RetryAction<String> retryAction = new RetryAction<>(task, RetryAction.RETRY_UNTIL_SUCCESS);
 
