@@ -44,9 +44,9 @@ import java.util.function.Supplier;
 
 public class Task<T> {
 
-    public static final ContextManager DEFAULT_CONTEXT_MANAGER = new ContextManager();
-    public static final ContextBuilder DEFAULT_CONTEXT_BUILDER = new ContextBuilder(DEFAULT_CONTEXT_MANAGER);
-    public static final ContextExecutor DEFAULT_CONTEXT_EXECUTOR = new ContextExecutor(DEFAULT_CONTEXT_MANAGER);
+    public static final IContextManager DEFAULT_CONTEXT_MANAGER = new ContextManager();
+    public static final IContextBuilder DEFAULT_CONTEXT_BUILDER = new ContextBuilder(DEFAULT_CONTEXT_MANAGER);
+    public static final IContextExecutor DEFAULT_CONTEXT_EXECUTOR = new ContextExecutor(DEFAULT_CONTEXT_MANAGER);
     public static final IScheduler DEFAULT_SCHEDULER = new DedicatedThreadScheduler("DEFAULT_TASK_SCHEDULER");
     public static final Option[] DEFAULT_OPTIONS = new Option[]{ };
 
