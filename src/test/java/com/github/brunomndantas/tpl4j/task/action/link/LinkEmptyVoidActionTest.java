@@ -18,7 +18,7 @@ public class LinkEmptyVoidActionTest {
     @Test
     public void getActionTest() {
         ILinkEmptyVoidAction action = () -> {};
-        LinkEmptyVoidAction linkAction = new LinkEmptyVoidAction<>(null, action);
+        LinkEmptyVoidAction<?> linkAction = new LinkEmptyVoidAction<>(null, action);
 
         assertSame(action, linkAction.getAction());
     }

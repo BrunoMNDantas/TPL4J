@@ -28,12 +28,11 @@ public class ParallelTaskTest {
     private static final IParallelAction<String, String> CANCEL_ACTION = (e, ct) -> { Thread.sleep(1000); ct.cancel(); ct.abortIfCancelRequested(); throw FAIL_RESULT; };
     private static final IParallelAction<String, String> FAIL_ACTION = (e, ct) -> { Thread.sleep(1000); throw FAIL_RESULT; };
     private static final IParallelAction<String, String> ACTION = (e, ct) -> {
-        if(e.equals("s"))
-            return SUCCESS_ACTION.run(e, ct);
-        else if(e.equals("c"))
-            return CANCEL_ACTION.run(e, ct);
-        else if(e.equals("f"))
-            return FAIL_ACTION.run(e, ct);
+        switch (e) {
+            case "s": return SUCCESS_ACTION.run(e, ct);
+            case "c": return CANCEL_ACTION.run(e, ct);
+            case "f": return FAIL_ACTION.run(e, ct);
+        }
 
         return null;
     };

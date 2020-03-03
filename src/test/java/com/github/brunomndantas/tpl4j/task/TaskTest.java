@@ -251,7 +251,7 @@ public class TaskTest {
     @Test
     public void getIdTest() {
         String id = UUID.randomUUID().toString();
-        Task<String> task = new Task(id, SUCCESS_ACTION);
+        Task<String> task = new Task<>(id, SUCCESS_ACTION);
         assertSame(id, task.getId());
     }
 
