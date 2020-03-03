@@ -16,28 +16,28 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.context.manager;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 
 public interface IContextManager {
 
-    void registerContext(Context<?> context);
+    void registerContext(IContext<?> context);
 
-    void unregisterContext(Context<?> context);
-
-
-    void registerCurrentThreadAsCreatorOfContext(Context<?> context);
-
-    void registerCurrentThreadAsExecutorOfContext(Context<?> context);
-
-    void registerCurrentThreadEndExecutionOfContext(Context<?> context);
+    void unregisterContext(IContext<?> context);
 
 
-    void registerTaskParenting(Context<?> parentContext, Context<?> childContext);
+    void registerCurrentThreadAsCreatorOfContext(IContext<?> context);
+
+    void registerCurrentThreadAsExecutorOfContext(IContext<?> context);
+
+    void registerCurrentThreadEndExecutionOfContext(IContext<?> context);
 
 
-    Context<?> getContextRunningOnCurrentThread();
+    void registerTaskParenting(IContext<?> parentContext, IContext<?> childContext);
 
 
-    <T> void setContextResult(Context<T> context, T value, Exception exception);
+    IContext<?> getContextRunningOnCurrentThread();
+
+
+    <T> void setContextResult(IContext<T> context, T value, Exception exception);
     
 }

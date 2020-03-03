@@ -277,7 +277,7 @@ public class TaskTest {
     }
 
     @Test
-    public void getOptionsTest() { ;
+    public void getOptionsTest() {
         Task<String> task = new Task<>(SUCCESS_ACTION);
         assertSame(task.getContext().getOptions(), task.getOptions());
     }

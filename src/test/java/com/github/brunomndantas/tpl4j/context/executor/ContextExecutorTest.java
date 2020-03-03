@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.context.executor;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
@@ -57,7 +57,7 @@ public class ContextExecutorTest {
     public void executeTest() {
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        Context<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         executor.execute(context);
@@ -68,7 +68,7 @@ public class ContextExecutorTest {
     public void executeVerifyIfCancelledRequestedTest() {
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        Context<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         context.getCancellationToken().cancel();
@@ -82,7 +82,7 @@ public class ContextExecutorTest {
     public void executeTwiceResultsInExceptionTest() {
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        Context<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         executor.execute(context);
@@ -103,12 +103,12 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
+            IContext<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
             executor.execute(context);
             return SUCCESS_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.REJECT_CHILDREN)));
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.REJECT_CHILDREN)));
 
         long time = System.currentTimeMillis() + SLEEP_TIME;
         executor.execute(context);
@@ -125,12 +125,12 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             return SUCCESS_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
 
         long time = System.currentTimeMillis() + SLEEP_TIME;
         executor.execute(context);
@@ -146,18 +146,18 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             return SUCCESS_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
 
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -181,17 +181,17 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", CANCEL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", CANCEL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             return SUCCESS_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -215,17 +215,17 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             return SUCCESS_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -249,7 +249,7 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("childA", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("childA", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
 
             context = contextBuilder.build("childB", FAIL_ACTION, new CancellationToken(), SCHEDULER, OPTIONS);
@@ -258,13 +258,13 @@ public class ContextExecutorTest {
             return SUCCESS_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
-        Context<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childAContext));
@@ -297,19 +297,19 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             token.cancel();
             token.abortIfCancelRequested();
             return null;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -333,19 +333,19 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", CANCEL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", CANCEL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             token.cancel();
             token.abortIfCancelRequested();
             return null;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -369,19 +369,19 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             token.cancel();
             token.abortIfCancelRequested();
             return null;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -405,7 +405,7 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("childA", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("childA", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
 
             context = contextBuilder.build("childB", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
@@ -417,13 +417,13 @@ public class ContextExecutorTest {
             return null;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
-        Context<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childAContext));
@@ -456,17 +456,17 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", SUCCESS_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             throw FAIL_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -490,17 +490,17 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", CANCEL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", CANCEL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             throw FAIL_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -524,17 +524,17 @@ public class ContextExecutorTest {
         ContextExecutor executor = new ContextExecutor(contextManager);
 
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("child", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("child", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
             throw FAIL_RESULT;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childContext = context.getChildrenContexts().stream().findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childContext));
@@ -560,7 +560,7 @@ public class ContextExecutorTest {
 
         Exception exception = new Exception();
         IAction<String> action = (token) ->  {
-            Context<String> context = contextBuilder.build("childA", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
+            IContext<String> context = contextBuilder.build("childA", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
 
             context = contextBuilder.build("childB", FAIL_ACTION, new CancellationToken(), SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
@@ -569,13 +569,13 @@ public class ContextExecutorTest {
             throw exception;
         };
 
-        Context<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
+        IContext<String> context = contextBuilder.build("parent", action, new CancellationToken(), SCHEDULER, OPTIONS);
         executor.execute(context);
         context.getStatus().getFinishedEvent().await();
 
-        Context<?> parentContext = context;
-        Context<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
-        Context<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
+        IContext<?> parentContext = context;
+        IContext<?> childAContext = context.getChildrenContexts().stream().findFirst().get();
+        IContext<?> childBContext = context.getChildrenContexts().stream().skip(1).findFirst().get();
 
         assertNotNull(parentContext);
         assertTrue(parentContext.getChildrenContexts().contains(childAContext));

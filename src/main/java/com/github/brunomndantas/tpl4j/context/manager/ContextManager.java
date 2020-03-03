@@ -16,7 +16,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.context.manager;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,13 +31,13 @@ public class ContextManager implements IContextManager {
 
 
 
-    protected final Collection<Context<?>> contexts = new HashSet<>();
-    protected final Map<Long, Context<?>> contextByExecutorThread = new HashMap<>();
+    protected final Collection<IContext<?>> contexts = new HashSet<>();
+    protected final Map<Long, IContext<?>> contextByExecutorThread = new HashMap<>();
 
 
 
     @Override
-    public synchronized void registerContext(Context<?> context) {
+    public synchronized void registerContext(IContext<?> context) {
         String taskId = context.getTaskId();
 
         if(this.contexts.contains(context))
@@ -45,27 +45,27 @@ public class ContextManager implements IContextManager {
 
         this.contexts.add(context);
 
-        LOGGER.info("Registered Context for Task with id:" + taskId);
+        LOGGER.info("Registered IContext for Task with id:" + taskId);
     }
 
     @Override
-    public synchronized void unregisterContext(Context<?> context) {
+    public synchronized void unregisterContext(IContext<?> context) {
         String taskId = context.getTaskId();
 
         if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + taskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
 
         this.contexts.remove(context);
 
-        LOGGER.info("Unregistered Context for Task with id:" + taskId);
+        LOGGER.info("Unregistered IContext for Task with id:" + taskId);
     }
 
     @Override
-    public synchronized void registerCurrentThreadAsCreatorOfContext(Context<?> context) {
+    public synchronized void registerCurrentThreadAsCreatorOfContext(IContext<?> context) {
         String taskId = context.getTaskId();
 
         if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + taskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
 
         if(context.getCreatorThreadId() != 0)
             throw new IllegalArgumentException("Task with id:" + taskId + " has already a creator thread registered!");
@@ -77,11 +77,11 @@ public class ContextManager implements IContextManager {
     }
 
     @Override
-    public synchronized void registerCurrentThreadAsExecutorOfContext(Context<?> context) {
+    public synchronized void registerCurrentThreadAsExecutorOfContext(IContext<?> context) {
         String taskId = context.getTaskId();
 
         if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + taskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
 
         if(context.getExecutorThreadId() != 0)
             throw new IllegalArgumentException("Task with id:" + taskId + " has already a executor thread registered!");
@@ -94,12 +94,12 @@ public class ContextManager implements IContextManager {
     }
 
     @Override
-    public void registerCurrentThreadEndExecutionOfContext(Context<?> context) {
+    public void registerCurrentThreadEndExecutionOfContext(IContext<?> context) {
         String taskId = context.getTaskId();
         long currentThreadId = Thread.currentThread().getId();
 
         if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + taskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
 
         if(context.getExecutorThreadId() != currentThreadId)
             throw new IllegalArgumentException("Trying to declare end of execution of Task with id:" + taskId + " on a different Thread!");
@@ -110,15 +110,15 @@ public class ContextManager implements IContextManager {
     }
 
     @Override
-    public synchronized void registerTaskParenting(Context<?> parentContext, Context<?> childContext) {
+    public synchronized void registerTaskParenting(IContext<?> parentContext, IContext<?> childContext) {
         String parentTaskId = parentContext.getTaskId();
         String childTaskId = childContext.getTaskId();
 
         if(!this.contexts.contains(parentContext))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + parentTaskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + parentTaskId + "!");
 
         if(!this.contexts.contains(childContext))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + childTaskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + childTaskId + "!");
 
         if(parentContext.hasChild(childContext))
             throw new IllegalArgumentException("Task with id:" + childTaskId + " is already registered as child of Task with id:" + parentTaskId + "!");
@@ -134,20 +134,20 @@ public class ContextManager implements IContextManager {
     }
 
     @Override
-    public synchronized Context<?> getContextRunningOnCurrentThread() {
+    public synchronized IContext<?> getContextRunningOnCurrentThread() {
         long currentThreadId = Thread.currentThread().getId();
         return this.contextByExecutorThread.get(currentThreadId);
     }
 
     @Override
-    public synchronized <T> void setContextResult(Context<T> context, T value, Exception exception) {
+    public synchronized <T> void setContextResult(IContext<T> context, T value, Exception exception) {
         String taskId = context.getTaskId();
 
         if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("Context not registered for Task with id:" + taskId + "!");
+            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
 
         if(context.getResultValue() != null || context.getResultException() != null)
-            throw new IllegalArgumentException("Context of Task with id:" + context.getTaskId() + " already has its value set!");
+            throw new IllegalArgumentException("IContext of Task with id:" + context.getTaskId() + " already has its value set!");
 
         context.setResultValue(value);
         context.setResultException(exception);

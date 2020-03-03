@@ -45,7 +45,7 @@ public class IntensiveTest {
 
 
 
-        public Calculation clone() {
+        public Calculation createClone() {
             return new Calculation(this.leftNumber, this.rightNumber, this.operation);
         }
 
@@ -59,9 +59,9 @@ public class IntensiveTest {
 
             switch (calculation.getOperation()) {
                 case '+': return leftNumber+rightNumber;
-                case '-': return leftNumber+rightNumber;
-                case '*': return leftNumber+rightNumber;
-                case '/': return leftNumber+rightNumber;
+                case '-': return leftNumber-rightNumber;
+                case '*': return leftNumber*rightNumber;
+                case '/': return leftNumber/rightNumber;
             }
 
             throw new RuntimeException("Unknown operation " + calculation.getOperation() + "!");
@@ -144,7 +144,7 @@ public class IntensiveTest {
         Collection<Calculation> clones = new LinkedList<>();
 
         for(Calculation calculation : calculations)
-            clones.add(calculation.clone());
+            clones.add(calculation.createClone());
 
         return clones;
     }

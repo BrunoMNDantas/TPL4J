@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
@@ -60,7 +60,7 @@ public class WhenAnyContextExecutorTest {
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         WhenAnyContextExecutor<?> executor = new WhenAnyContextExecutor<>(contextManager, tasks);
 
-        Context<Boolean> context = contextBuilder.build(
+        IContext<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
                 (ct) -> taskA.getFinishedEvent().hasFired() && !taskB.getFinishedEvent().hasFired(),
                 new CancellationToken(),
@@ -83,7 +83,7 @@ public class WhenAnyContextExecutorTest {
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         WhenAnyContextExecutor<?> executor = new WhenAnyContextExecutor<>(contextManager, tasks);
 
-        Context<Boolean> context = contextBuilder.build(
+        IContext<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
                 (ct) -> true,
                 new CancellationToken(),

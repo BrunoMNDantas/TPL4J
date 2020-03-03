@@ -39,14 +39,14 @@ public interface IContext<T> {
     IStatus getStatus();
 
 
-    Context<?> getParentContext();
+    IContext<?> getParentContext();
 
-    void setParentContext(Context<?> parentContext);
+    void setParentContext(IContext<?> parentContext);
 
 
-    Collection<Context<?>> getChildrenContexts();
+    Collection<IContext<?>> getChildrenContexts();
 
-    void setChildrenContexts(Collection<Context<?>> childrenContexts);
+    void setChildrenContexts(Collection<IContext<?>> childrenContexts);
 
 
     long getCreatorThreadId();
@@ -69,8 +69,8 @@ public interface IContext<T> {
     void setResultException(Exception resultException);
 
 
-    boolean hasChild(Context<?> context);
+    boolean hasChild(IContext<?> context);
 
-    void addChild(Context<?> context);
+    void addChild(IContext<?> context);
 
 }

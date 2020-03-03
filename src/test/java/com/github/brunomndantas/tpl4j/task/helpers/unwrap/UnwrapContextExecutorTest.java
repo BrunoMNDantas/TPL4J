@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
@@ -60,7 +60,7 @@ public class UnwrapContextExecutorTest {
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         UnwrapContextExecutor<?> executor = new UnwrapContextExecutor<>(contextManager, taskB);
 
-        Context<Boolean> context = contextBuilder.build(
+        IContext<Boolean> context = contextBuilder.build(
                 UUID.randomUUID().toString(),
                 (ct) -> taskB.getFinishedEvent().hasFired() && taskA.getFinishedEvent().hasFired(),
                 new CancellationToken(),

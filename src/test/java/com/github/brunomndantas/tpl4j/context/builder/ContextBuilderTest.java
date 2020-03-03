@@ -1,6 +1,6 @@
 package com.github.brunomndantas.tpl4j.context.builder;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
@@ -50,7 +50,7 @@ public class ContextBuilderTest {
 
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        Context<String> context = contextBuilder.build(taskId, action, cancellationToken, scheduler, options);
+        IContext<String> context = contextBuilder.build(taskId, action, cancellationToken, scheduler, options);
 
         assertSame(taskId, context.getTaskId());
         assertSame(action, context.getAction());
@@ -84,11 +84,11 @@ public class ContextBuilderTest {
 
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        Context<String> parentContext = contextBuilder.build(parentTaskId, action, cancellationToken, scheduler, options);
+        IContext<String> parentContext = contextBuilder.build(parentTaskId, action, cancellationToken, scheduler, options);
 
         contextManager.registerCurrentThreadAsExecutorOfContext(parentContext);
 
-        Context<String> childContext = contextBuilder.build(childTaskId, action, cancellationToken, scheduler, options);
+        IContext<String> childContext = contextBuilder.build(childTaskId, action, cancellationToken, scheduler, options);
 
         assertSame(parentContext, childContext.getParentContext());
         assertTrue(parentContext.getChildrenContexts().contains(childContext));

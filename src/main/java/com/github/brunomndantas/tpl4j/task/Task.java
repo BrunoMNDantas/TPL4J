@@ -16,7 +16,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.builder.IContextBuilder;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
@@ -52,8 +52,8 @@ public class Task<T> {
 
 
 
-    protected volatile Context<T> context;
-    public Context<T> getContext() { return this.context; }
+    protected volatile IContext<T> context;
+    public IContext<T> getContext() { return this.context; }
 
     protected IContextManager contextManager;
     public IContextManager getContextManager() { return this.contextManager; }
@@ -66,7 +66,7 @@ public class Task<T> {
 
 
 
-    public Task(Context<T> context, IContextManager contextManager, IContextBuilder contextBuilder, IContextExecutor contextExecutor) {
+    public Task(IContext<T> context, IContextManager contextManager, IContextBuilder contextBuilder, IContextExecutor contextExecutor) {
         this.context = context;
         this.contextManager = contextManager;
         this.contextBuilder = contextBuilder;

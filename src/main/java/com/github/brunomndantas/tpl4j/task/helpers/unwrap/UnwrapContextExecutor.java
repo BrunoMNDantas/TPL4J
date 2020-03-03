@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.status.State;
@@ -37,7 +37,7 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
 
 
     @Override
-    protected <T> void schedule(Context<T> context) {
+    protected <T> void schedule(IContext<T> context) {
         this.task.getFinishedEvent().addListener(() -> {
             if(super.verifyCancel(context))
                 return;
@@ -51,7 +51,7 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
         });
     }
 
-    protected <T> void scheduleExecutionOnFinished(Context<T> context, Task<?> task) {
+    protected <T> void scheduleExecutionOnFinished(IContext<T> context, Task<?> task) {
         if(task == null)
             this.scheduleExecution(context);
         else
@@ -61,7 +61,7 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
             });
     }
 
-    protected <T> void scheduleExecution(Context<T> context) {
+    protected <T> void scheduleExecution(IContext<T> context) {
         context.getScheduler().schedule(() -> super.run(context));
     }
 

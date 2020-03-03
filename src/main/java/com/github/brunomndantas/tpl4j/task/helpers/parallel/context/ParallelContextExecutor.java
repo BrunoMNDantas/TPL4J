@@ -16,7 +16,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.parallel.context;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.status.State;
@@ -32,9 +32,9 @@ public class ParallelContextExecutor extends ContextExecutor {
 
 
     @Override
-    protected <T> void endExecution(Context<T> context, Collection<Context<?>> childrenContexts, T value, Exception exception) {
+    protected <T> void endExecution(IContext<T> context, Collection<IContext<?>> childrenContexts, T value, Exception exception) {
         Exception childException = null;
-        for(Context<?> childContext : childrenContexts) {
+        for(IContext<?> childContext : childrenContexts) {
             if(childContext.getStatus().getState().equals(State.CANCELED)) {
                 if(childException == null)
                     childException = childContext.getResultException();

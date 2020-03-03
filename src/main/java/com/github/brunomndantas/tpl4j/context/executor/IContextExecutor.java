@@ -16,10 +16,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.context.executor;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 
 public interface IContextExecutor {
 
-    <T> void execute(Context<T> context);
+    <T> void execute(IContext<T> context);
 
 }

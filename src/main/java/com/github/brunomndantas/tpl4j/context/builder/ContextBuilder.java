@@ -17,6 +17,7 @@
 package com.github.brunomndantas.tpl4j.context.builder;
 
 import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
@@ -46,14 +47,14 @@ public class ContextBuilder implements IContextBuilder {
 
 
 
-    public <T> Context<T> build(String taskId, IAction<T> action, ICancellationToken cancellationToken, IScheduler scheduler, IOptions options) {
+    public <T> IContext<T> build(String taskId, IAction<T> action, ICancellationToken cancellationToken, IScheduler scheduler, IOptions options) {
         Context<T> context = new Context<>(taskId, action, cancellationToken, scheduler, options, new Status(taskId), null, new LinkedList<>(), 0, 0, null, null);
 
         this.contextManager.registerContext(context);
 
         this.contextManager.registerCurrentThreadAsCreatorOfContext(context);
 
-        Context<?> parentContext = this.contextManager.getContextRunningOnCurrentThread();
+        IContext<?> parentContext = this.contextManager.getContextRunningOnCurrentThread();
         if(parentContext != null)
             this.contextManager.registerTaskParenting(parentContext, context);
 

@@ -386,7 +386,7 @@ public class TaskTestUtils {
     }
 
     public static void validateParentResult(Task<?> task) {
-        Context<?> parentContext = task.getContext();
+        IContext<?> parentContext = task.getContext();
 
         if(parentContext != null && !parentContext.getOptions().rejectChildren()) {
             if(task.getOptions().attachToParent()) {
@@ -405,7 +405,7 @@ public class TaskTestUtils {
 
     public static void validateChildrenResult(Task<?> task) {
         if(!task.getContext().getChildrenContexts().isEmpty() && !task.getOptions().rejectChildren()) {
-            for(Context<?> childContext : task.getContext().getChildrenContexts()) {
+            for(IContext<?> childContext : task.getContext().getChildrenContexts()) {
                 if(childContext.getOptions().attachToParent()) {
                     assertTrue(childContext.getStatus().getFinishedEvent().hasFired());
 

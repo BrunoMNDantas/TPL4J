@@ -16,7 +16,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.task.Task;
@@ -40,14 +40,14 @@ public class WhenAnyContextExecutor<K> extends ContextExecutor {
 
 
     @Override
-    protected <T> void schedule(Context<T> context) {
+    protected <T> void schedule(IContext<T> context) {
         if(this.tasks.isEmpty())
             this.scheduleExecution(context);
         else
             this.tasks.forEach(task -> this.scheduleExecutionOnFinished(context, task));
     }
 
-    protected <T> void scheduleExecutionOnFinished(Context<T> context, Task<?> task) {
+    protected <T> void scheduleExecutionOnFinished(IContext<T> context, Task<?> task) {
         task.getFinishedEvent().addListener(() -> {
             synchronized (context) {
                 if(!this.finished) {
@@ -66,7 +66,7 @@ public class WhenAnyContextExecutor<K> extends ContextExecutor {
                 .anyMatch(t->t.getFinishedEvent().hasFired());
     }
 
-    protected <T> void scheduleExecution(Context<T> context) {
+    protected <T> void scheduleExecution(IContext<T> context) {
         context.getScheduler().schedule(() -> super.run(context));
         this.finished = true;
     }

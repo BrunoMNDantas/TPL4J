@@ -90,7 +90,7 @@ public class UnwrapTaskTest {
         TaskTestUtils.validateTask(task, template);
 
 
-        outerTask = new Task<>((IAction<Task<String>>) (ct) -> { ct.cancel(); ct.abortIfCancelRequested(); return null; });
+        outerTask = new Task<>((ct) -> { ct.cancel(); ct.abortIfCancelRequested(); return null; });
         outerTask.start();
 
         task = new UnwrapTask<>("", outerTask, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);

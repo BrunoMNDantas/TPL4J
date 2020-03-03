@@ -76,8 +76,8 @@ public class ContextTest {
 
     @Test
     public void setParentContextTest() {
-        Context<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);
-        Context<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
+        IContext<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);
+        IContext<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
 
         context.setParentContext(parentContext);
 
@@ -86,15 +86,15 @@ public class ContextTest {
 
     @Test
     public void getChildrenContextsTest() {
-        Collection<Context<?>> childrenContexts = new LinkedList<>();
-        Context<String> context = new Context<>(null, null, null, null, null, null, null, childrenContexts, 0, 0, null, null);
+        Collection<IContext<?>> childrenContexts = new LinkedList<>();
+        IContext<String> context = new Context<>(null, null, null, null, null, null, null, childrenContexts, 0, 0, null, null);
         assertSame(childrenContexts, context.getChildrenContexts());
     }
 
     @Test
     public void setChildrenContextsTest() {
-        Collection<Context<?>> childrenContexts = new LinkedList<>();
-        Context<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
+        Collection<IContext<?>> childrenContexts = new LinkedList<>();
+        IContext<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
 
         context.setChildrenContexts(childrenContexts);
 
@@ -188,13 +188,13 @@ public class ContextTest {
         };
         Status status = new Status("");
         Context<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);
-        Collection<Context<?>> childrenContexts = new LinkedList<>();
+        Collection<IContext<?>> childrenContexts = new LinkedList<>();
         long creatorThreadId = 1;
         long executorThreadId = 2;
         String resultValue = "";
         Exception resultException = new Exception();
 
-        Context<String> context = new Context<>(taskId, action, cancellationToken, scheduler, options, status, parentContext, childrenContexts, creatorThreadId, executorThreadId, resultValue, resultException);
+        IContext<String> context = new Context<>(taskId, action, cancellationToken, scheduler, options, status, parentContext, childrenContexts, creatorThreadId, executorThreadId, resultValue, resultException);
 
         assertSame(taskId, context.getTaskId());
         assertSame(action, context.getAction());

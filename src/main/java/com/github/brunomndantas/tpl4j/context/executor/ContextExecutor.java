@@ -16,7 +16,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.context.executor;
 
-import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.status.State;
@@ -39,7 +39,7 @@ public class ContextExecutor implements IContextExecutor {
 
 
     @Override
-    public synchronized <T> void execute(Context<T> context) {
+    public synchronized <T> void execute(IContext<T> context) {
         if(context.getStatus().getScheduledEvent().hasFired())
             throw new RuntimeException("Task:" + context.getTaskId() + " already scheduled!");
 
@@ -49,7 +49,7 @@ public class ContextExecutor implements IContextExecutor {
             this.schedule(context);
     }
 
-    protected <T> boolean verifyCancel(Context<T> context) {
+    protected <T> boolean verifyCancel(IContext<T> context) {
         try {
             if(!context.getOptions().notCancelable())
                 context.getCancellationToken().abortIfCancelRequested();
@@ -61,11 +61,11 @@ public class ContextExecutor implements IContextExecutor {
         return false;
     }
 
-    protected <T> void schedule(Context<T> context) {
+    protected <T> void schedule(IContext<T> context) {
         context.getScheduler().schedule(() -> run(context));
     }
 
-    protected <T> void run(Context<T> context) {
+    protected <T> void run(IContext<T> context) {
         this.contextManager.registerCurrentThreadAsExecutorOfContext(context);
 
         try {
@@ -87,8 +87,8 @@ public class ContextExecutor implements IContextExecutor {
         this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
     }
 
-    protected <T> void declareSuccess(Context<T> context, T value) {
-        Collection<Context<?>> children = getAttachedChildrenContext(context);
+    protected <T> void declareSuccess(IContext<T> context, T value) {
+        Collection<IContext<?>> children = getAttachedChildrenContext(context);
 
         if(children.isEmpty())
             this.endExecution(context, value, null);
@@ -96,8 +96,8 @@ public class ContextExecutor implements IContextExecutor {
             this.endExecutionAfterChildrenFinish(context, children, value, null);
     }
 
-    protected <T> void declareCancel(Context<T> context, CancelledException exception) {
-        Collection<Context<?>> children = getAttachedChildrenContext(context);
+    protected <T> void declareCancel(IContext<T> context, CancelledException exception) {
+        Collection<IContext<?>> children = getAttachedChildrenContext(context);
 
         if(children.isEmpty())
             this.endExecution(context, null, exception);
@@ -105,8 +105,8 @@ public class ContextExecutor implements IContextExecutor {
             this.endExecutionAfterChildrenFinish(context, children, null, exception);
     }
 
-    protected <T> void declareFail(Context<T> context, Exception exception) {
-        Collection<Context<?>> children = getAttachedChildrenContext(context);
+    protected <T> void declareFail(IContext<T> context, Exception exception) {
+        Collection<IContext<?>> children = getAttachedChildrenContext(context);
 
         if(children.isEmpty())
             this.endExecution(context, null, exception);
@@ -114,7 +114,7 @@ public class ContextExecutor implements IContextExecutor {
             this.endExecutionAfterChildrenFinish(context, children, null, exception);
     }
 
-    protected Collection<Context<?>> getAttachedChildrenContext(Context<?> context) {
+    protected Collection<IContext<?>> getAttachedChildrenContext(IContext<?> context) {
         if(context.getOptions().rejectChildren())
             return new LinkedList<>();
 
@@ -124,10 +124,10 @@ public class ContextExecutor implements IContextExecutor {
                 .collect(Collectors.toList());
     }
 
-    protected <T> void endExecutionAfterChildrenFinish(Context<T> context, Collection<Context<?>> childrenContexts, T value, Exception exception) {
+    protected <T> void endExecutionAfterChildrenFinish(IContext<T> context, Collection<IContext<?>> childrenContexts, T value, Exception exception) {
         context.getStatus().setState(State.WAITING_CHILDREN);
 
-        for(Context<?> childContext : childrenContexts) {
+        for(IContext<?> childContext : childrenContexts) {
             childContext.getStatus().getFinishedEvent().addListener(() -> {
                 context.getScheduler().schedule(() -> {
                     synchronized (childrenContexts) {
@@ -139,15 +139,15 @@ public class ContextExecutor implements IContextExecutor {
         }
     }
 
-    protected boolean allFinished(Collection<Context<?>> contexts) {
+    protected boolean allFinished(Collection<IContext<?>> contexts) {
         return contexts
                 .stream()
                 .allMatch((context) -> context.getStatus().getFinishedEvent().hasFired());
     }
 
-    protected <T> void endExecution(Context<T> context, Collection<Context<?>> childrenContexts, T value, Exception exception) {
+    protected <T> void endExecution(IContext<T> context, Collection<IContext<?>> childrenContexts, T value, Exception exception) {
         Exception childException;
-        for(Context<?> childContext : childrenContexts) {
+        for(IContext<?> childContext : childrenContexts) {
             if(childContext.getStatus().getState().equals(State.FAILED)) {
                 childException = childContext.getResultException();
 
@@ -161,8 +161,8 @@ public class ContextExecutor implements IContextExecutor {
         this.endExecution(context, value, exception);
     }
 
-    protected <T> void endExecution(Context<T> context, T value, Exception exception) {
-        if(exception != null && exception instanceof CancelledException) {
+    protected <T> void endExecution(IContext<T> context, T value, Exception exception) {
+        if(exception instanceof CancelledException) {
             this.contextManager.setContextResult(context, null, exception);
             context.getStatus().setState(State.CANCELED);
         } else if(exception != null) {
