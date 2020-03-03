@@ -1,6 +1,7 @@
 package com.github.brunomndantas.tpl4j.task;
 
 import com.github.brunomndantas.tpl4j.context.Context;
+import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
@@ -11,6 +12,7 @@ import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.options.Options;
 import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
 import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
+import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.*;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
@@ -27,18 +29,23 @@ public class TaskTest {
     private static final IEmptyAction<String> EMPTY_ACTION = () -> null;
     private static final IVoidAction VOID_ACTION = (token) -> {};
     private static final IEmptyVoidAction EMPTY_VOID_ACTION = () -> {};
+
     private static final ILinkAction<String, String> LINK_ACTION = (task, token) -> null;
     private static final ILinkEmptyAction<String> LINK_EMPTY_ACTION = () -> null;
     private static final ILinkVoidAction<String> LINK_VOID_ACTION = (task, token) -> {};
     private static final ILinkEmptyVoidAction LINK_EMPTY_VOID_ACTION = () -> {};
+
     private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
     private static final Option[] OPTIONS = {};
     private static final IScheduler SCHEDULER = new DedicatedThreadScheduler();
+
     private static final String SUCCESS_RESULT = "";
-    private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(3000); return SUCCESS_RESULT; };
+    private static final IAction<String> SUCCESS_ACTION = (token) -> { Thread.sleep(1000); return SUCCESS_RESULT; };
+
     private static final Exception FAIL_RESULT = new Exception();
-    private static final IAction<String> FAIL_ACTION = (token) -> { Thread.sleep(3000); throw FAIL_RESULT; };
-    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(3000); token.cancel(); token.abortIfCancelRequested(); return SUCCESS_RESULT; };
+    private static final IAction<String> FAIL_ACTION = (token) -> { Thread.sleep(1000); throw FAIL_RESULT; };
+
+    private static final IAction<String> CANCEL_ACTION = (token) -> { Thread.sleep(1000); token.cancel(); token.abortIfCancelRequested(); return SUCCESS_RESULT; };
 
 
 
@@ -71,261 +78,174 @@ public class TaskTest {
     }
     
     @Test
-    public void constructorsTest() {
+    public void constructorsTest() throws Exception {
         String id = "";
         Task<?> task;
 
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateAction(task, id, ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = new Task<>(id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateVoidAction(task, id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = new Task<>(id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateEmptyAction(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateAction(task, id, ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, id, ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateVoidAction(task, id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, id, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateEmptyAction(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
 
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateAction(task, id, ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, id, ACTION, CANCELLATION_TOKEN, null, OPTIONS);
         task = new Task<>(id, VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateVoidAction(task, id, VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, id, VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
         task = new Task<>(id, EMPTY_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateEmptyAction(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
 
         task = new Task<>(id, ACTION, SCHEDULER, OPTIONS);
-        validateAction(task, id, ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, ACTION, null, SCHEDULER, OPTIONS);
         task = new Task<>(id, VOID_ACTION, SCHEDULER, OPTIONS);
-        validateVoidAction(task, id, VOID_ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, VOID_ACTION, null, SCHEDULER, OPTIONS);
         task = new Task<>(id, EMPTY_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
         task = new Task<>(id, EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
 
         task = new Task<>(id, ACTION, CANCELLATION_TOKEN);
-        validateAction(task, id, ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, id, ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(id, VOID_ACTION, CANCELLATION_TOKEN);
-        validateVoidAction(task, id, VOID_ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, id, VOID_ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(id, EMPTY_ACTION, CANCELLATION_TOKEN);
-        validateEmptyAction(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, id, EMPTY_ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, null);
 
         task = new Task<>(id, ACTION, SCHEDULER);
-        validateAction(task, id, ACTION, null, SCHEDULER, null);
+        validateConstructor(task, id, ACTION, null, SCHEDULER, null);
         task = new Task<>(id, VOID_ACTION, SCHEDULER);
-        validateVoidAction(task, id, VOID_ACTION, null, SCHEDULER, null);
+        validateConstructor(task, id, VOID_ACTION, null, SCHEDULER, null);
         task = new Task<>(id, EMPTY_ACTION, SCHEDULER);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, SCHEDULER, null);
+        validateConstructor(task, id, EMPTY_ACTION, null, SCHEDULER, null);
         task = new Task<>(id, EMPTY_VOID_ACTION, SCHEDULER);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, null);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, null, SCHEDULER, null);
 
         task = new Task<>(id, ACTION, OPTIONS);
-        validateAction(task, id, ACTION, null, null, OPTIONS);
+        validateConstructor(task, id, ACTION, null, null, OPTIONS);
         task = new Task<>(id, VOID_ACTION, OPTIONS);
-        validateVoidAction(task, id, VOID_ACTION, null, null, OPTIONS);
+        validateConstructor(task, id, VOID_ACTION, null, null, OPTIONS);
         task = new Task<>(id, EMPTY_ACTION, OPTIONS);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, null, OPTIONS);
+        validateConstructor(task, id, EMPTY_ACTION, null, null, OPTIONS);
         task = new Task<>(id, EMPTY_VOID_ACTION, OPTIONS);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, null, OPTIONS);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, null, null, OPTIONS);
 
         task = new Task<>(id, ACTION);
-        validateAction(task, id, ACTION, null, null, null);
+        validateConstructor(task, id, ACTION, null, null, null);
         task = new Task<>(id, VOID_ACTION);
-        validateVoidAction(task, id, VOID_ACTION, null, null, null);
+        validateConstructor(task, id, VOID_ACTION, null, null, null);
         task = new Task<>(id, EMPTY_ACTION);
-        validateEmptyAction(task, id, EMPTY_ACTION, null, null, null);
+        validateConstructor(task, id, EMPTY_ACTION, null, null, null);
         task = new Task<>(id, EMPTY_VOID_ACTION);
-        validateEmptyVoidAction(task, id, EMPTY_VOID_ACTION, null, null, null);
+        validateConstructor(task, id, EMPTY_VOID_ACTION, null, null, null);
 
         task = new Task<>(ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateAction(task, null, ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = new Task<>(VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateVoidAction(task, null, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = new Task<>(EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateEmptyAction(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
         task = new Task<>(ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateAction(task, null, ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, null, ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateVoidAction(task, null, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, null, VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateEmptyAction(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, null);
 
         task = new Task<>(ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateAction(task, null, ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, null, ACTION, CANCELLATION_TOKEN, null, OPTIONS);
         task = new Task<>(VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateVoidAction(task, null, VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, null, VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
         task = new Task<>(EMPTY_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateEmptyAction(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, OPTIONS);
 
         task = new Task<>(ACTION, SCHEDULER, OPTIONS);
-        validateAction(task, null, ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, ACTION, null, SCHEDULER, OPTIONS);
         task = new Task<>(VOID_ACTION, SCHEDULER, OPTIONS);
-        validateVoidAction(task, null, VOID_ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, VOID_ACTION, null, SCHEDULER, OPTIONS);
         task = new Task<>(EMPTY_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, EMPTY_ACTION, null, SCHEDULER, OPTIONS);
         task = new Task<>(EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, OPTIONS);
 
         task = new Task<>(ACTION, CANCELLATION_TOKEN);
-        validateAction(task, null, ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, null, ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(VOID_ACTION, CANCELLATION_TOKEN);
-        validateVoidAction(task, null, VOID_ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, null, VOID_ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(EMPTY_ACTION, CANCELLATION_TOKEN);
-        validateEmptyAction(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, null, EMPTY_ACTION, CANCELLATION_TOKEN, null, null);
         task = new Task<>(EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, null);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, CANCELLATION_TOKEN, null, null);
 
         task = new Task<>(ACTION, SCHEDULER);
-        validateAction(task, null, ACTION, null, SCHEDULER, null);
+        validateConstructor(task, null, ACTION, null, SCHEDULER, null);
         task = new Task<>(VOID_ACTION, SCHEDULER);
-        validateVoidAction(task, null, VOID_ACTION, null, SCHEDULER, null);
+        validateConstructor(task, null, VOID_ACTION, null, SCHEDULER, null);
         task = new Task<>(EMPTY_ACTION, SCHEDULER);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, SCHEDULER, null);
+        validateConstructor(task, null, EMPTY_ACTION, null, SCHEDULER, null);
         task = new Task<>(EMPTY_VOID_ACTION, SCHEDULER);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, null);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, null, SCHEDULER, null);
 
         task = new Task<>(ACTION, OPTIONS);
-        validateAction(task, null, ACTION, null, null, OPTIONS);
+        validateConstructor(task, null, ACTION, null, null, OPTIONS);
         task = new Task<>(VOID_ACTION, OPTIONS);
-        validateVoidAction(task, null, VOID_ACTION, null, null, OPTIONS);
+        validateConstructor(task, null, VOID_ACTION, null, null, OPTIONS);
         task = new Task<>(EMPTY_ACTION, OPTIONS);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, null, OPTIONS);
+        validateConstructor(task, null, EMPTY_ACTION, null, null, OPTIONS);
         task = new Task<>(EMPTY_VOID_ACTION, OPTIONS);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, null, OPTIONS);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, null, null, OPTIONS);
 
         task = new Task<>(ACTION);
-        validateAction(task, null, ACTION, null, null, null);
+        validateConstructor(task, null, ACTION, null, null, null);
         task = new Task<>(VOID_ACTION);
-        validateVoidAction(task, null, VOID_ACTION, null, null, null);
+        validateConstructor(task, null, VOID_ACTION, null, null, null);
         task = new Task<>(EMPTY_ACTION);
-        validateEmptyAction(task, null, EMPTY_ACTION, null, null, null);
+        validateConstructor(task, null, EMPTY_ACTION, null, null, null);
         task = new Task<>(EMPTY_VOID_ACTION);
-        validateEmptyVoidAction(task, null, EMPTY_VOID_ACTION, null, null, null);
+        validateConstructor(task, null, EMPTY_VOID_ACTION, null, null, null);
     }
 
-    private void validateAction(Task<?> task, String id, IAction<?> action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(task.getId());
-        else
-            assertSame(id, task.getId());
+    private void validateConstructor(Task<?> task, String id, IAction<?> action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        IContext<?> template = TaskTestUtils.createTemplate(id, action, cancellationToken, scheduler, options, State.CREATED);
+        TaskTestUtils.validateCreation(task, template);
 
-        assertSame(action, task.context.getAction());
-
-        if(cancellationToken == null)
-            assertNotNull(task.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, task.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
-        else
-            assertSame(scheduler, task.context.getScheduler());
-
-        if(options == null) {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
-        } else {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
-        }
+        task.start();
+        template.getStatus().setState(State.SUCCEEDED);
+        TaskTestUtils.validateExecution(task, template);
     }
 
-    private void validateVoidAction(Task<?> task, String id, IVoidAction action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(task.getId());
-        else
-            assertSame(id, task.getId());
-
-        assertSame(action, ((VoidAction)task.context.getAction()).getAction());
-
-        if(cancellationToken == null)
-            assertNotNull(task.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, task.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
-        else
-            assertSame(scheduler, task.context.getScheduler());
-
-        if(options == null) {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
-        } else {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
-        }
+    private void validateConstructor(Task<?> task, String id, IVoidAction action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateConstructor(task, id, new VoidAction(action), cancellationToken, scheduler, options);
     }
 
-    private void validateEmptyAction(Task<?> task, String id, IEmptyAction<?> action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(task.getId());
-        else
-            assertSame(id, task.getId());
-
-        assertSame(action, ((EmptyAction)task.context.getAction()).getAction());
-
-        if(cancellationToken == null)
-            assertNotNull(task.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, task.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
-        else
-            assertSame(scheduler, task.context.getScheduler());
-
-        if(options == null) {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
-        } else {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
-        }
+    private void validateConstructor(Task<?> task, String id, IEmptyAction<?> action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateConstructor(task, id, new EmptyAction<>(action), cancellationToken, scheduler, options);
     }
 
-    private void validateEmptyVoidAction(Task<?> task, String id, IEmptyVoidAction action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(task.getId());
-        else
-            assertSame(id, task.getId());
-
-        assertSame(action, ((EmptyVoidAction)task.context.getAction()).getAction());
-
-        if(cancellationToken == null)
-            assertNotNull(task.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, task.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(Task.DEFAULT_SCHEDULER, task.context.getScheduler());
-        else
-            assertSame(scheduler, task.context.getScheduler());
-
-        if(options == null) {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(Task.DEFAULT_OPTIONS)));
-            assertTrue(Arrays.asList(Task.DEFAULT_OPTIONS).containsAll(task.context.getOptions().getOptions()));
-        } else {
-            assertTrue(task.context.getOptions().getOptions().containsAll(Arrays.asList(options)));
-            assertTrue(Arrays.asList(options).containsAll(task.context.getOptions().getOptions()));
-        }
+    private void validateConstructor(Task<?> task, String id, IEmptyVoidAction action, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateConstructor(task, id, new EmptyVoidAction(action), cancellationToken, scheduler, options);
     }
 
     @Test
@@ -523,260 +443,193 @@ public class TaskTest {
     }
 
     @Test
-    public void thenTest() {
+    public void thenTest() throws Exception {
         String id = "";
         IScheduler scheduler = new DedicatedThreadScheduler();
         Option[] options = new Option[0];
         Task<String> task = new Task<>(ACTION, scheduler, options);
+        task.start();
         Task<?> thenTask;
 
         thenTask = task.then(id, LINK_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         thenTask = task.then(id, LINK_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
         thenTask = task.then(id, LINK_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkAction(thenTask, task, id, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, id, null, SCHEDULER, OPTIONS);
         thenTask = task.then(id, LINK_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, id, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, null, SCHEDULER, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, id, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, null, SCHEDULER, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, null, SCHEDULER, OPTIONS);
 
         thenTask = task.then(id, LINK_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
         thenTask = task.then(id, LINK_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkVoidAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
         thenTask = task.then(id, LINK_EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkEmptyAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, CANCELLATION_TOKEN, SCHEDULER, null);
 
         thenTask = task.then(id, LINK_ACTION, SCHEDULER);
-        validateThenLinkAction(thenTask, task, id, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_ACTION, task, id, null, SCHEDULER, null);
         thenTask = task.then(id, LINK_VOID_ACTION, SCHEDULER);
-        validateThenLinkVoidAction(thenTask, task, id, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, null, SCHEDULER, null);
         thenTask = task.then(id, LINK_EMPTY_ACTION, SCHEDULER);
-        validateThenLinkEmptyAction(thenTask, task, id, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, null, SCHEDULER, null);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, SCHEDULER);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, null, SCHEDULER, null);
 
         thenTask = task.then(id, LINK_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkAction(thenTask, task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, id, CANCELLATION_TOKEN, null, OPTIONS);
         thenTask = task.then(id, LINK_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, CANCELLATION_TOKEN, null, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, CANCELLATION_TOKEN, null, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, CANCELLATION_TOKEN, null, OPTIONS);
 
         thenTask = task.then(id, LINK_ACTION, OPTIONS);
-        validateThenLinkAction(thenTask, task, id, null, null, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, id, null, null, OPTIONS);
         thenTask = task.then(id, LINK_VOID_ACTION, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, id, null, null, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, null, null, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_ACTION, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, id, null, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, null, null, OPTIONS);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, null, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, null, null, OPTIONS);
 
         thenTask = task.then(id, LINK_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkAction(thenTask, task, id, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_ACTION, task, id, CANCELLATION_TOKEN, null, null);
         thenTask = task.then(id, LINK_VOID_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkVoidAction(thenTask, task, id, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, CANCELLATION_TOKEN, null, null);
         thenTask = task.then(id, LINK_EMPTY_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkEmptyAction(thenTask, task, id, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, CANCELLATION_TOKEN, null, null);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, CANCELLATION_TOKEN, null, null);
 
         thenTask = task.then(id, LINK_ACTION);
-        validateThenLinkAction(thenTask, task, id, null, null, null);
+        validateThen(thenTask, LINK_ACTION, task, id, null, null, null);
         thenTask = task.then(id, LINK_VOID_ACTION);
-        validateThenLinkVoidAction(thenTask, task, id, null, null, null );
+        validateThen(thenTask, LINK_VOID_ACTION, task, id, null, null, null );
         thenTask = task.then(id, LINK_EMPTY_ACTION);
-        validateThenLinkEmptyAction(thenTask, task, id, null, null, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, id, null, null, null);
         thenTask = task.then(id, LINK_EMPTY_VOID_ACTION);
-        validateThenLinkEmptyVoidAction(thenTask, task, id, null, null, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, id, null, null, null);
 
         thenTask = task.then(LINK_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         thenTask = task.then(LINK_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         thenTask = task.then(LINK_EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
 
         thenTask = task.then(LINK_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkAction(thenTask, task, null, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, null, null, SCHEDULER, OPTIONS);
         thenTask = task.then(LINK_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, null, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, null, SCHEDULER, OPTIONS);
         thenTask = task.then(LINK_EMPTY_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, null, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, null, SCHEDULER, OPTIONS);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, SCHEDULER, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, null, SCHEDULER, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, null, SCHEDULER, OPTIONS);
 
         thenTask = task.then(LINK_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
         thenTask = task.then(LINK_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkVoidAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
         thenTask = task.then(LINK_EMPTY_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkEmptyAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN, SCHEDULER);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, CANCELLATION_TOKEN, SCHEDULER, null);
 
         thenTask = task.then(LINK_ACTION, SCHEDULER);
-        validateThenLinkAction(thenTask, task, null, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_ACTION, task, null, null, SCHEDULER, null);
         thenTask = task.then(LINK_VOID_ACTION, SCHEDULER);
-        validateThenLinkVoidAction(thenTask, task, null, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, null, SCHEDULER, null);
         thenTask = task.then(LINK_EMPTY_ACTION, SCHEDULER);
-        validateThenLinkEmptyAction(thenTask, task, null, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, null, SCHEDULER, null);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, SCHEDULER);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, null, SCHEDULER, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, null, SCHEDULER, null);
 
         thenTask = task.then(LINK_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkAction(thenTask, task, null, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, null, CANCELLATION_TOKEN, null, OPTIONS);
         thenTask = task.then(LINK_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, null, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, CANCELLATION_TOKEN, null, OPTIONS);
         thenTask = task.then(LINK_EMPTY_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, null, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, CANCELLATION_TOKEN, null, OPTIONS);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, CANCELLATION_TOKEN, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, CANCELLATION_TOKEN, null, OPTIONS);
 
         thenTask = task.then(LINK_ACTION, OPTIONS);
-        validateThenLinkAction(thenTask, task, null, null, null, OPTIONS);
+        validateThen(thenTask, LINK_ACTION, task, null, null, null, OPTIONS);
         thenTask = task.then(LINK_VOID_ACTION, OPTIONS);
-        validateThenLinkVoidAction(thenTask, task, null, null, null, OPTIONS);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, null, null, OPTIONS);
         thenTask = task.then(LINK_EMPTY_ACTION, OPTIONS);
-        validateThenLinkEmptyAction(thenTask, task, null, null, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, null, null, OPTIONS);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, OPTIONS);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, null, null, OPTIONS);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, null, null, OPTIONS);
 
         thenTask = task.then(LINK_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkAction(thenTask, task, null, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_ACTION, task, null, CANCELLATION_TOKEN, null, null);
         thenTask = task.then(LINK_VOID_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkVoidAction(thenTask, task, null, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, CANCELLATION_TOKEN, null, null);
         thenTask = task.then(LINK_EMPTY_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkEmptyAction(thenTask, task, null, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, CANCELLATION_TOKEN, null, null);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION, CANCELLATION_TOKEN);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, CANCELLATION_TOKEN, null, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, CANCELLATION_TOKEN, null, null);
 
         thenTask = task.then(LINK_ACTION);
-        validateThenLinkAction(thenTask, task, null, null, null, null);
+        validateThen(thenTask, LINK_ACTION, task, null, null, null, null);
         thenTask = task.then(LINK_VOID_ACTION);
-        validateThenLinkVoidAction(thenTask, task, null, null, null, null );
+        validateThen(thenTask, LINK_VOID_ACTION, task, null, null, null, null );
         thenTask = task.then(LINK_EMPTY_ACTION);
-        validateThenLinkEmptyAction(thenTask, task, null, null, null, null);
+        validateThen(thenTask, LINK_EMPTY_ACTION, task, null, null, null, null);
         thenTask = task.then(LINK_EMPTY_VOID_ACTION);
-        validateThenLinkEmptyVoidAction(thenTask, task, null, null, null, null);
+        validateThen(thenTask, LINK_EMPTY_VOID_ACTION, task, null, null, null, null);
     }
 
-    private void validateThenLinkAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(thenTask.getId());
-        else
-            assertSame(id, thenTask.getId());
-
-        assertTrue(thenTask.context.getAction() instanceof LinkAction);
-
-        if(cancellationToken == null)
-            assertNotNull(thenTask.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, thenTask.context.getCancellationToken());
-
+    private void validateThen(Task<?> thenTask, IAction<?> action, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
         if(scheduler == null)
-            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
-        else
-            assertSame(scheduler, thenTask.context.getScheduler());
+            scheduler = task.getScheduler();
 
         if(options == null)
-            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
-        else
-            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
+            options = task.getOptions().getOptions().toArray(new Option[0]);
+
+        IContext<?> template = TaskTestUtils.createTemplate(id, action, cancellationToken, scheduler, options, State.SUCCEEDED);
+        TaskTestUtils.validateTask(thenTask, template);
     }
 
-    private void validateThenLinkVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(thenTask.getId());
-        else
-            assertSame(id, thenTask.getId());
-
-        assertTrue(thenTask.context.getAction() instanceof LinkVoidAction);
-
-        if(cancellationToken == null)
-            assertNotNull(thenTask.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, thenTask.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
-        else
-            assertSame(scheduler, thenTask.context.getScheduler());
-
-        if(options == null)
-            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
-        else
-            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
+    private void validateThen(Task<?> thenTask, ILinkAction<?,String> action, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateThen(thenTask, new LinkAction<>(task, action), task, id, cancellationToken, scheduler, options);
     }
 
-    private void validateThenLinkEmptyAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(thenTask.getId());
-        else
-            assertSame(id, thenTask.getId());
-
-        assertTrue(thenTask.context.getAction() instanceof LinkEmptyAction);
-
-        if(cancellationToken == null)
-            assertNotNull(thenTask.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, thenTask.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
-        else
-            assertSame(scheduler, thenTask.context.getScheduler());
-
-        if(options == null)
-            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
-        else
-            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
+    private void validateThen(Task<?> thenTask, ILinkVoidAction<String> action, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateThen(thenTask, new LinkVoidAction<>(task, action), task, id, cancellationToken, scheduler, options);
     }
 
-    private void validateThenLinkEmptyVoidAction(Task<?> thenTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(thenTask.getId());
-        else
-            assertSame(id, thenTask.getId());
+    private void validateThen(Task<?> thenTask, ILinkEmptyAction<String> action, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateThen(thenTask, new LinkEmptyAction<>(task, action), task, id, cancellationToken, scheduler, options);
+    }
 
-        assertTrue(thenTask.context.getAction() instanceof LinkEmptyVoidAction);
-
-        if(cancellationToken == null)
-            assertNotNull(thenTask.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, thenTask.context.getCancellationToken());
-
-        if(scheduler == null)
-            assertSame(task.context.getScheduler(), thenTask.context.getScheduler());
-        else
-            assertSame(scheduler, thenTask.context.getScheduler());
-
-        if(options == null)
-            assertEquals(task.context.getOptions().getOptions(), thenTask.context.getOptions().getOptions());
-        else
-            assertEquals(Arrays.asList(options), thenTask.context.getOptions().getOptions());
+    private void validateThen(Task<?> thenTask, ILinkEmptyVoidAction action, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
+        validateThen(thenTask, new LinkEmptyVoidAction<>(task, action), task, id, cancellationToken, scheduler, options);
     }
 
     @Test
-    public void retryTest() {
+    public void retryTest() throws Exception {
         String id = "";
         IScheduler scheduler = new DedicatedThreadScheduler();
         Option[] options = new Option[0];
         Task<String> task = new Task<>(ACTION, scheduler, options);
+        task.start();
         Task<String> retryTask;
 
         retryTask = task.retry(id, () -> true, CANCELLATION_TOKEN, SCHEDULER, OPTIONS);
@@ -892,28 +745,183 @@ public class TaskTest {
         validateRetry(retryTask, task, null, null, null, null);
     }
 
-    private void validateRetry(Task<String> retryTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) {
-        if(id == null)
-            assertNotNull(retryTask.getId());
-        else
-            assertSame(id, retryTask.getId());
-
-        if(cancellationToken == null)
-            assertNotNull(retryTask.context.getCancellationToken());
-        else
-            assertSame(cancellationToken, retryTask.context.getCancellationToken());
-
+    private void validateRetry(Task<String> retryTask, Task<String> task, String id, CancellationToken cancellationToken, IScheduler scheduler, Option... options) throws Exception {
         if(scheduler == null)
-            assertSame(task.context.getScheduler(), retryTask.context.getScheduler());
-        else
-            assertSame(scheduler, retryTask.context.getScheduler());
+            scheduler = task.getScheduler();
 
         if(options == null)
-            assertEquals(task.context.getOptions().getOptions(), retryTask.context.getOptions().getOptions());
-        else
-            assertEquals(Arrays.asList(options), retryTask.context.getOptions().getOptions());
+            options = task.getOptions().getOptions().toArray(new Option[0]);
 
-        assertTrue(retryTask.context.getAction() instanceof RetryAction);
+        IContext<?> template = TaskTestUtils.createTemplate(id, new RetryAction<>(task), cancellationToken, scheduler, options, State.SUCCEEDED);
+        TaskTestUtils.validateTask(retryTask, template);
+    }
+
+    @Test
+    public void executeSuccessParentAndSuccessChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(SUCCESS_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            return SUCCESS_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.SUCCEEDED, SUCCESS_RESULT, null);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeSuccessParentAndCancelChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(CANCEL_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            return SUCCESS_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.SUCCEEDED, SUCCESS_RESULT, null);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeSuccessParentAndFailChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(FAIL_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            return SUCCESS_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeCancelParentAndSuccessChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(SUCCESS_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            ct.cancel();
+            ct.abortIfCancelRequested();
+            return SUCCESS_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.CANCELED, null, new CancelledException(""));
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeCancelParentAndCancelChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(CANCEL_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            ct.cancel();
+            ct.abortIfCancelRequested();
+            return SUCCESS_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.CANCELED, null, new CancelledException(""));
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeCancelParentAndFailChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(FAIL_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            ct.cancel();
+            ct.abortIfCancelRequested();
+            return SUCCESS_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeFailParentAndSuccessChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(SUCCESS_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            throw FAIL_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeFailParentAndCancelChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(CANCEL_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            throw FAIL_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executeFailParentAndFailChildTest() throws Exception {
+        IAction<String> action = (ct) -> {
+            Task<String> task = new Task<>(FAIL_ACTION, Option.ATTACH_TO_PARENT);
+            task.start();
+            throw FAIL_RESULT;
+        };
+
+        Task<String> task = new Task<>(action);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executionEndWithSuccessTest() throws Exception {
+        Task<String> task = new Task<>(SUCCESS_ACTION);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), SUCCESS_ACTION, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.SUCCEEDED, SUCCESS_RESULT, null);
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executionEndWithCancelTest() throws Exception {
+        Task<String> task = new Task<>(CANCEL_ACTION);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), CANCEL_ACTION, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.CANCELED, null, new CancelledException(""));
+        TaskTestUtils.validateTask(task, template);
+    }
+
+    @Test
+    public void executionEndWithFailTest() throws Exception {
+        Task<String> task = new Task<>(FAIL_ACTION);
+        task.start();
+
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), FAIL_ACTION, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        TaskTestUtils.validateTask(task, template);
     }
 
 }
