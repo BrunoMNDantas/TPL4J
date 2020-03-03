@@ -40,22 +40,22 @@ public class ParallelAction<T,K> implements IAction<Collection<K>> {
 
 
 
-    protected String taskId;
+    protected volatile String taskId;
     public String getTaskId() { return this.taskId; }
 
-    protected IParallelAction<T,K> action;
+    protected volatile IParallelAction<T,K> action;
     public IParallelAction<T,K> getAction() { return this.action; }
 
-    protected Iterable<T> elements;
+    protected volatile Iterable<T> elements;
     public Iterable<T> getElements() { return this.elements; }
 
-    protected ICancellationToken cancellationToken;
+    protected volatile ICancellationToken cancellationToken;
     public ICancellationToken getCancellationToken() { return this.cancellationToken; }
 
-    protected IScheduler scheduler;
+    protected volatile IScheduler scheduler;
     public IScheduler getScheduler(){ return this.scheduler; }
 
-    protected Option[] options;
+    protected volatile Option[] options;
     public Option[] getOptions() { return this.options; }
 
 

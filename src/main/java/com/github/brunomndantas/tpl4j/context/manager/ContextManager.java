@@ -94,7 +94,7 @@ public class ContextManager implements IContextManager {
     }
 
     @Override
-    public void registerCurrentThreadEndExecutionOfContext(IContext<?> context) {
+    public synchronized void registerCurrentThreadEndExecutionOfContext(IContext<?> context) {
         String taskId = context.getTaskId();
         long currentThreadId = Thread.currentThread().getId();
 

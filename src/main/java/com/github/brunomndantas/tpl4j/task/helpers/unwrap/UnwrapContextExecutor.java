@@ -24,7 +24,7 @@ import com.github.brunomndantas.tpl4j.task.Task;
 
 public class UnwrapContextExecutor<K> extends ContextExecutor {
 
-    protected Task<Task<K>> task;
+    protected volatile Task<Task<K>> task;
     public Task<Task<K>> getTask() { return this.task; }
 
 

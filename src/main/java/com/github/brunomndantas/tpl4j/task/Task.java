@@ -55,13 +55,13 @@ public class Task<T> {
     protected volatile IContext<T> context;
     public IContext<T> getContext() { return this.context; }
 
-    protected IContextManager contextManager;
+    protected volatile IContextManager contextManager;
     public IContextManager getContextManager() { return this.contextManager; }
 
-    protected IContextBuilder contextBuilder;
+    protected volatile IContextBuilder contextBuilder;
     public IContextBuilder getContextBuilder() { return this.contextBuilder; }
 
-    protected IContextExecutor contextExecutor;
+    protected volatile IContextExecutor contextExecutor;
     public IContextExecutor getContextExecutor() { return this.contextExecutor; }
 
 

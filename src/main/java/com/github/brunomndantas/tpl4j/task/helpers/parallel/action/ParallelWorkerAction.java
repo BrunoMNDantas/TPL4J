@@ -25,10 +25,10 @@ import java.util.LinkedList;
 
 public class ParallelWorkerAction<T,K> implements IAction<Collection<K>> {
 
-    protected IParallelAction<T,K> action;
+    protected volatile IParallelAction<T,K> action;
     public IParallelAction<T,K> getAction() { return this.action; }
 
-    protected Iterator<T> iterator;
+    protected volatile Iterator<T> iterator;
     public Iterator<T> getIterator() { return this.iterator; }
 
 
