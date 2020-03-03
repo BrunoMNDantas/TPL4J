@@ -134,10 +134,14 @@ public class IntensiveTest {
 
 
     private static Task<Boolean> createCalculationTask(Calculation calculation, IScheduler scheduler) {
-        return TaskFactory.createAndStart(new CalculationAction(calculation), scheduler)
-            .retry(RetryAction.RETRY_UNTIL_SUCCESS, scheduler)
-            .then(new SetResultAction(calculation), scheduler)
-            .then(new VerifyResultAction(), scheduler, Option.ATTACH_TO_PARENT);
+        Task<Task<Boolean>> task = TaskFactory.createAndStart(() -> {
+            return TaskFactory.createAndStart(new CalculationAction(calculation), scheduler)
+                    .retry(RetryAction.RETRY_UNTIL_SUCCESS, scheduler)
+                    .then(new SetResultAction(calculation), scheduler)
+                    .then(new VerifyResultAction(), scheduler);
+        });
+
+        return TaskFactory.unwrap(task, scheduler, Option.ATTACH_TO_PARENT);
     }
 
     private static Collection<Calculation> clone(Collection<Calculation> calculations) {
@@ -222,10 +226,7 @@ public class IntensiveTest {
     public void runTest(Collection<Calculation> calculations, IScheduler scheduler) throws Exception {
         Collection<Task<Void>> tasks = new LinkedList<>();
         for(Calculation calculation : calculations)
-            tasks.add(new Task<>(() -> { createCalculationTask(calculation, scheduler); }, scheduler));
-
-        for(Task<?> task : tasks)
-            task.start();
+            tasks.add(TaskFactory.createAndStart(() -> { createCalculationTask(calculation, scheduler); }, scheduler));
 
         Task<?> finalTask = TaskFactory.whenAll(tasks, scheduler);
         finalTask.getResult();
