@@ -67,7 +67,7 @@ public class WhenAllContextExecutor<K> extends ContextExecutor {
     }
 
     protected <T> void scheduleExecution(IContext<T> context) {
-        context.getScheduler().schedule(() -> super.run(context));
+        super.schedule(context);
         this.finished = true;
     }
 
