@@ -45,7 +45,7 @@ public class ContextManager implements IContextManager {
 
         this.contexts.add(context);
 
-        LOGGER.info("Registered IContext for Task with id:" + taskId);
+        LOGGER.trace("Registered IContext for Task with id:" + taskId);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ContextManager implements IContextManager {
 
         this.contexts.remove(context);
 
-        LOGGER.info("Unregistered IContext for Task with id:" + taskId);
+        LOGGER.trace("Unregistered IContext for Task with id:" + taskId);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ContextManager implements IContextManager {
         long threadId = Thread.currentThread().getId();
         context.setCreatorThreadId(threadId);
 
-        LOGGER.info("Thread with id:" + threadId + " registered as creator of Task with id:" + taskId);
+        LOGGER.trace("Thread with id:" + threadId + " registered as creator of Task with id:" + taskId);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ContextManager implements IContextManager {
         context.setExecutorThreadId(threadId);
         this.contextByExecutorThread.put(threadId, context);
 
-        LOGGER.info("Thread with id:" + threadId + " registered as executor of Task with id:" + taskId);
+        LOGGER.trace("Thread with id:" + threadId + " registered as executor of Task with id:" + taskId);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ContextManager implements IContextManager {
 
         this.contextByExecutorThread.put(currentThreadId, null);
 
-        LOGGER.info("Thread with id:" + currentThreadId + " registered end of execution of Task with id:" + taskId);
+        LOGGER.trace("Thread with id:" + currentThreadId + " registered end of execution of Task with id:" + taskId);
     }
 
     @Override
@@ -127,10 +127,10 @@ public class ContextManager implements IContextManager {
             throw new IllegalArgumentException("Task with id:" + childTaskId + " has another parent which is not Task with id:" + parentTaskId + "!");
 
         parentContext.addChild(childContext);
-        LOGGER.info("Task with id:" + parentTaskId + " registered as parent of Task with id:" + childTaskId);
+        LOGGER.trace("Task with id:" + parentTaskId + " registered as parent of Task with id:" + childTaskId);
 
         childContext.setParentContext(parentContext);
-        LOGGER.info("Task with id:" + childTaskId + " registered as child of Task with id:" + parentTaskId);
+        LOGGER.trace("Task with id:" + childTaskId + " registered as child of Task with id:" + parentTaskId);
     }
 
     @Override
@@ -151,6 +151,8 @@ public class ContextManager implements IContextManager {
 
         context.setResultValue(value);
         context.setResultException(exception);
+
+        LOGGER.trace("Set result of Task with id:" + taskId);
     }
 
 }

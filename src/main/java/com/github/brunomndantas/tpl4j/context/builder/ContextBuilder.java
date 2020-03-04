@@ -61,6 +61,7 @@ public class ContextBuilder implements IContextBuilder {
         LOGGER.info("Context for Task with id:" + taskId + " built!");
         LOGGER.info("Task with id:" + taskId + " monitoring CancellationToken with id:" + cancellationToken.getId() + "!");
         LOGGER.info("Task with id:" + taskId + " associated to Scheduler with id:" + scheduler.getId() + "!");
+        LOGGER.info("Task with id:" + taskId + (parentContext == null ? " has no parent!" : (" is child of Task with id:" + parentContext.getTaskId())));
         LOGGER.info("Task with id:" + taskId + " created with options:[" + optionsToString(options) + "]");
 
         return context;

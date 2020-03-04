@@ -20,12 +20,18 @@ import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.status.State;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class ContextExecutor implements IContextExecutor {
+
+    private static final Logger LOGGER = LogManager.getLogger(ContextExecutor.class);
+
+
 
     protected volatile IContextManager contextManager;
     public IContextManager getContextManager() { return this.contextManager; }
@@ -40,6 +46,8 @@ public class ContextExecutor implements IContextExecutor {
 
     @Override
     public synchronized <T> void execute(IContext<T> context) {
+        LOGGER.trace("Executing Task with id:" + context.getTaskId());
+
         if(context.getStatus().getScheduledEvent().hasFired())
             throw new RuntimeException("Task:" + context.getTaskId() + " already scheduled!");
 
@@ -50,6 +58,8 @@ public class ContextExecutor implements IContextExecutor {
     }
 
     protected <T> boolean verifyCancel(IContext<T> context) {
+        LOGGER.trace("Verifying cancel for Task with id:" + context.getTaskId());
+
         try {
             if(!context.getOptions().notCancelable())
                 context.getCancellationToken().abortIfCancelRequested();
@@ -62,10 +72,14 @@ public class ContextExecutor implements IContextExecutor {
     }
 
     protected <T> void schedule(IContext<T> context) {
+        LOGGER.trace("Scheduling Task with id:" + context.getTaskId());
+
         context.getScheduler().schedule(() -> run(context));
     }
 
     protected <T> void run(IContext<T> context) {
+        LOGGER.trace("Running Task with id:" + context.getTaskId());
+
         this.contextManager.registerCurrentThreadAsExecutorOfContext(context);
 
         try {
@@ -85,6 +99,8 @@ public class ContextExecutor implements IContextExecutor {
         }
 
         this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
+
+        LOGGER.trace("Task with id:" + context.getTaskId() + " end run");
     }
 
     protected <T> void declareSuccess(IContext<T> context, T value) {
@@ -162,6 +178,8 @@ public class ContextExecutor implements IContextExecutor {
     }
 
     protected <T> void endExecution(IContext<T> context, T value, Exception exception) {
+        LOGGER.trace("Setting result of Task with id:" + context.getTaskId());
+
         if(exception instanceof CancelledException) {
             this.contextManager.setContextResult(context, null, exception);
             context.getStatus().setState(State.CANCELED);
