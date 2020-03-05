@@ -50,7 +50,6 @@ public class Context<T> implements IContext<T> {
 
     protected Collection<IContext<?>> childrenContexts;
     @Override public synchronized Collection<IContext<?>> getChildrenContexts() { return this.childrenContexts; }
-    @Override public synchronized void setChildrenContexts(Collection<IContext<?>> childrenContexts) { this.childrenContexts = childrenContexts; }
 
     protected long creatorThreadId;
     @Override public synchronized long getCreatorThreadId() { return this.creatorThreadId; }

@@ -92,16 +92,6 @@ public class ContextTest {
     }
 
     @Test
-    public void setChildrenContextsTest() {
-        Collection<IContext<?>> childrenContexts = new LinkedList<>();
-        IContext<String> context = new Context<>(null, null, null, null, null, null, null, null, 0, 0, null, null);
-
-        context.setChildrenContexts(childrenContexts);
-
-        assertSame(childrenContexts, context.getChildrenContexts());
-    }
-
-    @Test
     public void getCreatorThreadIdTest() {
         long creatorThreadId = 1;
         Context<String> context = new Context<>(null, null, null, null, null, null, null, null, creatorThreadId, 0, null, null);
