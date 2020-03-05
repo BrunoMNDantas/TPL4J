@@ -89,22 +89,4 @@ public class WhenAllActionTest {
         action.run(new CancellationToken());
     }
 
-    @Test(expected = CancelledException.class)
-    public void runCancelTokenTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), TestUtils.SCHEDULER);
-        Collection<Task<String>> tasks = Arrays.asList(taskA);
-
-        taskA.start();
-
-        taskA.getFinishedEvent().await();
-
-        CancellationToken cancellationToken = new CancellationToken();
-
-        cancellationToken.cancel();
-
-        WhenAllAction<String> action = new WhenAllAction<>(tasks);
-
-        action.run(cancellationToken);
-    }
-
 }
