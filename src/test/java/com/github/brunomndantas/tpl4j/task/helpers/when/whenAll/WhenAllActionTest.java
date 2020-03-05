@@ -3,9 +3,8 @@ package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
-import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
-import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
+import com.github.brunomndantas.tpl4j.transversal.TestUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,11 +14,6 @@ import java.util.LinkedList;
 import static org.junit.Assert.*;
 
 public class WhenAllActionTest {
-
-    private static final CancellationToken CANCELLATION_TOKEN = new CancellationToken();
-    private static final IScheduler SCHEDULER = new DedicatedThreadScheduler();
-
-
 
     @Test
     public void getTasksTest() {
@@ -32,8 +26,8 @@ public class WhenAllActionTest {
 
     @Test
     public void runSuccessTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), SCHEDULER);
-        Task<String> taskB = new Task<>((t) -> "B", new CancellationToken(), SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), TestUtils.SCHEDULER);
+        Task<String> taskB = new Task<>((t) -> "B", new CancellationToken(), TestUtils.SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         taskA.start();
@@ -54,9 +48,9 @@ public class WhenAllActionTest {
     public void runFailTest() throws Exception {
         Exception exceptionB = new Exception();
         Exception exceptionC = new Exception();
-        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), SCHEDULER);
-        Task<String> taskB = new Task<>((IAction<String>) (t) -> { throw exceptionB; }, new CancellationToken(), SCHEDULER);
-        Task<String> taskC = new Task<>((IAction<String>) (t) -> { throw exceptionC; }, new CancellationToken(), SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), TestUtils.SCHEDULER);
+        Task<String> taskB = new Task<>((IAction<String>) (t) -> { throw exceptionB; }, new CancellationToken(), TestUtils.SCHEDULER);
+        Task<String> taskC = new Task<>((IAction<String>) (t) -> { throw exceptionC; }, new CancellationToken(), TestUtils.SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB, taskC);
 
         taskA.start();
@@ -80,8 +74,8 @@ public class WhenAllActionTest {
 
     @Test(expected = CancelledException.class)
     public void runCancelTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> "A", CANCELLATION_TOKEN, SCHEDULER);
-        Task<String> taskB = new Task<>((t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, CANCELLATION_TOKEN, SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), TestUtils.SCHEDULER);
+        Task<String> taskB = new Task<>((t) -> { t.cancel(); t.abortIfCancelRequested(); return null; }, new CancellationToken(), TestUtils.SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         taskA.start();
@@ -97,7 +91,7 @@ public class WhenAllActionTest {
 
     @Test(expected = CancelledException.class)
     public void runCancelTokenTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> "A", CANCELLATION_TOKEN, SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> "A", new CancellationToken(), TestUtils.SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA);
 
         taskA.start();

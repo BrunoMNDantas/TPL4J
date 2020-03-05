@@ -8,7 +8,7 @@ import static org.junit.Assert.assertSame;
 public class CancelledExceptionTest {
 
     @Test
-    public void getCancellationTokenId() {
+    public void getCancellationTokenIdTest() {
         String tokenId = "";
         CancelledException exception = new CancelledException(tokenId);
         assertSame(tokenId, exception.getCancellationTokenId());

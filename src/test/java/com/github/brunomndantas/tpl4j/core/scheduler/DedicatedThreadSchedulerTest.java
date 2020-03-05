@@ -20,7 +20,7 @@ public class DedicatedThreadSchedulerTest {
     }
 
     @Test
-    public void getId() {
+    public void getIdTest() {
         String id = "";
         DedicatedThreadScheduler scheduler = new DedicatedThreadScheduler(id);
         assertSame(id, scheduler.getId());
@@ -28,7 +28,7 @@ public class DedicatedThreadSchedulerTest {
     }
 
     @Test
-    public void schedule() throws Exception {
+    public void scheduleTest() throws Exception {
         boolean[] passedA = new boolean[1];
         boolean[] passedB = new boolean[1];
         long[] threadA = new long[1];
@@ -56,7 +56,7 @@ public class DedicatedThreadSchedulerTest {
     }
 
     @Test
-    public void close() {
+    public void closeTest() {
         DedicatedThreadScheduler scheduler = new DedicatedThreadScheduler();
         scheduler.close();
     }

@@ -5,10 +5,8 @@ import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.Options;
-import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
-import com.github.brunomndantas.tpl4j.core.scheduler.SingleThreadScheduler;
 import com.github.brunomndantas.tpl4j.task.Task;
-import org.junit.AfterClass;
+import com.github.brunomndantas.tpl4j.transversal.TestUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -20,18 +18,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class WhenAllContextExecutorTest {
-
-    private static final IScheduler SCHEDULER = new SingleThreadScheduler();
-
-
-
-    @AfterClass
-    public static void close() {
-        SCHEDULER.close();
-    }
-
-
-
+    
     @Test
     public void getTasksTest() {
         Collection<Task<String>> tasks = new LinkedList<>();
@@ -52,8 +39,8 @@ public class WhenAllContextExecutorTest {
 
     @Test
     public void scheduleTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> { Thread.sleep(3000); return "A"; }, SCHEDULER);
-        Task<String> taskB = new Task<>((t) -> { Thread.sleep(3000); return "B"; }, SCHEDULER);
+        Task<String> taskA = new Task<>((t) -> { Thread.sleep(3000); return "A"; }, TestUtils.SCHEDULER);
+        Task<String> taskB = new Task<>((t) -> { Thread.sleep(3000); return "B"; }, TestUtils.SCHEDULER);
         Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
 
         ContextManager contextManager = new ContextManager();
@@ -64,7 +51,7 @@ public class WhenAllContextExecutorTest {
                 UUID.randomUUID().toString(),
                 (ct) -> tasks.stream().allMatch(t->t.getFinishedEvent().hasFired()),
                 new CancellationToken(),
-                SCHEDULER,
+                TestUtils.SCHEDULER,
                 new Options(new LinkedList<>()));
 
         executor.execute(context);
@@ -88,7 +75,7 @@ public class WhenAllContextExecutorTest {
                 UUID.randomUUID().toString(),
                 (ct) -> tasks.stream().allMatch(t->t.getFinishedEvent().hasFired()),
                 new CancellationToken(),
-                SCHEDULER,
+                TestUtils.SCHEDULER,
                 new Options(new LinkedList<>()));
 
         executor.execute(context);

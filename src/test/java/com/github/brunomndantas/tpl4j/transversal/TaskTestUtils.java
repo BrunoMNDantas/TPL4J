@@ -1,4 +1,4 @@
-package com.github.brunomndantas.tpl4j.task;
+package com.github.brunomndantas.tpl4j.transversal;
 
 import com.github.brunomndantas.tpl4j.context.Context;
 import com.github.brunomndantas.tpl4j.context.IContext;
@@ -13,6 +13,7 @@ import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.core.status.IStatus;
 import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.core.status.Status;
+import com.github.brunomndantas.tpl4j.task.Task;
 import com.github.brunomndantas.tpl4j.task.action.action.*;
 import com.github.brunomndantas.tpl4j.task.action.link.LinkAction;
 import com.github.brunomndantas.tpl4j.task.action.link.LinkEmptyAction;

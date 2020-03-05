@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class RetryActionTest {
 
     @Test
-    public void getRetrySupplierAction() {
+    public void getRetrySupplierActionTest() {
         Supplier<Boolean> supplier = () -> true;
         RetryAction<String> retryAction = new RetryAction<>(null, supplier);
 

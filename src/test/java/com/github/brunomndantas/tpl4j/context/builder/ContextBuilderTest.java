@@ -5,19 +5,16 @@ import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
 import com.github.brunomndantas.tpl4j.core.options.IOptions;
-import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
+import com.github.brunomndantas.tpl4j.transversal.TestUtils;
 import org.junit.Test;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
 public class ContextBuilderTest {
 
     @Test
-    public void getContextManager() {
+    public void getContextManagerTest() {
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
         assertSame(contextManager, contextBuilder.getContextManager());
@@ -33,20 +30,10 @@ public class ContextBuilderTest {
     @Test
     public void buildContextTest() {
         String taskId = "";
-        IAction<String> action = (ct) -> null;
-        CancellationToken cancellationToken = new CancellationToken();
-        IScheduler scheduler = new IScheduler() {
-            @Override public String getId() { return null; }
-            @Override public void schedule(Runnable action) { }
-            @Override public void close() { }
-        };
-        IOptions options = new IOptions() {
-            @Override public Collection<Option> getOptions() { return new LinkedList<>(); }
-            @Override public boolean contains(Option option) { return false; }
-            @Override public boolean rejectChildren() { return false; }
-            @Override public boolean attachToParent() { return false; }
-            @Override public boolean notCancelable() { return false; }
-        };
+        IAction<String> action = TestUtils.ACTION;
+        CancellationToken cancellationToken = TestUtils.CANCELLATION_TOKEN;
+        IScheduler scheduler = TestUtils.SCHEDULER;
+        IOptions options = TestUtils.OPTIONS;
 
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);
@@ -58,6 +45,7 @@ public class ContextBuilderTest {
         assertSame(scheduler, context.getScheduler());
         assertSame(options, context.getOptions());
         assertNotNull(context.getStatus());
+        assertNull(context.getParentContext());
         assertNotNull(context.getChildrenContexts());
 
         assertSame(Thread.currentThread().getId(), context.getCreatorThreadId());
@@ -67,20 +55,10 @@ public class ContextBuilderTest {
     public void buildContextWithChildTest() {
         String parentTaskId = "parent";
         String childTaskId = "child";
-        IAction<String> action = (ct) -> null;
-        CancellationToken cancellationToken = new CancellationToken();
-        IScheduler scheduler = new IScheduler() {
-            @Override public String getId() { return null; }
-            @Override public void schedule(Runnable action) { }
-            @Override public void close() { }
-        };
-        IOptions options = new IOptions() {
-            @Override public Collection<Option> getOptions() { return new LinkedList<>(); }
-            @Override public boolean contains(Option option) { return false; }
-            @Override public boolean rejectChildren() { return false; }
-            @Override public boolean attachToParent() { return false; }
-            @Override public boolean notCancelable() { return false; }
-        };
+        IAction<String> action = TestUtils.ACTION;
+        CancellationToken cancellationToken = TestUtils.CANCELLATION_TOKEN;
+        IScheduler scheduler = TestUtils.SCHEDULER;
+        IOptions options = TestUtils.OPTIONS;
 
         ContextManager contextManager = new ContextManager();
         ContextBuilder contextBuilder = new ContextBuilder(contextManager);

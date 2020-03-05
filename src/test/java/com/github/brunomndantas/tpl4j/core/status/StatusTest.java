@@ -14,7 +14,7 @@ public class StatusTest {
     }
 
     @Test
-    public void constructorStateTest() {
+    public void constructorTest() {
         String id = "ID";
         Status status = new Status(id);
         assertSame(id, status.getTaskId());
@@ -22,13 +22,13 @@ public class StatusTest {
     }
 
     @Test
-    public void getState() {
+    public void getStateTest() {
         Status status = new Status("");
         assertSame(State.CREATED, status.getState());
     }
 
     @Test
-    public void setState() {
+    public void setStateTest() {
         Status status = new Status("Id");
         assertFalse(status.getScheduledEvent().hasFired());
         assertFalse(status.getFinishedEvent().hasFired());

@@ -8,10 +8,11 @@ import com.github.brunomndantas.tpl4j.core.scheduler.DedicatedThreadScheduler;
 import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.task.TaskTestUtils;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.IParallelAction;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.ParallelAction;
 import com.github.brunomndantas.tpl4j.task.pool.TaskPool;
+import com.github.brunomndantas.tpl4j.transversal.TaskTestUtils;
+import com.github.brunomndantas.tpl4j.transversal.TestUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -21,17 +22,12 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 public class ParallelTaskTest {
-
-    private static final String SUCCESS_RESULT = "";
-    private static final Exception FAIL_RESULT = new Exception();
-    private static final IParallelAction<String, String> SUCCESS_ACTION = (e, ct) -> { Thread.sleep(1000); return SUCCESS_RESULT; };
-    private static final IParallelAction<String, String> CANCEL_ACTION = (e, ct) -> { Thread.sleep(1000); ct.cancel(); ct.abortIfCancelRequested(); throw FAIL_RESULT; };
-    private static final IParallelAction<String, String> FAIL_ACTION = (e, ct) -> { Thread.sleep(1000); throw FAIL_RESULT; };
+    
     private static final IParallelAction<String, String> ACTION = (e, ct) -> {
         switch (e) {
-            case "s": return SUCCESS_ACTION.run(e, ct);
-            case "c": return CANCEL_ACTION.run(e, ct);
-            case "f": return FAIL_ACTION.run(e, ct);
+            case "s": return TestUtils.SUCCESS_ACTION.run(ct);
+            case "c": return TestUtils.CANCEL_ACTION.run(ct);
+            case "f": return TestUtils.FAIL_ACTION.run(ct);
         }
 
         return null;
@@ -121,7 +117,7 @@ public class ParallelTaskTest {
         ParallelTask<String,String> task = new ParallelTask<>("", elements, ACTION, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
         task.start();
 
-        IContext<Collection<String>> template = TaskTestUtils.createTemplate(task.getId(), new ParallelAction<>(task.getId(), ACTION, elements, new CancellationToken(), Task.DEFAULT_SCHEDULER, Arrays.asList(Task.DEFAULT_OPTIONS)), task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.SUCCEEDED, Arrays.asList(SUCCESS_RESULT, SUCCESS_RESULT, SUCCESS_RESULT), null);
+        IContext<Collection<String>> template = TaskTestUtils.createTemplate(task.getId(), new ParallelAction<>(task.getId(), ACTION, elements, new CancellationToken(), Task.DEFAULT_SCHEDULER, Arrays.asList(Task.DEFAULT_OPTIONS)), task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.SUCCEEDED, Arrays.asList(TestUtils.SUCCESS_RESULT, TestUtils.SUCCESS_RESULT, TestUtils.SUCCESS_RESULT), null);
         TaskTestUtils.validateTask(task, template);
     }
 
@@ -141,7 +137,7 @@ public class ParallelTaskTest {
         ParallelTask<String,String> task = new ParallelTask<>("", elements, ACTION, new CancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS);
         task.start();
 
-        IContext<Collection<String>> template = TaskTestUtils.createTemplate(task.getId(), new ParallelAction<>(task.getId(), ACTION, elements, new CancellationToken(), Task.DEFAULT_SCHEDULER, Arrays.asList(Task.DEFAULT_OPTIONS)), task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, FAIL_RESULT);
+        IContext<Collection<String>> template = TaskTestUtils.createTemplate(task.getId(), new ParallelAction<>(task.getId(), ACTION, elements, new CancellationToken(), Task.DEFAULT_SCHEDULER, Arrays.asList(Task.DEFAULT_OPTIONS)), task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.FAILED, null, TestUtils.FAIL_RESULT);
         TaskTestUtils.validateTask(task, template);
     }
 
