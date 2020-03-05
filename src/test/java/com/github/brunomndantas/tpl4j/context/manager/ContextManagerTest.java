@@ -43,7 +43,6 @@ public class ContextManagerTest {
         Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
 
         contextManager.registerContext(context);
-        contextManager.registerCurrentThreadAsCreatorOfContext(context);
         contextManager.registerCurrentThreadAsExecutorOfContext(context);
         contextManager.unregisterContext(context);
 
@@ -62,47 +61,6 @@ public class ContextManagerTest {
             assertNotNull(e.getMessage());
             assertTrue(e.getMessage().contains("Context not registered"));
             assertTrue(e.getMessage().contains(context.getTaskId()));
-        }
-    }
-
-    @Test
-    public void registerCurrentThreadAsCreatorOfContextTest() {
-        ContextManager contextManager = new ContextManager();
-        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
-        contextManager.registerContext(context);
-
-        contextManager.registerCurrentThreadAsCreatorOfContext(context);
-
-        assertEquals(Thread.currentThread().getId(), context.getCreatorThreadId());
-    }
-
-    @Test
-    public void registerCurrentThreadAsCreatorOfContextWithoutRegisterContextTest() {
-        ContextManager contextManager = new ContextManager();
-        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
-
-        try {
-            contextManager.registerCurrentThreadAsCreatorOfContext(context);
-            fail("Exception should be thrown!");
-        } catch (Exception e) {
-            assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("Context not registered"));
-        }
-    }
-
-    @Test
-    public void registerCurrentThreadAsCreatorOfContextWithCreatorAlreadyRegisteredTest() {
-        ContextManager contextManager = new ContextManager();
-        Context<String> context = new Context<>("id", null, null, null, null, null, null, null, 0, 0, null, null);
-        contextManager.registerContext(context);
-        contextManager.registerCurrentThreadAsCreatorOfContext(context);
-
-        try {
-            contextManager.registerCurrentThreadAsCreatorOfContext(context);
-            fail("Exception should be thrown!");
-        } catch (Exception e) {
-            assertNotNull(e.getMessage());
-            assertTrue(e.getMessage().contains("has already a creator"));
         }
     }
 

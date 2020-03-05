@@ -25,8 +25,6 @@ public interface IContextManager {
     void unregisterContext(IContext<?> context);
 
 
-    void registerCurrentThreadAsCreatorOfContext(IContext<?> context);
-
     void registerCurrentThreadAsExecutorOfContext(IContext<?> context);
 
     void registerCurrentThreadEndExecutionOfContext(IContext<?> context);

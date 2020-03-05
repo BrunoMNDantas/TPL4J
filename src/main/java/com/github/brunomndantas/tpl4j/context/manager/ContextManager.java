@@ -61,22 +61,6 @@ public class ContextManager implements IContextManager {
     }
 
     @Override
-    public synchronized void registerCurrentThreadAsCreatorOfContext(IContext<?> context) {
-        String taskId = context.getTaskId();
-
-        if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
-
-        if(context.getCreatorThreadId() != 0)
-            throw new IllegalArgumentException("Task with id:" + taskId + " has already a creator thread registered!");
-
-        long threadId = Thread.currentThread().getId();
-        context.setCreatorThreadId(threadId);
-
-        LOGGER.trace("Thread with id:" + threadId + " registered as creator of Task with id:" + taskId);
-    }
-
-    @Override
     public synchronized void registerCurrentThreadAsExecutorOfContext(IContext<?> context) {
         String taskId = context.getTaskId();
 
