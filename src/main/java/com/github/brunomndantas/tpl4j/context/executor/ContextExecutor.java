@@ -90,15 +90,16 @@ public class ContextExecutor implements IContextExecutor {
 
             T value = context.getAction().run(context.getCancellationToken());
 
+            this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
             declareSuccess(context, value);
         } catch(Exception e) {
+            this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
+
             if(e instanceof CancelledException)
                 declareCancel(context, (CancelledException) e);
             else
                 declareFail(context, e);
         }
-
-        this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
 
         LOGGER.trace("Task with id:" + context.getTaskId() + " end run");
     }
