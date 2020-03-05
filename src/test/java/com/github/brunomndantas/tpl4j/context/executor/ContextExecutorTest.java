@@ -230,7 +230,7 @@ public class ContextExecutorTest {
             IContext<String> context = contextBuilder.build("childA", TestUtils.FAIL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
 
-            context = contextBuilder.build("childB", TestUtils.FAIL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, TestUtils.OPTIONS);
+            context = contextBuilder.build("childB", TestUtils.FAIL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)));
             executor.execute(context);
 
             return TestUtils.SUCCESS_RESULT;
