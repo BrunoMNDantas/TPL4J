@@ -44,8 +44,25 @@ public class ContextManager implements IContextManager {
             throw new IllegalArgumentException("There is already a context registered for Task with id:" + taskId + "!");
 
         this.contexts.add(context);
-
         LOGGER.trace("Registered IContext for Task with id:" + taskId);
+
+        registerParenting(context);
+    }
+
+    protected void registerParenting(IContext<?> context) {
+        long threadId = context.getCreatorThreadId();
+        IContext<?> parentContext = this.contextByExecutorThread.get(threadId);
+
+        if(parentContext != null) {
+            String parentTaskId = parentContext.getTaskId();
+            String childTaskId = context.getTaskId();
+
+            parentContext.addChild(context);
+            LOGGER.trace("Task with id:" + parentTaskId + " registered as parent of Task with id:" + childTaskId);
+
+            context.setParentContext(parentContext);
+            LOGGER.trace("Task with id:" + childTaskId + " registered as child of Task with id:" + parentTaskId);
+        }
     }
 
     @Override
@@ -91,36 +108,6 @@ public class ContextManager implements IContextManager {
         this.contextByExecutorThread.put(currentThreadId, null);
 
         LOGGER.trace("Thread with id:" + currentThreadId + " registered end of execution of Task with id:" + taskId);
-    }
-
-    @Override
-    public synchronized void registerTaskParenting(IContext<?> parentContext, IContext<?> childContext) {
-        String parentTaskId = parentContext.getTaskId();
-        String childTaskId = childContext.getTaskId();
-
-        if(!this.contexts.contains(parentContext))
-            throw new IllegalArgumentException("IContext not registered for Task with id:" + parentTaskId + "!");
-
-        if(!this.contexts.contains(childContext))
-            throw new IllegalArgumentException("IContext not registered for Task with id:" + childTaskId + "!");
-
-        if(parentContext.hasChild(childContext))
-            throw new IllegalArgumentException("Task with id:" + childTaskId + " is already registered as child of Task with id:" + parentTaskId + "!");
-
-        if(childContext.getParentContext() != null && !childContext.getParentContext().equals(parentContext))
-            throw new IllegalArgumentException("Task with id:" + childTaskId + " has another parent which is not Task with id:" + parentTaskId + "!");
-
-        parentContext.addChild(childContext);
-        LOGGER.trace("Task with id:" + parentTaskId + " registered as parent of Task with id:" + childTaskId);
-
-        childContext.setParentContext(parentContext);
-        LOGGER.trace("Task with id:" + childTaskId + " registered as child of Task with id:" + parentTaskId);
-    }
-
-    @Override
-    public synchronized IContext<?> getContextRunningOnCurrentThread() {
-        long currentThreadId = Thread.currentThread().getId();
-        return this.contextByExecutorThread.get(currentThreadId);
     }
 
 }

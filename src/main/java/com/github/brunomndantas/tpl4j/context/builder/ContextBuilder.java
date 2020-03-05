@@ -52,21 +52,13 @@ public class ContextBuilder implements IContextBuilder {
 
         this.contextManager.registerContext(context);
 
-        IContext<?> parentContext = this.contextManager.getContextRunningOnCurrentThread();
-        if(parentContext != null)
-            this.contextManager.registerTaskParenting(parentContext, context);
-
-        log(taskId, cancellationToken, scheduler, options, parentContext);
-
-        return context;
-    }
-
-    private void log(String taskId, ICancellationToken cancellationToken, IScheduler scheduler, IOptions options, IContext<?> parentContext) {
-        LOGGER.info("Context for Task with id:" + taskId + " created on Thread ith id:" + Thread.currentThread().getId());
+        LOGGER.info("Context for Task with id:" + taskId + " created on Thread ith id:" + context.getCreatorThreadId());
         LOGGER.info("Task with id:" + taskId + " monitoring CancellationToken with id:" + cancellationToken.getId() + "!");
         LOGGER.info("Task with id:" + taskId + " associated to Scheduler with id:" + scheduler.getId() + "!");
-        LOGGER.info("Task with id:" + taskId + (parentContext == null ? " has no parent!" : (" is child of Task with id:" + parentContext.getTaskId())));
         LOGGER.info("Task with id:" + taskId + " created with options:[" + optionsToString(options) + "]");
+        LOGGER.info("Task with id:" + taskId + (context.getParentContext() == null ? " has no parent!" : (" is child of Task with id:" + context.getParentContext().getTaskId())));
+
+        return context;
     }
 
     protected String optionsToString(IOptions options) {

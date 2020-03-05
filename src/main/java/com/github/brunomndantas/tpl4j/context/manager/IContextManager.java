@@ -29,10 +29,4 @@ public interface IContextManager {
 
     void registerCurrentThreadEndExecutionOfContext(IContext<?> context);
 
-
-    void registerTaskParenting(IContext<?> parentContext, IContext<?> childContext);
-
-
-    IContext<?> getContextRunningOnCurrentThread();
-    
 }
