@@ -139,20 +139,4 @@ public class ContextManager implements IContextManager {
         return this.contextByExecutorThread.get(currentThreadId);
     }
 
-    @Override
-    public synchronized <T> void setContextResult(IContext<T> context, T value, Exception exception) {
-        String taskId = context.getTaskId();
-
-        if(!this.contexts.contains(context))
-            throw new IllegalArgumentException("IContext not registered for Task with id:" + taskId + "!");
-
-        if(context.getResultValue() != null || context.getResultException() != null)
-            throw new IllegalArgumentException("IContext of Task with id:" + context.getTaskId() + " already has its value set!");
-
-        context.setResultValue(value);
-        context.setResultException(exception);
-
-        LOGGER.trace("Set result of Task with id:" + taskId);
-    }
-
 }

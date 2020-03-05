@@ -36,8 +36,5 @@ public interface IContextManager {
 
 
     IContext<?> getContextRunningOnCurrentThread();
-
-
-    <T> void setContextResult(IContext<T> context, T value, Exception exception);
     
 }

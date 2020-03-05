@@ -181,13 +181,13 @@ public class ContextExecutor implements IContextExecutor {
         LOGGER.trace("Setting result of Task with id:" + context.getTaskId());
 
         if(exception instanceof CancelledException) {
-            this.contextManager.setContextResult(context, null, exception);
+            context.setResultException(exception);
             context.getStatus().setState(State.CANCELED);
         } else if(exception != null) {
-            this.contextManager.setContextResult(context, null, exception);
+            context.setResultException(exception);
             context.getStatus().setState(State.FAILED);
         } else {
-            this.contextManager.setContextResult(context, value, null);
+            context.setResultValue(value);
             context.getStatus().setState(State.SUCCEEDED);
         }
 
