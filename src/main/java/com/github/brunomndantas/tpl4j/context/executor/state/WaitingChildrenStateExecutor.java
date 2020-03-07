@@ -55,23 +55,39 @@ public class WaitingChildrenStateExecutor extends StateExecutor {
     }
 
     protected <T> void mergeResults(IContext<T> context, Collection<IContext<?>> childrenContexts) {
+        if(context.getResultException() instanceof CancelledException)
+            mergeChildrenResultWithParentCancellation(context, childrenContexts);
+        else if(context.getResultException() != null)
+            mergeChildrenResultWithParentFailure(context, childrenContexts);
+        else
+            mergeChildrenResultWithParentSuccess(context, childrenContexts);
+    }
+
+    protected <T> void mergeChildrenResultWithParentSuccess(IContext<T> context, Collection<IContext<?>> childrenContexts) {
         Collection<Exception> childrenFails = this.collectChildrenFails(childrenContexts);
         Collection<Exception> childrenCancels = this.collectChildrenCancels(childrenContexts);
 
-        if(context.getResultException() instanceof CancelledException) {
-            if(!childrenFails.isEmpty())
-                context.setResultException(combineExceptions(childrenFails));
-            else if(!childrenCancels.isEmpty())
-                context.setResultException(combineExceptions(context.getResultException(), childrenCancels));
-        } else if(context.getResultException() != null) {
-            if(!childrenFails.isEmpty())
-                context.setResultException(combineExceptions(context.getResultException(), childrenFails));
-        } else {
-            if(!childrenFails.isEmpty())
-                context.setResultException(combineExceptions(childrenFails));
-            else if(!childrenCancels.isEmpty())
-                context.setResultException(combineExceptions(childrenCancels));
-        }
+        if(!childrenFails.isEmpty() && !context.getOptions().notPropagateFailure())
+            context.setResultException(combineExceptions(childrenFails));
+        else if(!childrenCancels.isEmpty() && !context.getOptions().notPropagateCancellation())
+            context.setResultException(combineExceptions(childrenCancels));
+    }
+
+    protected <T> void mergeChildrenResultWithParentCancellation(IContext<T> context, Collection<IContext<?>> childrenContexts) {
+        Collection<Exception> childrenFails = this.collectChildrenFails(childrenContexts);
+        Collection<Exception> childrenCancels = this.collectChildrenCancels(childrenContexts);
+
+        if(!childrenFails.isEmpty() && !context.getOptions().notPropagateFailure())
+            context.setResultException(combineExceptions(childrenFails));
+        else if(!childrenCancels.isEmpty() && !context.getOptions().notPropagateCancellation())
+            context.setResultException(combineExceptions(context.getResultException(), childrenCancels));
+    }
+
+    protected <T> void mergeChildrenResultWithParentFailure(IContext<T> context, Collection<IContext<?>> childrenContexts) {
+        Collection<Exception> childrenFails = this.collectChildrenFails(childrenContexts);
+
+        if(!childrenFails.isEmpty() && !context.getOptions().notPropagateFailure())
+            context.setResultException(combineExceptions(context.getResultException(), childrenFails));
     }
 
     protected Collection<Exception> collectChildrenFails(Collection<IContext<?>> childrenContexts) {

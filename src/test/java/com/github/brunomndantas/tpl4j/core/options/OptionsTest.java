@@ -74,4 +74,30 @@ public class OptionsTest {
         assertTrue(options.notCancelable());
     }
 
+    @Test
+    public void notPropagateCancellationTest() {
+        Collection<Option> ops = new LinkedList<>();
+        Options options = new Options(ops);
+
+        assertFalse(options.notPropagateCancellation());
+
+        ops = Arrays.asList(Option.NOT_PROPAGATE_CANCELLATION);
+        options = new Options(ops);
+
+        assertTrue(options.notPropagateCancellation());
+    }
+
+    @Test
+    public void notPropagateFailureTest() {
+        Collection<Option> ops = new LinkedList<>();
+        Options options = new Options(ops);
+
+        assertFalse(options.notPropagateFailure());
+
+        ops = Arrays.asList(Option.NOT_PROPAGATE_FAILURE);
+        options = new Options(ops);
+
+        assertTrue(options.notPropagateFailure());
+    }
+
 }

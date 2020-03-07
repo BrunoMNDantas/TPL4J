@@ -30,4 +30,8 @@ public interface IOptions {
 
     boolean notCancelable();
 
+    boolean notPropagateCancellation();
+
+    boolean notPropagateFailure();
+
 }

@@ -55,4 +55,14 @@ public class Options implements IOptions {
         return this.contains(Option.NOT_CANCELABLE);
     }
 
+    @Override
+    public boolean notPropagateCancellation() {
+        return this.contains(Option.NOT_PROPAGATE_CANCELLATION);
+    }
+
+    @Override
+    public boolean notPropagateFailure() {
+        return this.contains(Option.NOT_PROPAGATE_FAILURE);
+    }
+
 }

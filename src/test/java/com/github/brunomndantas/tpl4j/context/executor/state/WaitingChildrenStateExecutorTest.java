@@ -95,6 +95,21 @@ public class WaitingChildrenStateExecutorTest {
     }
 
     @Test
+    public void executeWithSuccessAndChildrenCancelWithNotPropagateCancellationOptionTest() throws Exception {
+        IContext<?> childContext = new Context<>("", TestUtils.CANCEL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new CancelledException(""));
+        IContext<?> parentContext = new Context<>("", TestUtils.ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.NOT_PROPAGATE_CANCELLATION)), new Status(""), null, Arrays.asList(childContext), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        childContext.getStatus().setState(State.CANCELED);
+
+        IStateExecutor succeededStateExecutor = new StateExecutor(State.SUCCEEDED);
+        WaitingChildrenStateExecutor executor = new WaitingChildrenStateExecutor(null, null, succeededStateExecutor);
+        executor.execute(parentContext);
+
+        Thread.sleep(1000);
+        assertEquals(State.SUCCEEDED, parentContext.getStatus().getState());
+        assertNull(parentContext.getResultException());
+    }
+
+    @Test
     public void executeWithSuccessAndChildrenFailTest() throws Exception {
         IContext<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new Exception());
         IContext<?> parentContext = new Context<>("", TestUtils.ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, TestUtils.OPTIONS, new Status(""), null, Arrays.asList(childContext), 0, 0, TestUtils.SUCCESS_RESULT, null);
@@ -113,6 +128,21 @@ public class WaitingChildrenStateExecutorTest {
         assertEquals(State.WAITING_CHILDREN, parentContext.getStatus().getState());
         assertTrue(failedStateExecutorInvoked.get());
         assertSame(childContext.getResultException(), parentContext.getResultException());
+    }
+
+    @Test
+    public void executeWithSuccessAndChildrenFailWithNotPropagateFailureOptionTest() throws Exception {
+        IContext<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new Exception());
+        IContext<?> parentContext = new Context<>("", TestUtils.ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.NOT_PROPAGATE_FAILURE)), new Status(""), null, Arrays.asList(childContext), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        childContext.getStatus().setState(State.FAILED);
+
+        IStateExecutor succeededStateExecutor = new StateExecutor(State.SUCCEEDED);
+        WaitingChildrenStateExecutor executor = new WaitingChildrenStateExecutor(null, null, succeededStateExecutor);
+        executor.execute(parentContext);
+
+        Thread.sleep(1000);
+        assertEquals(State.SUCCEEDED, parentContext.getStatus().getState());
+        assertNull(parentContext.getResultException());
     }
 
     @Test
@@ -157,6 +187,21 @@ public class WaitingChildrenStateExecutorTest {
     }
 
     @Test
+    public void executeWithCancelAndChildrenCancelWithNotPropagateCancellationOptionTest() throws Exception {
+        IContext<?> childContext = new Context<>("", TestUtils.CANCEL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new CancelledException(""));
+        IContext<?> parentContext = new Context<>("", TestUtils.CANCEL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.NOT_PROPAGATE_CANCELLATION)), new Status(""), null, Arrays.asList(childContext), 0, 0, null, new CancelledException(""));
+        childContext.getStatus().setState(State.CANCELED);
+
+        IStateExecutor cancelledStateExecutor = new StateExecutor(State.CANCELED);
+        WaitingChildrenStateExecutor executor = new WaitingChildrenStateExecutor(cancelledStateExecutor, null, null);
+        executor.execute(parentContext);
+
+        Thread.sleep(1000);
+        assertEquals(State.CANCELED, parentContext.getStatus().getState());
+        assertEquals(0, parentContext.getResultException().getSuppressed().length);
+    }
+
+    @Test
     public void executeWithCancelAndChildrenFailTest() throws Exception {
         IContext<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new Exception());
         IContext<?> parentContext = new Context<>("", TestUtils.CANCEL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, TestUtils.OPTIONS, new Status(""), null, Arrays.asList(childContext), 0, 0, null, new CancelledException(""));
@@ -175,6 +220,21 @@ public class WaitingChildrenStateExecutorTest {
         assertEquals(State.WAITING_CHILDREN, parentContext.getStatus().getState());
         assertTrue(failedStateExecutorInvoked.get());
         assertSame(childContext.getResultException(), parentContext.getResultException());
+    }
+
+    @Test
+    public void executeWithCancelAndChildrenFailWithNotPropagateFailureOptionTest() throws Exception {
+        IContext<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new Exception());
+        IContext<?> parentContext = new Context<>("", TestUtils.CANCEL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.NOT_PROPAGATE_FAILURE)), new Status(""), null, Arrays.asList(childContext), 0, 0, null, new CancelledException(""));
+        childContext.getStatus().setState(State.FAILED);
+
+        IStateExecutor canceledStateExecutor = new StateExecutor(State.CANCELED);
+        WaitingChildrenStateExecutor executor = new WaitingChildrenStateExecutor(canceledStateExecutor, null, null);
+        executor.execute(parentContext);
+
+        Thread.sleep(1000);
+        assertEquals(State.CANCELED, parentContext.getStatus().getState());
+        assertTrue(parentContext.getResultException() instanceof CancelledException);
     }
 
     @Test
@@ -220,6 +280,22 @@ public class WaitingChildrenStateExecutorTest {
     }
 
     @Test
+    public void executeWithFailAndChildrenCancelWithNotPropagateCancellationOptionTest() throws Exception {
+        IContext<?> childContext = new Context<>("", TestUtils.CANCEL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new CancelledException(""));
+        IContext<?> parentContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.NOT_PROPAGATE_CANCELLATION)), new Status(""), null, Arrays.asList(childContext), 0, 0, null, new Exception());
+        childContext.getStatus().setState(State.CANCELED);
+
+        IStateExecutor failedStateExecutor = new StateExecutor(State.FAILED);
+        WaitingChildrenStateExecutor executor = new WaitingChildrenStateExecutor(null, failedStateExecutor, null);
+        executor.execute(parentContext);
+
+        Thread.sleep(1000);
+        assertEquals(State.FAILED, parentContext.getStatus().getState());
+        assertNotNull(parentContext.getResultException());
+        assertEquals(0, parentContext.getResultException().getSuppressed().length);
+    }
+
+    @Test
     public void executeWithFailAndChildrenFailTest() throws Exception {
         IContext<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new Exception());
         IContext<?> parentContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, TestUtils.OPTIONS, new Status(""), null, Arrays.asList(childContext), 0, 0, null, new Exception());
@@ -238,6 +314,22 @@ public class WaitingChildrenStateExecutorTest {
         assertEquals(State.WAITING_CHILDREN, parentContext.getStatus().getState());
         assertTrue(failedStateExecutorInvoked.get());
         assertNotSame(childContext.getResultException(), parentContext.getResultException());
+    }
+
+    @Test
+    public void executeWithFailAndChildrenFailWithNotPropagateFailureOptionTest() throws Exception {
+        IContext<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null, new LinkedList<>(), 0, 0, null, new Exception());
+        IContext<?> parentContext = new Context<>("", TestUtils.FAIL_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.NOT_PROPAGATE_FAILURE)), new Status(""), null, Arrays.asList(childContext), 0, 0, null, new Exception());
+        childContext.getStatus().setState(State.FAILED);
+
+        IStateExecutor failedStateExecutor = new StateExecutor(State.FAILED);
+        WaitingChildrenStateExecutor executor = new WaitingChildrenStateExecutor(null, failedStateExecutor, null);
+        executor.execute(parentContext);
+
+        Thread.sleep(1000);
+        assertEquals(State.FAILED, parentContext.getStatus().getState());
+        assertNotSame(childContext.getResultException(), parentContext.getResultException());
+        assertEquals(0, parentContext.getResultException().getSuppressed().length);
     }
 
     @Test
@@ -319,5 +411,5 @@ public class WaitingChildrenStateExecutorTest {
         assertEquals(1, parentContext.getResultException().getSuppressed().length);
         assertSame(childBContext.getResultException(), parentContext.getResultException().getSuppressed()[0]);
     }
-    
+
 }
