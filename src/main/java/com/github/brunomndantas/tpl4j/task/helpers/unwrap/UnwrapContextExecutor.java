@@ -16,10 +16,9 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.unwrap;
 
-import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
+import com.github.brunomndantas.tpl4j.context.executor.state.*;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
-import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 public class UnwrapContextExecutor<K> extends ContextExecutor {
@@ -30,35 +29,25 @@ public class UnwrapContextExecutor<K> extends ContextExecutor {
 
 
     public UnwrapContextExecutor(IContextManager contextManager, Task<Task<K>> task) {
-        super(contextManager);
+        super(
+            contextManager,
+            new UnwrapScheduledStateExecutor<> (
+                new CanceledStateExecutor(contextManager),
+                new RunningStateExecutor(
+                    new CanceledStateExecutor(contextManager),
+                    new FailedStateExecutor(contextManager),
+                    new SucceededStateExecutor(contextManager),
+                    new WaitingChildrenStateExecutor(
+                        new CanceledStateExecutor(contextManager),
+                        new FailedStateExecutor(contextManager),
+                        new SucceededStateExecutor(contextManager)
+                    ),
+                    contextManager
+                ),
+                task
+            )
+        );
         this.task = task;
-    }
-
-
-
-    @Override
-    protected <T> void schedule(IContext<T> context) {
-        this.task.getFinishedEvent().addListener(() -> {
-            if(super.verifyCancel(context))
-                return;
-
-            if(this.task.getState().equals(State.SUCCEEDED)) {
-                Task<K> task = this.task.getResultValue();
-                this.scheduleExecutionOnFinished(context, task);
-            } else {
-                super.schedule(context);
-            }
-        });
-    }
-
-    protected <T> void scheduleExecutionOnFinished(IContext<T> context, Task<?> task) {
-        if(task == null)
-            super.schedule(context);
-        else
-            task.getFinishedEvent().addListener(() -> {
-                if(!super.verifyCancel(context))
-                    super.schedule(context);
-            });
     }
 
 }

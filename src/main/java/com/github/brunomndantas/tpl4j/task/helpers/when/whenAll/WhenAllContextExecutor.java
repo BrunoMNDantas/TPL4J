@@ -16,8 +16,8 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 
-import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.executor.ContextExecutor;
+import com.github.brunomndantas.tpl4j.context.executor.state.*;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.task.Task;
 
@@ -28,47 +28,28 @@ public class WhenAllContextExecutor<K> extends ContextExecutor {
     protected volatile Collection<Task<K>> tasks;
     public Collection<Task<K>> getTasks() { return this.tasks; }
 
-    protected boolean finished;
-
 
 
     public WhenAllContextExecutor(IContextManager contextManager, Collection<Task<K>> tasks) {
-        super(contextManager);
+        super(
+            contextManager,
+            new WhenAllScheduledStateExecutor<> (
+                new CanceledStateExecutor(contextManager),
+                new RunningStateExecutor(
+                    new CanceledStateExecutor(contextManager),
+                    new FailedStateExecutor(contextManager),
+                    new SucceededStateExecutor(contextManager),
+                    new WaitingChildrenStateExecutor(
+                        new CanceledStateExecutor(contextManager),
+                        new FailedStateExecutor(contextManager),
+                        new SucceededStateExecutor(contextManager)
+                    ),
+                    contextManager
+                ),
+                tasks
+            )
+        );
         this.tasks = tasks;
-    }
-
-
-
-    @Override
-    protected <T> void schedule(IContext<T> context) {
-        if(this.tasks.isEmpty())
-            this.scheduleExecution(context);
-         else
-            this.tasks.forEach(task -> scheduleExecutionOnFinished(context, task));
-    }
-
-    protected <T> void scheduleExecutionOnFinished(IContext<T> context, Task<?> task) {
-        task.getFinishedEvent().addListener(() -> {
-            synchronized (context) {
-                if(!this.finished) {
-                    if(super.verifyCancel(context))
-                        this.finished = true;
-                    else if(allFinished())
-                        this.scheduleExecution(context);
-                }
-            }
-        });
-    }
-
-    protected boolean allFinished() {
-        return this.tasks
-                .stream()
-                .allMatch(t->t.getFinishedEvent().hasFired());
-    }
-
-    protected <T> void scheduleExecution(IContext<T> context) {
-        super.schedule(context);
-        this.finished = true;
     }
 
 }

@@ -18,10 +18,12 @@ package com.github.brunomndantas.tpl4j.task.helpers.when.whenAll;
 
 import com.github.brunomndantas.tpl4j.core.action.IAction;
 import com.github.brunomndantas.tpl4j.core.cancel.ICancellationToken;
+import com.github.brunomndantas.tpl4j.core.status.State;
 import com.github.brunomndantas.tpl4j.task.Task;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class WhenAllAction<T> implements IAction<Collection<T>> {
 
@@ -54,18 +56,13 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     }
 
     protected Exception collectErrors() {
-        Exception exception = null;
-
-        for(Task<T> task : this.tasks) {
-            if(task.getFailedEvent().hasFired()) {
-                if(exception == null)
-                    exception = task.getResultException();
-                else
-                    exception.addSuppressed(task.getResultException());
-            }
-        }
-
-        return exception;
+        return this.combineExceptions(
+                this.tasks
+                    .stream()
+                    .filter(t -> t.getState().equals(State.FAILED))
+                    .map(Task::getResultException)
+                    .collect(Collectors.toList())
+        );
     }
 
     protected boolean anyCancelled() {
@@ -75,15 +72,23 @@ public class WhenAllAction<T> implements IAction<Collection<T>> {
     }
 
     protected Exception collectCancellations() {
+        return this.combineExceptions(
+                this.tasks
+                    .stream()
+                    .filter(t -> t.getState().equals(State.CANCELED))
+                    .map(Task::getResultException)
+                    .collect(Collectors.toList())
+        );
+    }
+
+    protected Exception combineExceptions(Collection<Exception> exceptions) {
         Exception exception = null;
 
-        for(Task<T> task : this.tasks) {
-            if(task.getCancelledEvent().hasFired()) {
-                if(exception == null)
-                    exception = task.getResultException();
-                else
-                    exception.addSuppressed(task.getResultException());
-            }
+        for(Exception e : exceptions) {
+            if(exception == null)
+                exception = e;
+            else if(e != exception)
+                exception.addSuppressed(e);
         }
 
         return exception;

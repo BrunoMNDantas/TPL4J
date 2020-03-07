@@ -21,8 +21,6 @@ import com.github.brunomndantas.tpl4j.task.action.link.LinkEmptyVoidAction;
 import com.github.brunomndantas.tpl4j.task.action.link.LinkVoidAction;
 import com.github.brunomndantas.tpl4j.task.action.retry.RetryAction;
 import com.github.brunomndantas.tpl4j.task.helpers.parallel.action.*;
-import com.github.brunomndantas.tpl4j.task.helpers.parallel.context.ParallelContextExecutor;
-import com.github.brunomndantas.tpl4j.task.helpers.parallel.task.ParallelTask;
 import com.github.brunomndantas.tpl4j.task.helpers.unwrap.UnwrapAction;
 import com.github.brunomndantas.tpl4j.task.helpers.unwrap.UnwrapContextExecutor;
 import com.github.brunomndantas.tpl4j.task.helpers.unwrap.UnwrapTask;
@@ -182,8 +180,6 @@ public class TaskTestUtils {
             assertTrue(task.getContextExecutor() instanceof WhenAnyContextExecutor);
         else if(task instanceof UnwrapTask)
             assertTrue(task.getContextExecutor() instanceof UnwrapContextExecutor);
-        else if(task instanceof ParallelTask)
-            assertTrue(task.getContextExecutor() instanceof ParallelContextExecutor);
         else
             assertSame(Task.DEFAULT_CONTEXT_EXECUTOR, task.getContextExecutor());
     }

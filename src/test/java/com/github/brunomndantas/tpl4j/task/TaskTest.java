@@ -758,7 +758,7 @@ public class TaskTest {
         Task<String> task = new Task<>(action);
         task.start();
 
-        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.SUCCEEDED, TestUtils.SUCCESS_RESULT, null);
+        IContext<String> template = TaskTestUtils.createTemplate(task.getId(), action, task.getCancellationToken(), Task.DEFAULT_SCHEDULER, Task.DEFAULT_OPTIONS, State.CANCELED, null, new CancelledException(""));
         TaskTestUtils.validateTask(task, template);
     }
 

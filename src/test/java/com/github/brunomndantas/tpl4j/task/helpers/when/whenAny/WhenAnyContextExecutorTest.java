@@ -1,18 +1,11 @@
 package com.github.brunomndantas.tpl4j.task.helpers.when.whenAny;
 
-import com.github.brunomndantas.tpl4j.context.IContext;
-import com.github.brunomndantas.tpl4j.context.builder.ContextBuilder;
 import com.github.brunomndantas.tpl4j.context.manager.ContextManager;
-import com.github.brunomndantas.tpl4j.core.cancel.CancellationToken;
-import com.github.brunomndantas.tpl4j.core.options.Options;
 import com.github.brunomndantas.tpl4j.task.Task;
-import com.github.brunomndantas.tpl4j.transversal.TestUtils;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.UUID;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -35,51 +28,7 @@ public class WhenAnyContextExecutorTest {
 
         assertSame(contextManager, executor.getContextManager());
         assertSame(tasks, executor.getTasks());
-    }
-
-    @Test
-    public void scheduleTest() throws Exception {
-        Task<String> taskA = new Task<>((t) -> { Thread.sleep(3000); return "A"; }, TestUtils.SCHEDULER);
-        Task<String> taskB = new Task<>((t) -> { Thread.sleep(3000); return "B"; }, TestUtils.SCHEDULER);
-        Collection<Task<String>> tasks = Arrays.asList(taskA, taskB);
-
-        ContextManager contextManager = new ContextManager();
-        ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        WhenAnyContextExecutor<?> executor = new WhenAnyContextExecutor<>(contextManager, tasks);
-
-        IContext<Boolean> context = contextBuilder.build(
-                UUID.randomUUID().toString(),
-                (ct) -> taskA.getFinishedEvent().hasFired() && !taskB.getFinishedEvent().hasFired(),
-                new CancellationToken(),
-                TestUtils.SCHEDULER,
-                new Options(new LinkedList<>()));
-
-        executor.execute(context);
-
-        taskA.start();
-
-        context.getStatus().getFinishedEvent().await();
-        assertTrue(context.getResultValue());
-    }
-
-    @Test
-    public void scheduleWithEmptyTasksTest() throws Exception {
-        Collection<Task<String>> tasks = new LinkedList<>();
-
-        ContextManager contextManager = new ContextManager();
-        ContextBuilder contextBuilder = new ContextBuilder(contextManager);
-        WhenAnyContextExecutor<?> executor = new WhenAnyContextExecutor<>(contextManager, tasks);
-
-        IContext<Boolean> context = contextBuilder.build(
-                UUID.randomUUID().toString(),
-                (ct) -> true,
-                new CancellationToken(),
-                TestUtils.SCHEDULER,
-                new Options(new LinkedList<>()));
-
-        executor.execute(context);
-        context.getStatus().getFinishedEvent().await();
-        assertTrue(context.getResultValue());
+        assertTrue(executor.getScheduledStateExecutor() instanceof WhenAnyScheduledStateExecutor);
     }
 
 }
