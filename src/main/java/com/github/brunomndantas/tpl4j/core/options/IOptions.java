@@ -34,4 +34,12 @@ public interface IOptions {
 
     boolean notPropagateFailure();
 
+    boolean cancelChildrenOnCancellation();
+
+    boolean cancelChildrenOnFailure();
+
+    boolean cancelParentOnCancellation();
+
+    boolean cancelParentOnFailure();
+
 }

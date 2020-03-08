@@ -57,6 +57,10 @@ public class ContextTest {
             @Override public boolean notCancelable() { return false; }
             @Override public boolean notPropagateCancellation() { return false; }
             @Override public boolean notPropagateFailure() { return false; }
+            @Override public boolean cancelChildrenOnCancellation() { return false; }
+            @Override public boolean cancelChildrenOnFailure() { return false; }
+            @Override public boolean cancelParentOnCancellation() { return false; }
+            @Override public boolean cancelParentOnFailure() { return false; }
         };
         Context<String> context = new Context<>(null, null, null, null, options, null, null, null, 0, 0, null, null);
         assertSame(options, context.getOptions());
@@ -179,6 +183,10 @@ public class ContextTest {
             @Override public boolean notCancelable() { return false; }
             @Override public boolean notPropagateCancellation() { return false; }
             @Override public boolean notPropagateFailure() { return false; }
+            @Override public boolean cancelChildrenOnCancellation() { return false; }
+            @Override public boolean cancelChildrenOnFailure() { return false; }
+            @Override public boolean cancelParentOnCancellation() { return false; }
+            @Override public boolean cancelParentOnFailure() { return false; }
         };
         Status status = new Status("");
         Context<?> parentContext = new Context<>("", (t)->null, null, null, null, null, null, null, 0, 0, null, null);

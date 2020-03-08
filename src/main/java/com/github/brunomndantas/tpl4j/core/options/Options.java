@@ -65,4 +65,24 @@ public class Options implements IOptions {
         return this.contains(Option.NOT_PROPAGATE_FAILURE);
     }
 
+    @Override
+    public boolean cancelChildrenOnCancellation() {
+        return this.contains(Option.CANCEL_CHILDREN_ON_CANCELLATION);
+    }
+
+    @Override
+    public boolean cancelChildrenOnFailure() {
+        return this.contains(Option.CANCEL_CHILDREN_ON_FAILURE);
+    }
+
+    @Override
+    public boolean cancelParentOnCancellation() {
+        return this.contains(Option.CANCEL_PARENT_ON_CANCELLATION);
+    }
+
+    @Override
+    public boolean cancelParentOnFailure() {
+        return this.contains(Option.CANCEL_PARENT_ON_FAILURE);
+    }
+
 }

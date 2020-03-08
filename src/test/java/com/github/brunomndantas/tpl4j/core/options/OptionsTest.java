@@ -100,4 +100,57 @@ public class OptionsTest {
         assertTrue(options.notPropagateFailure());
     }
 
+
+    @Test
+    public void cancelChildrenOnCancellationTest() {
+        Collection<Option> ops = new LinkedList<>();
+        Options options = new Options(ops);
+
+        assertFalse(options.cancelChildrenOnCancellation());
+
+        ops = Arrays.asList(Option.CANCEL_CHILDREN_ON_CANCELLATION);
+        options = new Options(ops);
+
+        assertTrue(options.cancelChildrenOnCancellation());
+    }
+
+    @Test
+    public void cancelChildrenOnFailureTest() {
+        Collection<Option> ops = new LinkedList<>();
+        Options options = new Options(ops);
+
+        assertFalse(options.cancelChildrenOnFailure());
+
+        ops = Arrays.asList(Option.CANCEL_CHILDREN_ON_FAILURE);
+        options = new Options(ops);
+
+        assertTrue(options.cancelChildrenOnFailure());
+    }
+
+    @Test
+    public void cancelParentOnCancellationTest() {
+        Collection<Option> ops = new LinkedList<>();
+        Options options = new Options(ops);
+
+        assertFalse(options.cancelParentOnCancellation());
+
+        ops = Arrays.asList(Option.CANCEL_PARENT_ON_CANCELLATION);
+        options = new Options(ops);
+
+        assertTrue(options.cancelParentOnCancellation());
+    }
+
+    @Test
+    public void cancelParentOnFailureTest() {
+        Collection<Option> ops = new LinkedList<>();
+        Options options = new Options(ops);
+
+        assertFalse(options.cancelParentOnFailure());
+
+        ops = Arrays.asList(Option.CANCEL_PARENT_ON_FAILURE);
+        options = new Options(ops);
+
+        assertTrue(options.cancelParentOnFailure());
+    }
+
 }

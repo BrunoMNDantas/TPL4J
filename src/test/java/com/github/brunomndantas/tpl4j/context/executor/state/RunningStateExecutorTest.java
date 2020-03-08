@@ -209,7 +209,7 @@ public class RunningStateExecutorTest {
     public void executeWithChildrenTest() {
         Context<?> childAContext = new Context<>("", TestUtils.SUCCESS_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
         Context<?> childBContext = new Context<>("", TestUtils.SUCCESS_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
-        Context<?> parentContext = new Context<>("", TestUtils.SUCCESS_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , Arrays.asList(childAContext, childBContext), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> parentContext = new Context<>("", TestUtils.SUCCESS_ACTION, TestUtils.CANCELLATION_TOKEN, TestUtils.SCHEDULER, TestUtils.OPTIONS, new Status(""), null , Arrays.asList(childAContext, childBContext), 0, 0, TestUtils.SUCCESS_RESULT, null);
 
         AtomicBoolean waitingChildrenStateExecutorInvoked = new AtomicBoolean();
         IStateExecutor waitingChildrenStateExecutor = new StateExecutor(State.WAITING_CHILDREN) {
@@ -225,6 +225,80 @@ public class RunningStateExecutorTest {
 
         assertEquals(State.RUNNING, parentContext.getStatus().getState());
         assertTrue(waitingChildrenStateExecutorInvoked.get());
+    }
+
+    @Test
+    public void executeCancelsChildrenOnCancellationTest() {
+        Context<?> childAContext = new Context<>("", TestUtils.SUCCESS_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> childBContext = new Context<>("", TestUtils.SUCCESS_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> parentContext = new Context<>("", TestUtils.CANCEL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.CANCEL_CHILDREN_ON_CANCELLATION)), new Status(""), null , Arrays.asList(childAContext, childBContext), 0, 0, null, new CancelledException(""));
+
+        IStateExecutor waitingChildrenStateExecutor = new StateExecutor(State.WAITING_CHILDREN);
+        ContextManager contextManager = new ContextManager();
+        contextManager.registerContext(childAContext);
+        contextManager.registerContext(childBContext);
+        contextManager.registerContext(parentContext);
+
+        RunningStateExecutor executor = new RunningStateExecutor(null, null, null, waitingChildrenStateExecutor, contextManager);
+        executor.execute(parentContext);
+
+        assertEquals(State.WAITING_CHILDREN, parentContext.getStatus().getState());
+        assertTrue(childAContext.getCancellationToken().hasCancelRequest());
+        assertTrue(childBContext.getCancellationToken().hasCancelRequest());
+    }
+
+    @Test
+    public void executeCancelsChildrenOnFailureTest() {
+        Context<?> childAContext = new Context<>("", TestUtils.SUCCESS_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> childBContext = new Context<>("", TestUtils.SUCCESS_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT)), new Status(""), null , new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> parentContext = new Context<>("", TestUtils.FAIL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.CANCEL_CHILDREN_ON_FAILURE)), new Status(""), null , Arrays.asList(childAContext, childBContext), 0, 0, null, TestUtils.FAIL_RESULT);
+
+        IStateExecutor waitingChildrenStateExecutor = new StateExecutor(State.WAITING_CHILDREN);
+        ContextManager contextManager = new ContextManager();
+        contextManager.registerContext(childAContext);
+        contextManager.registerContext(childBContext);
+        contextManager.registerContext(parentContext);
+
+        RunningStateExecutor executor = new RunningStateExecutor(null, null, null, waitingChildrenStateExecutor, contextManager);
+        executor.execute(parentContext);
+
+        assertEquals(State.WAITING_CHILDREN, parentContext.getStatus().getState());
+        assertTrue(childAContext.getCancellationToken().hasCancelRequest());
+        assertTrue(childBContext.getCancellationToken().hasCancelRequest());
+    }
+
+    @Test
+    public void executeCancelsParentOnCancellationTest() {
+        Context<?> parentContext = new Context<>("", TestUtils.SUCCESS_ACTION, new CancellationToken(), TestUtils.SCHEDULER, TestUtils.OPTIONS, new Status(""), null, new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> childContext = new Context<>("", TestUtils.CANCEL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT, Option.CANCEL_PARENT_ON_CANCELLATION)), new Status(""), parentContext, new LinkedList<>(), 0, 0, null, new CancelledException(""));
+
+        IStateExecutor cancelledChildrenStateExecutor = new StateExecutor(State.CANCELED);
+        ContextManager contextManager = new ContextManager();
+        contextManager.registerContext(childContext);
+        contextManager.registerContext(parentContext);
+
+        RunningStateExecutor executor = new RunningStateExecutor(cancelledChildrenStateExecutor, null, null, null, contextManager);
+        executor.execute(childContext);
+
+        assertEquals(State.CANCELED, childContext.getStatus().getState());
+        assertTrue(parentContext.getCancellationToken().hasCancelRequest());
+    }
+
+    @Test
+    public void executeCancelsParentOnFailureTest() {
+        Context<?> parentContext = new Context<>("", TestUtils.SUCCESS_ACTION, new CancellationToken(), TestUtils.SCHEDULER, TestUtils.OPTIONS, new Status(""), null, new LinkedList<>(), 0, 0, TestUtils.SUCCESS_RESULT, null);
+        Context<?> childContext = new Context<>("", TestUtils.FAIL_ACTION, new CancellationToken(), TestUtils.SCHEDULER, new Options(Arrays.asList(Option.ATTACH_TO_PARENT, Option.CANCEL_PARENT_ON_FAILURE)), new Status(""), parentContext, new LinkedList<>(), 0, 0, null, TestUtils.FAIL_RESULT);
+
+        IStateExecutor failedChildrenStateExecutor = new StateExecutor(State.FAILED);
+        ContextManager contextManager = new ContextManager();
+        contextManager.registerContext(childContext);
+        contextManager.registerContext(parentContext);
+
+        RunningStateExecutor executor = new RunningStateExecutor(null, failedChildrenStateExecutor, null, null, contextManager);
+        executor.execute(childContext);
+
+        assertEquals(State.FAILED, childContext.getStatus().getState());
+        assertTrue(parentContext.getCancellationToken().hasCancelRequest());
     }
 
 }

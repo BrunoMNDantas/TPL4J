@@ -7,6 +7,8 @@ import com.github.brunomndantas.tpl4j.core.status.State;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
+
 public class RunningStateExecutor extends StateExecutor {
 
     private static final Logger LOGGER = LogManager.getLogger(RunningStateExecutor.class);
@@ -49,6 +51,8 @@ public class RunningStateExecutor extends StateExecutor {
         run(context);
         this.contextManager.registerCurrentThreadEndExecutionOfContext(context);
 
+        cancelChildrenIfNeeded(context);
+        cancelParentIfNeeded(context);
         invokeNextState(context);
 
         LOGGER.trace("Task with id:" + context.getTaskId() + " end run");
@@ -63,6 +67,28 @@ public class RunningStateExecutor extends StateExecutor {
             context.setResultValue(value);
         } catch(Exception e) {
             context.setResultException(e);
+        }
+    }
+
+    protected <T> void cancelChildrenIfNeeded(IContext<T> context) {
+        Collection<IContext<?>> childrenContexts = StateUtils.getAttachedChildrenContext(context);
+        if(!childrenContexts.isEmpty()) {
+            if(context.getResultException() instanceof CancelledException && context.getOptions().cancelChildrenOnCancellation())
+                childrenContexts.forEach(cc -> cc.getCancellationToken().cancel());
+            else if(context.getResultException() != null && context.getOptions().cancelChildrenOnFailure())
+                childrenContexts.forEach(cc -> cc.getCancellationToken().cancel());
+        }
+    }
+
+    protected <T> void cancelParentIfNeeded(IContext<T> context) {
+        IContext<?> parentContext = context.getParentContext();
+        if( parentContext != null &&
+            context.getOptions().attachToParent() &&
+            !parentContext.getOptions().rejectChildren()) {
+            if(context.getResultException() instanceof CancelledException && context.getOptions().cancelParentOnCancellation())
+                parentContext.getCancellationToken().cancel();
+            else if(context.getResultException() != null && context.getOptions().cancelParentOnFailure())
+                parentContext.getCancellationToken().cancel();
         }
     }
 
