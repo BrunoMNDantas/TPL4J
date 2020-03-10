@@ -1,161 +1,261 @@
-# TPL4J
-TPL4J is a Task Library inspired on C# TPL.
+<h1>TPL4J</h1>
+TPL4J is a Java Task Library inspired on C# TPL.
 
-Let's start with our good friend "Hello World". Our goal is to create a task which its job is to print the text "Hello World" on console. For that you can create an instance of Task and pass, as parameter, a lambda with the code.
+<h2>Table of Contents</h2>
+
+- [Usage](#usage)
+  - [Hello World](#hello-world)
+  - [Task](#task)
+    - [Life Cycle](#life-cycle)
+    - [Action](#action)
+    - [Result](#result)
+    - [Status](#status)
+      - [State](#state)
+      - [Events](#events)
+    - [Child](#child)
+    - [Then](#then)
+    - [Retry](#retry)
+    - [Cancel](#cancel)
+    - [Context](#context)
+    - [Options](#options)
+      - [Reject Children](#reject-children)
+      - [Attach to Parent](#attach-to-parent)
+      - [Not Cancellable](#not-cancellable)
+      - [Not Propagate Cancellation](#not-propagate-cancellation)
+      - [Not Propagate Failure](#not-propagate-failure)
+      - [Cancel Children On Cancellation](#cancel-children-on-cancellation)
+      - [Cancel Children On Failure](#cancel-children-on-failure)
+      - [Cancel Parent On Cancellation](#cancel-parent-on-cancellation)
+      - [Cancel Parent On Failure](#cancel-parent-on-failure)
+    - [Schedule](#schedule)
+  - [Utilitaries](#utilitaries)
+    - [TaskFactory](#taskfactory)
+    - [TaskPool](#taskpool)
+- [Development](#development)
+  - [Architecture](#architecture)
+  - [Packages](#packages)
+  - [Core](#core)
+    - [Action](#action-1)
+    - [Cancel](#cancel-1)
+    - [Options](#options-1)
+    - [Scheduler](#scheduler)
+    - [Status](#status-1)
+  - [Context](#context-1)
+    - [Manager](#manager)
+    - [Builder](#builder)
+    - [Executor](#executor)
+  - [Task](#task-1)
+    - [ForEachTask](#foreachtask)
+    - [UnwrapTask](#unwraptask)
+    - [WhenAllTask](#whenalltask)
+    - [WhenAnyTask](#whenanytask)
+    - [TaskFactory](#taskfactory-1)
+    - [TaskPool](#taskpool-1)
+
+# Usage
+
+During this chapter you will have a guide oriented to examples on how to use TPL4J. If the functionality you are trying to implemnet is not supported out of the box, plase check the [Development](#development) chapter and fell free to extend the library funcionality.
+
+## Hello World
+
+
+Let's start with our good friend "Hello World". Our goal is to create a task which its job is to print the text "Hello World" on console. For that you can create an instance of  [Task](#task) and pass, as parameter, a lambda with the code.
 
 ```java
-public static void main(String[] args) throws Exception {
-	new Task(() -> System.out.println("Hello World")).start();
-}
+new Task(() -> System.out.println("Hello World")).start();
 ```
-If you are really anxious and ran this piece of code you probably realized that nothing happened. What a crappy library! Not even the "Hello Word" works!
+If you are really anxious and ran this piece of code you probably realized that nothing happened. 
+
+What a crappy library! Not even the "Hello Word" works!
 
 Let's see what happened.
-You've created a Task and told to the task that it could start its job. When you invoke method `start()` the task will run our code on a different Thread.
+You created a task and told to the task that it could start its job. When you invoke method `start()` the task will run our code on a different thread.
 
-OH! Now I see it! We have to wait until the Task finishes its job. How can we do it?
+OH! Now I see it! We have to wait until the task finishes its job. How can we do it?
 
-Ok, here you have some options but since this is a dummy example we will invoke the method `getResult()` which blocks the current thread until Task finishes. Later on you will understand better this method and different ways of waiting for a Task to finish.
-Ok, it's the time. You can call method `getResult()` and run our Hello World. Your code should look like:
+Ok, here you have some options but since this is a dummy example we will invoke the method `getResult()` which blocks the current thread until task finishes. Later on you will understand better this method and different ways of waiting for a task to finish.
+
+Ok, it's time. You can call method `getResult()` and run our Hello World. Your code should look like:
+
 ```java
-public static void main(String[] args) throws Exception {
-	Task task = new Task(() -> System.out.println("Hello World"));
-	task.start();
-	task.getResult();
-}
+Task task = new Task(() -> System.out.println("Hello World"));
+task.start();
+task.getResult();
 ```
+
 If everything went smoothly, your console should have something like:
 
 ```java
 Hello World
 ```
 
-Pretty simple, right?  Let's spice it up a little bit.
-
-Imagine that we have a function that produces a name and we want to welcome this user. We will create a `Task<String>` which produces the user's name, get its result and use it to welcome our user.
-The code should look something like this:
+Pretty simple, right?  You can simplify this example by using the utilirary class [TaskFactory](#taskfactory). 
 
 ```java
-public static void main(String[] args) throws Exception {
-	Task<String> task = new Task<>(() -> "Paul");
-	task.start();
-
-	String name = task.getResult();
-	System.out.println("Hello " + name + "!");
-}
+TaskFactory
+  .createAndStart(() -> System.out.println("Hello World"))
+  .getResult();
 ```
-The method `getResult()` blocks the current Thread until task finishes and returns the Task's result. On our case since our Task is generic in **String** the return of method `getResult()` is **String** ("Paul").  Run the example and observe the output:
-```java
-Hello Paul!
-```
-
-If for some reason our task produced an **Exception**, this Exception would be thrown on `getResult()` call. That’s what happen on this example:
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<String> task = new Task<>(() -> { throw new Exception("Try again later!"); });
-
-    task.start();
-
-    try {
-        task.getResult();
-    } catch(Exception e) {
-        System.out.println(e.getMessage());
-    }
-}
-```
-Output:
-```java
-Try again later!
-```
-
-Next step is to chain tasks. For this example we will have tow Tasks, one producer and one consumer. To chain Tasks you can use method `<T> Task<T> then(Task<T> task)`, this method register the given task to run after the current task finishes.
-Go ahead, create a producer Task and a consumer Task. Now register consumer Task to run after producer Task. Your code should look like:
-```java
-public static void main(String[] args) throws Exception {
-    Task<String> producerTask = new Task<>(() -> "Paul");
-    Task<?> consumerTask = new Task<>(() -> System.out.println("Hello " + producerTask.getResult() + " !"));
-
-    producerTask.then(consumerTask);
-
-    producerTask.start();
-
-    consumerTask.getResult();
-}
-```
-
-Run this example and observe the following output:
-```java
-Hello Paul!
-```
-If you look carefully you will realize that `then` method returns a Task<T>. The returned task is the same task received as parameter. This mechanism will permit to have a fluent syntax to chain Tasks:
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<String> task = new Task<>(() -> System.out.println(1));
-    task.start();
-
-    task.then(new Task<>(() -> System.out.println(2)))
-        .then(new Task<>(() -> System.out.println(3)))
-        .then(new Task<>(() -> System.out.println(4)))
-        .getResult();
-}
-```
-Output:
-```java
-1
-2
-3
-4
-```
-
-I know, I know. You are probably thinking that it would be easier to pass a lambda to `then` method. Guess what?... I totally agree ;) that's why you have multiple overloads of method `then`. These variants of method `then` create a Task with the given action, chain it with the current task and return the created Task. With these overloads the previous example could be written like this:
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<String> task = new Task<>(() -> System.out.println(1));
-    task.start();
-
-    task.then(() -> System.out.println(2))
-        .then(() -> System.out.println(3))
-        .then(() -> System.out.println(4))
-        .getResult();
-}
-```
-
-Latter on [ILinkAction](#ilinkaction) section you can find all overloads of method `then`.
-
-That's it for now. You already have your basic skills up  and running. You can go ahead and develop your project or keep reading to see in more detail some aspects of TPL4J.
-
-
 
 ## Task
 
-### TaskStatus
+Task class represents a task which will be executed asynchronously and produces an output. The main constructor of Task has the following interface:
 
-Task life cycle:
-
-![TaskLifeCycle](https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/TaskLifeCycle.png)
-
-`TaskStatus` class offers all life cycle events of a Task. You can get it through method `getStatus()`.  On the flowing code we are registering an action on each event to log different status of Task.
 
 ```java
-public static void main(String[] args) throws Exception {
-    Task<?> task = new Task<>(() -> System.out.println("Task Action!"));
+public Task(
+  String taskId, 
+  IAction<T> action, 
+  ICancellationToken cancellationToken,
+  IScheduler scheduler,
+  Option... options) { }
+```
 
-    task.getStatus().scheduledEvent.addListener(() -> System.out.println("SCHEDULED"));
-    task.getStatus().runningEvent.addListener(() -> System.out.println("RUNNING"));
-    task.getStatus().waitingForChildrenEvent.addListener(() -> System.out.println("WAITING"));
-    task.getStatus().succeededEvent.addListener(() -> System.out.println("SUCCEEDED"));
-    task.getStatus().cancelledEvent.addListener(() -> System.out.println("CANCELED"));
-    task.getStatus().failedEvent.addListener(() -> System.out.println("FAILED"));
-    task.getStatus().finishedEvent.addListener(() -> System.out.println("FINISHED"));
+This constructor has the following parameters:
 
-    task.start();
+- `taskId`: String with id of task. This property is helpfull when we need to analise the log. During the task [life cycle](#life-cycle) it is logged the state transitions associated with the task's id.
+- `action`: represents the action to be executed. You can see [here](#action) all types of action supported.
+- `cancellationToken`: the token through which you can send a cancel request. You can find more about cancellation [here](#cancel).
+- `scheduler`: entity responsible to schedule the `action`. You can find more about schedule [here](#schedule).
+- `options`: options to configure task's execution. You can see all options existent [here](#options).
 
-    task.getResult();
-    System.out.println("Final:"task.getStatus().getValue());
+All the parameters of Task constructor, with exception of `action`, are optional. For this reason Task class has overloads of this constructor receiving all combinations of different parameters. 
+
+
+### Life Cycle
+
+On the image bellow you an see the different states of a task's life cycle.
+
+![TaskLifeCycle](https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/LifeCycle.png)
+
+A task starts on `Created` state. The task will stay on this state until you invoke `start()` method which makes the task transit to `Scheduled` state. 
+
+When on `Scheduled` state, if the task has a cancel request it will transit synchronously to `Canceled` state otherwise the task will transit to `Running` state asynchronously. 
+
+When on `Running` state the task will execute the action supplied. From here it can transit to the following states:
+- `WaitingForChildren`: the task has children. See more about children [here](#child).
+- `Canceled`: the action supplied ends with `CancelledException` and has no children
+- `Failed`: the action supplied ends with `Exception` (excluding `CancelledException`) and has no children
+- `Succeeded`: the action ends successfully and has no children
+
+When on `WaitingForChildren` the task will stay on this state until all its children finish. From here it can transit to the following states:
+- `Failed`: the action supplied ends with `Exception` (excluding `CancelledException`) or any of its children finished trough `Failed` state.
+- `Canceled`: the action supplied ends with `CancelledException` or any of its children finished trough `Canceled` state.
+- `Succeeded`: the action and its children finish successfully
+
+<div style="background-color:rgba(66, 135, 245, 0.2);padding:10px">
+  <b>Note:</b> This is the default task's life cycle. You can change this behaviour by providing <a href="#options">options</a> to the task.
+</div>
+
+### Action
+
+`IAction` is the functional interface to define the action that a task will execute. This interface declares a method `run` which produces K and receives an instance of `CancellationToken`. Learn more about `CancellationToken` [here](#cancel) .
+
+Since sometimes we just want to execute some action which produces no result or we don't need to deal with `CancellationToken`, `Task` constructor has variants compatible with the following functional interfaces:
+
+```java
+/*IAction*/
+K run(CancellationToken cancellationToken) throws Exception;
+
+/*IVoidAction*/
+void run(CancellationToken cancellationToken) throws Exception;
+
+/*IEmptyAction*/
+K run() throws Exception;
+
+/*IEmptyVoidAction*/
+void run() throws Exception;
+```
+
+### Result
+
+In order to get the result produced by a task, you can invoke `getResult()` method. This method blocks the thread until the task finishes. If the task ends successfully the result will be returned, if ends with fail or cancel state the respective exception will be thrown.
+
+Here follows an example of a successful task:
+
+```java
+Task<String> task = TaskFactory.createAndStart(() -> "Paul");
+System.out.println("Hello " + task.getResult() + "!");
+```
+Output:
+
+```java
+Hello Paul!
+```
+
+Here follows an example of a failed task:
+
+```java
+Task<String> task = TaskFactory.createAndStart(() -> { throw new Exception("Error"); });
+
+try {
+  System.out.println("Hello " + task.getResult() + "!");
+} catch(Exception e) {
+  System.out.println(e.getMessage());
 }
+
+```
+Output:
+
+```java
+Error
+```
+
+If you want to handle the the value/exception separatly, you have the methods `getResultValue()` and `getResultException()` which will return the respective result. Both these methods are not blocking, so you must to invoke them after the task finishes.
+
+Here follows an example:
+
+```java
+Task<String> task = TaskFactory.createAndStart(() -> "Paul");
+System.out.println("Hello " + task.getResultValue() + "!");
+
+task.getFinishedEvent().await();
+
+System.out.println("Hello " + task.getResultValue() + "!");
+```
+Output:
+
+```java
+Hello null!
+Hello Paul!
+```
+
+### Status
+
+In order to check the task's status you can access it trought `getStatus()` method.
+
+`Status` class offers all life cycle events of a Task. You can get it through method `getStatus()`. 
+
+#### State
+
+The enum `State` indicates the state in which the task is. `State` enum has the following values:
+
+- `CREATED`: task was created but not scheduled.
+- `SCHEDULED`: task was scheduled and will be executed asynchronously.
+- `RUNNING`: scheduler already took the task and is being executed.
+- `WAITING_FOR_CHILDREN`: execution of task's action ended but is pendent until its children finish.
+- `SUCCEEDED`: task succeeded.
+- `FAILED`: task failed.
+- `CANCELED`: task canceled.
+
+#### Events
+
+On the flowing code we are registering an action on each event to log 
+different status of Task.
+
+```java
+Task<?> task = new Task<>(() -> System.out.println("Task Action!"));
+
+task.getScheduledEvent().addListener(() -> System.out.println("SCHEDULED"));
+task.getStatus().runningEvent.addListener(() -> System.out.println("RUNNING"));
+task.getStatus().succeededEvent.addListener(() -> System.out.println("SUCCEEDED"));
+task.getStatus().finishedEvent.addListener(() -> System.out.println("FINISHED"));
+
+task.start();
+
+task.getFinishedEvent().await();
+
+System.out.println("Final:"task.getStatus().getValue());
 ```
 Output:
 ```java
@@ -171,248 +271,60 @@ With an `Event` instance you can:
 -  register listener `addListener(Runnable listener)`
 -  check if it fired `hasFired()`
 
-### IAction<T>
 
-`IAction` is the functional interface to define the action that Tasks will execute. This interface declares a method `run` which produces K and receives an `CancellationToken` instance. `CancellationToken` is explained on [Cancel](#cancellationtoken) section.
+### Child
 
-Since sometimes we just want to execute some action which produces no result or we don't need to deal with `CancellationToken`. Task constructor has variants compatible with the following functional interfaces:
-```java
-	K run(CancellationToken cancellationToken) throws Exception;
+### Then
 
-	void run(CancellationToken cancellationToken) throws Exception;
+### Retry
 
-	K run() throws Exception;
+### Cancel
 
-	void run() throws Exception;
-```
+### Context
 
-### ILinkAction
+### Options
+#### Reject Children
+#### Attach to Parent
+#### Not Cancellable
+#### Not Propagate Cancellation
+#### Not Propagate Failure
+#### Cancel Children On Cancellation
+#### Cancel Children On Failure
+#### Cancel Parent On Cancellation
+#### Cancel Parent On Failure
 
-`ILinkAction` is the functional interface to define the action to be executed after some Task finishes. This interface declares a method `run` which produces K, receives an CancellationToken instance and the previous Task. CancellationToken is explained on [Cancel](#cancellationtoken) section.
+### Schedule
 
-Similarly to Task constructors, sometimes we just want to execute some action which produces no result or we don't need to deal with `CancellationToken` and the previous Task. `then` method has variants compatible with the following functional interfaces:
+## Utilitaries
+### TaskFactory
+### TaskPool
 
-```java
-	T run(Task<K> previousTask, CancellationToken cancellationToken) throws Exception;
 
-	void run(Task<K> previousTask, CancellationToken cancellationToken) throws Exception;
+# Development
 
-	T run() throws Exception;
-
-	void run() throws Exception;
-```
-
-### Children
-
-Sometimes it is useful to create other Tasks inside a certain Task. TPL4J allows you to make a certain Task to finish only when all its children finish.
-This feature needs to be declared explicitly. Child must be created with `ATTACH_TO_PARENT` option and parent must be created with `ACCEPT_CHILDREN ` option.
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<String> task = new Task<>(() -> {
-        System.out.println(1);
-
-        new Task<>(() -> {
-            System.out.println(2);
-        }, TaskOption.ATTACH_TO_PARENT).start();
-
-    }, TaskOption.ACCEPT_CHILDREN);
-
-    task.start();
-
-    task.getResult();
-
-    System.out.println("Finished");
-}
-```
-
-Output:
-```java
-1
-2
-Finished
-```
-
-If you create a task with the option `REJECT_CHILDREN`, all children tasks will be ignored and parent Task will terminate without waiting for children. If any exception occurs on a child Task, this exception will be propagated to parent and this parent Task will end with fail status.
-
-### CancellationToken
-
-In certain scenarios it is useful to cancel the execution of a task. To finish a Task with cancel status, the action supplied to the Task must throw a `CancelledException`. To implement this mechanism, the action passed to Task can receive an instance of `CancellationToken `. With this token the action can check if there is a cancel request through method `hasCancelRequest` and abort the action by trowing a `CancelledException`. Here you have an example:
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<?> task = new Task<>((IVoidAction)(cancelToken) -> {
-        while(true) {
-            System.out.println("Sleep");
-            Thread.sleep(1000);
-
-            if(cancelToken.hasCancelRequest())
-                throw cancelToken.abort();
-        }
-    });
-
-    task.start();
-
-    Thread.sleep(3000);
-    task.cancel();
-
-    task.getResult();
-    System.out.println(task.getStatus().getValue());  //Prints CANCELED
-}
-```
-
-
-
-## TaskFactory
-
-`TaskFactory` has some static utilities methods.
-
-### CreatAndStart
-
-`createAndStart` creates and starts a new Task.
-As you already realized we have a common pattern of creating and starting a Task. Imagine the following example:
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<String> task = new Task<>(() -> System.out.println(1));
-    task.start();
-
-    task.then(new Task<>(() -> System.out.println(2)))
-        .then(new Task<>(() -> System.out.println(3)))
-        .then(new Task<>(() -> System.out.println(4)))
-        .getResult();
-}
-```
-
-We can take advantage of this method and rewrite this code like so:
-
-```java
-public static void main(String[] args) throws Exception {
-    TaskFactory
-        .createAndStart(() -> System.out.println(1))
-        .then(new Task<>(() -> System.out.println(2)))
-        .then(new Task<>(() -> System.out.println(3)))
-        .then(new Task<>(() -> System.out.println(4)))
-        .getResult();
-}
-```
-
-
-### WhenAll
-
-`whenAll` method returns a Task that will only be completed when all the given tasks complete. The result of the returned task is a `Collection` containing the result of all given tasks. If any of the supplied tasks fails the result of the returned task is also failure.
-Here you have an example:
-```java
-public static void main(String[] args) throws Exception {
-    Collection<Task<String>> tasks = Arrays.asList(
-        TaskFactory.createAndStart(()->"A"),
-        TaskFactory.createAndStart(()->"B"),
-        TaskFactory.createAndStart(()->"C")
-    );
-
-    Task<Collection<String>> collectTask = TaskFactory.whenAll(tasks);
-
-    for(String s : collectTask.getResult())
-        System.out.println(s);
-}
-```
-
-### WhenAny
-
-`whenAny` method returns a Task that will only be completed when one of the given tasks completes. The result of the returned task is the task that finished first.
-Here you have an example:
-```java
-public static void main(String[] args) throws Exception {
-    Collection<Task<String>> tasks = Arrays.asList(
-        TaskFactory.createAndStart(()->"A"),
-        TaskFactory.createAndStart(()->"B"),
-        TaskFactory.createAndStart(()->"C")
-    );
-
-    Task<Task<String>> collectTask = TaskFactory.whenAny(tasks);
-    System.out.println(collectTask.getResult().getResult());
-}
-```
-
-### Unwrap
-
-It can be convenient in some scenarios that a task returns another Task and we end up with a `Task<Task<?>>`. Now we have a Task which its result is another Task but are we only interested on the result of the returned Task.
-`unwrap` method returns a task that will only be completed when the Task returned by another Task is completed. This Task's result will be the same of the inner Task.
-Here you have and example:
-
-```java
-public static void main(String[] args) throws Exception {
-    Task<Task<String>> task = TaskFactory.createAndStart(() -> TaskFactory.createAndStart(() -> "Task"));
-
-    Task<String> unwrappedTask = TaskFactory.unwrap(task);
-
-    System.out.println(unwrappedTask.getResult());
-}
-```
-
-### ForEach
-
-`forEach` method returns a Task which internally will create the same number of children as the number of cpus available. Each child task will process the elements of the supplied Iterable. The result of this Task is a Collection containing all results of applying `action` to each element.
-Here you have an example:
-
-```java
-public static void main(String[] args) throws Exception {
-    Collection<String> elements = Arrays.asList("1","2","3");
-    Task<Collection<Integer>> task = TaskFactory.forEach(elements, (element) -> {
-        Thread.sleep(1000);
-        return Integer.parseInt(element);
-    });
-    task.getResult().forEach(System.out::println);
-}
-```
-
-## TaskPool
-
-As it was already mentioned a new Thread is created to run a Task's action. This works ok in majority of the scenarios but sometimes we want to have some control over the created Threads.
-In order to solve this, Task has some variants of constructor that receives an argument called scheduler of type `Consumer<Runnable>`. This scheduler is used to schedule the Task when we invoke method `start()`. By default this scheduler is `(runnable) -> new Thread(runnable).start()`.
-Let´s see how can we execute our Tasks on a Pool:
-
-```java
-public static void main(String[] args) throws Exception {
-    ExecutorService pool = Executors.newFixedThreadPool(8);
-    Consumer<Runnable> scheduler = pool::submit;
-    Task<?> task = new Task<>(() -> System.out.println("Hello World!"), scheduler);
-
-    task.start();
-
-    task.getResult();
-    pool.shutdown();
-}
-```
-
-This is exactly what `TaskPool` does. When you create a Task through an instance of `TaskPool`, TaskPool will pass its pool as scheduler to the Task. So the previous example written with `TaskPool` looks like:
-
-```java
-public static void main(String[] args) throws Exception {
-    TaskPool pool = new TaskPool(8);
-    Task<?> task = pool.create(() -> System.out.println("Hello World!"));
-
-    task.start();
-
-    task.getResult();
-    pool.close();
-}
-```
-
-On a `TaskPool` instance you have all methods we saw on [`TaskFactory`](#taskfactory).
-
-
+During this chapter you will see how the architecture of TPL4J was mounted. You will understand all the components and how they interact with each other. Fell free to use and extend the library functionalities.
 
 ## Architecture
 
-<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Architecture.jpg" width="500" height="600">
+## Packages
 
+## Core
+### Action
+### Cancel
+### Options
+### Scheduler
+### Status
 
+## Context
+### Manager
+### Builder
+### Executor
 
-<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Task.jpg" width="510" height="400">
-
-
-
-<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Context.jpg" width="665" height="400">
-
+## Task
+### ForEachTask
+### UnwrapTask
+### WhenAllTask
+### WhenAnyTask
+### TaskFactory
+### TaskPool
 
