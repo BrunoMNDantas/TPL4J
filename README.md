@@ -30,11 +30,12 @@ TPL4J is a Java Task Library inspired on C# TPL.
     - [Schedule](#schedule)
     - [Context](#context)
   - [Utilitaries](#utilitaries)
-    - [ForEachTask](#foreachtask)
-    - [UnwrapTask](#unwraptask)
-    - [WhenAllTask](#whenalltask)
-    - [WhenAnyTask](#whenanytask)
     - [TaskFactory](#taskfactory)
+      - [CreatAndStart](#creatandstart)
+      - [ForEach](#foreach)
+      - [Unwrap](#unwrap)
+      - [WhenAll](#whenall)
+      - [WhenAny](#whenany)
     - [TaskPool](#taskpool)
 - [Development](#development)
   - [Architecture](#architecture)
@@ -51,9 +52,9 @@ TPL4J is a Java Task Library inspired on C# TPL.
     - [Executor](#executor)
   - [Task](#task-1)
     - [ParallelTask](#paralleltask)
-    - [UnwrapTask](#unwraptask-1)
-    - [WhenAllTask](#whenalltask-1)
-    - [WhenAnyTask](#whenanytask-1)
+    - [UnwrapTask](#unwraptask)
+    - [WhenAllTask](#whenalltask)
+    - [WhenAnyTask](#whenanytask)
     - [TaskFactory](#taskfactory-1)
     - [TaskPool](#taskpool-1)
 
@@ -550,13 +551,151 @@ Through task's context property you have access to the following properties:
 
 
 ## Utilitaries
-### ForEachTask
-### UnwrapTask
-### WhenAllTask
-### WhenAnyTask
+
 ### TaskFactory
+
+`TaskFactory` has some static utilitary methods.
+
+#### CreatAndStart
+
+`createAndStart` creates and starts a new task.
+As you already realized we have a common pattern of creating and starting a Task. Imagine the following example:
+
+```java
+Task<String> task = new Task<>(() -> System.out.println(1));
+task.start();
+
+task.then(new Task<>(() -> System.out.println(2)))
+    .then(new Task<>(() -> System.out.println(3)))
+    .then(new Task<>(() -> System.out.println(4)))
+    .getResult();
+```
+
+We can take advantage of this method and rewrite this code like so:
+
+```java
+TaskFactory
+    .createAndStart(() -> System.out.println(1))
+    .then(new Task<>(() -> System.out.println(2)))
+    .then(new Task<>(() -> System.out.println(3)))
+    .then(new Task<>(() -> System.out.println(4)))
+    .getResult();
+```
+
+#### ForEach
+
+`forEach` method returns a Task which internally will create the same number of children as the number of cpus available. Each child task will process the elements of the supplied Iterable. The result of this task is a collection containing all results of applying `action` to each element.
+Here you have an example:
+
+```java
+Collection<String> elements = Arrays.asList("1","2","3");
+Task<Collection<Integer>> task = TaskFactory.forEach(elements, (element) -> {
+    Thread.sleep(1000);
+    return Integer.parseInt(element);
+});
+task.getResult().forEach(System.out::println);
+```
+
+Output:
+
+```java
+1
+2
+3
+```
+
+#### Unwrap
+
+It can be convenient in some scenarios that a task returns another Task and we end up with a `Task<Task<?>>`. Now we have a task which its result is another task but we are only interested on the result of the returned task.
+`unwrap` method returns a task that will only be completed when the task returned by another task is completed. This task's result will be the same of the inner task.
+Here you have and example:
+
+```java
+Task<Task<String>> task = TaskFactory.createAndStart(() -> TaskFactory.createAndStart(() -> "Task"));
+
+Task<String> unwrappedTask = TaskFactory.unwrap(task);
+
+System.out.println(unwrappedTask.getResult());
+```
+
+Output:
+
+```java
+Task
+```
+
+#### WhenAll
+
+`whenAll` method returns a task that will only be completed when all the given tasks complete. The result of the returned task is a `Collection` containing the result of all given tasks. If any of the supplied tasks fails or cancels the result of the returned task is also be failure or cancellation respectively.
+
+Here you have an example:
+
+```java
+Collection<Task<String>> tasks = Arrays.asList(
+    TaskFactory.createAndStart(()->"A"),
+    TaskFactory.createAndStart(()->"B"),
+    TaskFactory.createAndStart(()->"C")
+);
+
+Task<Collection<String>> collectTask = TaskFactory.whenAll(tasks);
+
+task.getResult().forEach(System.out::println);
+```
+
+#### WhenAny
+
+`whenAny` method returns a task that will only be completed when one of the given tasks completes. The result of the returned task is the task that finished first. It is considered as finish any task which finished independently from the state (success, cancellation or failure).
+
+Here you have an example:
+
+```java
+Collection<Task<String>> tasks = Arrays.asList(
+    TaskFactory.createAndStart(()->"A"),
+    TaskFactory.createAndStart(()->"B"),
+    TaskFactory.createAndStart(()->"C")
+);
+
+Task<Task<String>> collectTask = TaskFactory.whenAny(tasks);
+System.out.println(collectTask.getResult().getResult());
+```
+
+
 ### TaskPool
 
+As it was already mentioned, if no scheduler is passed to the task, a new thread is created to run the task's action. This works ok in majority of the scenarios but sometimes we want to have some control over the created threads.
+
+Let´s see how can we execute our tasks on a pool:
+
+```java
+ExecutorService pool = Executors.newFixedThreadPool(8);
+Consumer<Runnable> scheduler = new IScheduler(){
+  @Overide
+  public String getId() { return "id"; }
+
+  @Overide 
+  public void schedule(Runnable action) { pool.submit(action); }
+};
+Task<?> task = new Task<>(() -> System.out.println("Hello World!"), scheduler);
+
+task.start();
+
+task.getResult();
+pool.shutdown();
+```
+
+This is exactly what `TaskPool` does. When you create a task through an instance of `TaskPool`, `TaskPool` will pass its pool as scheduler to the task. So the previous example, written with `TaskPool`, looks like:
+
+```java
+TaskPool pool = new TaskPool(8);
+Task<?> task = pool.create(() -> System.out.println("Hello World!"));
+
+task.start();
+
+task.getResult();
+pool.close();
+```
+
+On a `TaskPool` instance you have all methods we saw on [`TaskFactory`](#taskfactory).
 
 # Development
 
