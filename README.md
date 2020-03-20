@@ -84,7 +84,7 @@ Ok, here you have some options but since this is a dummy example we will invoke 
 Ok, it's time. You can call method `getResult()` and run our Hello World. Your code should look like:
 
 ```java
-Task task = new Task(() -> System.out.println("Hello World"));
+Task<?> task = new Task<>(() -> System.out.println("Hello World"));
 task.start();
 task.getResult();
 ```
@@ -265,7 +265,7 @@ task.start();
 
 task.getFinishedEvent().await();
 
-System.out.println("Final:"task.getState());
+System.out.println("Final:" + task.getState());
 ```
 Output:
 ```java
@@ -637,9 +637,17 @@ Collection<Task<String>> tasks = Arrays.asList(
     TaskFactory.createAndStart(()->"C")
 );
 
-Task<Collection<String>> collectTask = TaskFactory.whenAll(tasks);
+Task<Collection<String>> task = TaskFactory.whenAll(tasks);
 
 task.getResult().forEach(System.out::println);
+```
+
+Output:
+
+```java
+A
+B
+C
 ```
 
 #### WhenAny
@@ -651,12 +659,18 @@ Here you have an example:
 ```java
 Collection<Task<String>> tasks = Arrays.asList(
     TaskFactory.createAndStart(()->"A"),
-    TaskFactory.createAndStart(()->"B"),
-    TaskFactory.createAndStart(()->"C")
+    TaskFactory.create(()->"B"),
+    TaskFactory.create(()->"C")
 );
 
 Task<Task<String>> collectTask = TaskFactory.whenAny(tasks);
 System.out.println(collectTask.getResult().getResult());
+```
+
+Output:
+
+```java
+A
 ```
 
 
@@ -668,12 +682,15 @@ Let´s see how can we execute our tasks on a pool:
 
 ```java
 ExecutorService pool = Executors.newFixedThreadPool(8);
-Consumer<Runnable> scheduler = new IScheduler(){
-  @Overide
-  public String getId() { return "id"; }
+IScheduler scheduler = new IScheduler(){
+    @Override
+    public String getId() { return "id"; }
 
-  @Overide 
-  public void schedule(Runnable action) { pool.submit(action); }
+    @Override
+    public void schedule(Runnable action) { pool.submit(action); }
+
+    @Override
+    public void close() { }
 };
 Task<?> task = new Task<>(() -> System.out.println("Hello World!"), scheduler);
 
