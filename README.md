@@ -703,25 +703,76 @@ During this chapter you will see how the architecture of TPL4J was mounted. You 
 
 ## Architecture
 
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Architecture.png">
+
 ## Packages
 
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Packages.png">
+
+
 ## Core
+
 ### Action
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Action.png">
+
 ### Cancel
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Cancel.png">
+
 ### Options
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Options.png">
+
 ### Scheduler
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Scheduler.png">
+
 ### Status
 
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Status.png">
+
 ## Context
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Context.png">
+
 ### Manager
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Manager.png">
+
 ### Builder
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Builder.png">
+
 ### Executor
 
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Executor.png">
+
 ## Task
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Task.png">
+
 ### ParallelTask
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Parallel.png">
+
 ### UnwrapTask
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/Unwrap.png">
+
 ### WhenAllTask
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/WhenAll.png">
+
 ### WhenAnyTask
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/WhenAny.png">
+
 ### TaskFactory
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/TaskFactory.png">
+
 ### TaskPool
+
+<img src="https://raw.githubusercontent.com/BrunoMNDantas/TPL4J/master/docs/TaskPool.png">
 
