@@ -16,15 +16,15 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 package com.github.brunomndantas.tpl4j.core.cancel;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CancellationToken implements ICancellationToken {
 
-    private final Logger LOGGER = LogManager.getLogger(CancellationToken.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(CancellationToken.class);
 
 
 

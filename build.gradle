@@ -1,5 +1,5 @@
 group 'com.github.brunomndantas'
-version '1.1.0'
+version '1.2.1'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
@@ -20,8 +20,11 @@ dependencies {
     //JUnit
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    //LOG4J
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    //SLF4J
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+
+    //SLF4J Binding for Java Util Logger
+    testCompile group: 'org.slf4j', name:'slf4j-jdk14', version:'1.8.0-alpha2'
 }
 
 task sourceJar(type: Jar) {
@@ -50,7 +53,7 @@ publishing {
             customizePom(pom)
             groupId 'com.github.brunomndantas'
             artifactId 'tpl4j'
-            version '1.1.0'
+            version '1.2.1'
 
             from components.java
 

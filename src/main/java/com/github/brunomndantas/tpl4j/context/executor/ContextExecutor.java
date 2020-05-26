@@ -19,12 +19,12 @@ package com.github.brunomndantas.tpl4j.context.executor;
 import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.executor.state.*;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ContextExecutor implements IContextExecutor {
 
-    private static final Logger LOGGER = LogManager.getLogger(ContextExecutor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContextExecutor.class);
 
 
 

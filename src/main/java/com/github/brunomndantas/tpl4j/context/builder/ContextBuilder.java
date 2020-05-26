@@ -25,14 +25,14 @@ import com.github.brunomndantas.tpl4j.core.options.IOptions;
 import com.github.brunomndantas.tpl4j.core.options.Option;
 import com.github.brunomndantas.tpl4j.core.scheduler.IScheduler;
 import com.github.brunomndantas.tpl4j.core.status.Status;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 
 public class ContextBuilder implements IContextBuilder {
 
-    private static final Logger LOGGER = LogManager.getLogger(ContextBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContextBuilder.class);
 
 
 

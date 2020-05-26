@@ -2,12 +2,12 @@ package com.github.brunomndantas.tpl4j.context.executor.state;
 
 import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.core.status.State;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StateExecutor implements IStateExecutor {
 
-    private static final Logger LOGGER = LogManager.getLogger(StateExecutor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StateExecutor.class);
 
 
 

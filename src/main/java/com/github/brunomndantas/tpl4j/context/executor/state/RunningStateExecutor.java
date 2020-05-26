@@ -4,14 +4,14 @@ import com.github.brunomndantas.tpl4j.context.IContext;
 import com.github.brunomndantas.tpl4j.context.manager.IContextManager;
 import com.github.brunomndantas.tpl4j.core.cancel.CancelledException;
 import com.github.brunomndantas.tpl4j.core.status.State;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
 public class RunningStateExecutor extends StateExecutor {
 
-    private static final Logger LOGGER = LogManager.getLogger(RunningStateExecutor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RunningStateExecutor.class);
 
 
 
