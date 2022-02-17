@@ -1,6 +1,22 @@
 <h1>TPL4J</h1>
 TPL4J is a Java Task Library inspired on C# TPL.
 
+#### Gradle
+
+```groovy
+implementation group: 'com.github.brunomndantas', name: 'tpl4j', version: '1.2.1'
+```
+
+#### Maven
+
+```xml
+<dependency>
+    <groupId>com.github.brunomndantas</groupId>
+    <artifactId>tpl4j</artifactId>
+    <version>1.2.1</version>
+</dependency>
+```
+
 <h2>Table of Contents</h2>
 
 - [Usage](#usage)
